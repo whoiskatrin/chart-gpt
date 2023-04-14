@@ -1,13 +1,19 @@
 import React from "react";
 
+interface TailwindNode {
+  type: keyof JSX.IntrinsicElements;
+  css: string;
+  children?: TailwindNode[];
+}
+
 interface TranslatedDesignProps {
-  tailwindDesign: any;
+  tailwindDesign: TailwindNode[];
 }
 
 const TranslatedDesign: React.FC<TranslatedDesignProps> = ({
   tailwindDesign,
 }) => {
-  const renderTailwindNodes = (nodes: any[]) => {
+  const renderTailwindNodes = (nodes: TailwindNode[]) => {
     return nodes.map((node, index) => {
       const NodeElement = node.type;
       return (

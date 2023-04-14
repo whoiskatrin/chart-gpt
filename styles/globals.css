@@ -47,3 +47,9 @@
     border: 1px solid transparent;
   }
 }
+
+.squiggly {
+  stroke: blue;
+  stroke-width: 2px;
+  fill: none;
+}

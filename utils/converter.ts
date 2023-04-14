@@ -25,7 +25,7 @@ const generateTailwindClasses = async (input: string) => {
     }),
   });
 
-  const data: OpenAIResponse = await response.json();
+  const data = (await response.json()) as OpenAIResponse;
   const choice = data.choices[0];
   return choice.text.trim();
 };

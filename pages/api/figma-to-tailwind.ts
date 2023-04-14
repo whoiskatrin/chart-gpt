@@ -1,8 +1,8 @@
 // figma-to-tailwind.ts
 
 import { NextApiRequest, NextApiResponse } from "next";
-import { convertFigmaToTailwind } from "../utils/converter";
-import { FigmaFile } from "..utils/types";
+import { convertFigmaToTailwind } from "../../utils/converter";
+import { FigmaDocument } from "../../utils/types";
 import fetchFigmaData from "../../utils/fetchFigmaData";
 
 export default async function handler(
@@ -13,7 +13,7 @@ export default async function handler(
 
   try {
     // Fetch Figma file data
-    const designData: FigmaFile = await fetchFigmaData(figmaLink);
+    const designData: FigmaDocument = await fetchFigmaData(figmaLink);
 
     // Convert Figma file to Tailwind
     const tailwindDesign = await convertFigmaToTailwind(designData);

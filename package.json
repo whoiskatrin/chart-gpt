@@ -34,6 +34,8 @@
     "react-hook-form": "^7.42.0",
     "react-hot-toast": "^2.4.0",
     "react-syntax-highlighter": "^15.5.0",
+    "react-twitter-embed": "^4.0.4",
+    "react-twitter-widgets": "^1.11.0",
     "react-use-measure": "^2.1.1",
     "redis": "^4.6.5",
     "styled-components": "^5.3.9"

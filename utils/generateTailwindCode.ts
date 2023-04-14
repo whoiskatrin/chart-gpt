@@ -1,10 +1,12 @@
-import { GraphQLClient } from "graphql-request";
-import { query as gqlQuery } from "grafbase";
+import { GraphQLClient, gql } from "graphql-request";
 
-const generateTailwindCode = async (processedData, openaiApiKey) => {
+const generateTailwindCode = async (
+  processedData: any,
+  openaiApiKey: string
+) => {
   const graphQLClient = new GraphQLClient("https://api.grafbase.com/graphql");
 
-  const query = gqlQuery`
+  const query = gql`
     mutation generateTailwindCode($data: String!, $apiKey: String!) {
       generateTailwindCode(data: $data, apiKey: $apiKey)
     }
@@ -16,11 +18,13 @@ const generateTailwindCode = async (processedData, openaiApiKey) => {
   };
 
   try {
-    const data = await graphQLClient.request(query, variables);
+    const data: any = await graphQLClient.request(query, variables);
     const tailwindCode = data.generateTailwindCode;
     return tailwindCode;
   } catch (error) {
-    throw new Error(`Failed to generate Tailwind CSS code: ${error.message}`);
+    throw new Error(
+      `Failed to fetch Tailwind data: ${(error as Error).message}`
+    );
   }
 };
 
