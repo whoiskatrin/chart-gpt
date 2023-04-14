@@ -1,4 +1,7 @@
 # Figma to Tailwind.css
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" alt="Figma Logo" width="20" hight="20" /> <img src="https://cdn.worldvectorlogo.com/logos/tailwind-css-1.svg" alt="Tailwind Logo" width="100" hight="80" />
+
+
 
 This is a Next.js project that converts Figma designs to Tailwind CSS classes using AI.
 
