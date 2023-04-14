@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getFigmaFile, getImageURLs } from "../services/figma";
+import { getFigmaFile } from "../../services/figma";
 
 async function fetchFigmaDesign(figmaLink: string) {
   const fileId = figmaLink.split("/file/")[1].split("/")[0];

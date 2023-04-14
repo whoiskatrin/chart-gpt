@@ -1,38 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Figma to Tailwind.css
+
+This is a Next.js project that converts Figma designs to Tailwind CSS classes using AI.
 
 ## Getting Started
 
-First, run the development server:
+To get started, first clone this repository:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+```
+git clone https://github.com/whoiskatrin/figma-to-tailwind.git
+cd figma-to-tailwind
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then install the dependencies and start the development server:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```
+npm install
+npm run dev
+# or
+yarn
+yarn dev
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+This will start the development server at http://localhost:3000.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To use the Figma to Tailwind converter, follow these steps:
 
-## Learn More
+- In your Figma design, select the elements you want to convert to Tailwind CSS classes.
+- Copy the link to your Figma design.
+- Paste the link into the input field on the Figma to Tailwind homepage.
+- Click the "Convert to Tailwind" button
 
-To learn more about Next.js, take a look at the following resources:
+The converted Tailwind CSS classes will be displayed on the page.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+If you would like to contribute to this project, please follow these steps:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Fork this repository.
+2. Clone your forked repository:
+3. for your changes:
+4. Make your changes, commit them, and push them to your forked repository:
+5. Create a pull request on this repository.
