@@ -22,6 +22,8 @@
     "eventsource-parser": "^0.0.5",
     "express-rate-limit": "^6.7.0",
     "figma-js": "^1.16.0",
+    "grafbase": "^0.17.0",
+    "graphql-request": "^6.0.0",
     "isomorphic-unfetch": "^4.0.2",
     "next": "latest",
     "next-themes": "^0.2.1",

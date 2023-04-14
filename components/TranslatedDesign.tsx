@@ -1,31 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { convertFigmaToTailwind } from "../utils/figmaToTailwind";
+import React from "react";
 
 interface TranslatedDesignProps {
-  designData: any;
+  tailwindDesign: any;
 }
 
-const TranslatedDesign: React.FC<TranslatedDesignProps> = ({ designData }) => {
-  const [tailwindNodes, setTailwindNodes] = useState<any[]>([]);
-
-  useEffect(() => {
-    if (designData) {
-      const canvas = designData.document.children.find(
-        (child: any) => child.type === "CANVAS"
-      );
-      if (canvas) {
-        const processNodes = async () => {
-          const tailwindConvertedNodes = await Promise.all(
-            canvas.children.map(convertFigmaToTailwind)
-          );
-          setTailwindNodes(tailwindConvertedNodes);
-        };
-
-        processNodes();
-      }
-    }
-  }, [designData]);
-
+const TranslatedDesign: React.FC<TranslatedDesignProps> = ({
+  tailwindDesign,
+}) => {
   const renderTailwindNodes = (nodes: any[]) => {
     return nodes.map((node, index) => {
       const NodeElement = node.type;
@@ -40,7 +21,7 @@ const TranslatedDesign: React.FC<TranslatedDesignProps> = ({ designData }) => {
   return (
     <div className="translated-design">
       <h2>Tailwind CSS Design</h2>
-      {renderTailwindNodes(tailwindNodes)}
+      {tailwindDesign && renderTailwindNodes(tailwindDesign)}
     </div>
   );
 };

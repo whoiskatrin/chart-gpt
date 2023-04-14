@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import DesignPreview from "../components/DesignPreview";
 import { Header } from "../components/Header";
 import { useTheme } from "next-themes";
 import Head from "next/head";
 import TranslatedDesign from "../components/TranslatedDesign";
-import Github from "../components/GitHub";
 import ThemeButton from "../components/ThemeButton";
 
 const HomePage: React.FC = () => {
@@ -34,7 +32,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col px-4 items-center justify-center min-h-screen bg-gradient-to-r from-slate-600 to-indigo-400">
+    <div className="flex flex-col px-4 items-center justify-center min-h-screen bg-gradient-to-r from-slate-600 to-indigo-400 overflow-x-hidden">
       <Header />
       <Head>
         <title>Figma to Tailwind.css</title>
@@ -42,7 +40,7 @@ const HomePage: React.FC = () => {
       </Head>
       <ThemeButton className="absolute top-2.5 right-2.5 text-gray-500 dark:text-gray-400 focus:outline-none hover:scale-125 transition" />
       <div className="flex flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-2">
-        <div className="w-full max-w-xl mb-6">
+        <form onSubmit={handleSubmit} className="w-full max-w-xl mb-6">
           <div className="flex flex-col items-center justify-center">
             <label
               htmlFor="figmaLink"
@@ -62,7 +60,6 @@ const HomePage: React.FC = () => {
             <button
               type="submit"
               className="cursor-pointer font-inter font-semibold py-2 px-4 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
-              // onClick={handleSubmit}
             >
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1024px-Tailwind_CSS_Logo.svg.png"
@@ -74,7 +71,7 @@ const HomePage: React.FC = () => {
               Convert to Tailwind
             </button>
           </div>
-        </div>
+        </form>
 
         <div
           className={
@@ -111,7 +108,6 @@ const HomePage: React.FC = () => {
             <div className="flex flex-col rounded-xl bg-white container-w-gradient-border dark:dark-container-w-gradient-border dark:bg-custom-gray p-3 h-full w-full">
               <div className="flex flex-col flex-1">
                 <div className="designs-container">
-                  <DesignPreview figmaLink={figmaLink} />
                   <TranslatedDesign designData={tailwindDesign} />
                 </div>
               </div>
