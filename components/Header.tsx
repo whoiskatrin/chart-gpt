@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Github from "./GitHub";
-import ThemeButton from "./ThemeButton";
 import { useTheme } from "next-themes";
 import React from "react";
 
