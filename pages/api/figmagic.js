@@ -1,4 +1,4 @@
-import { default as execa } from "execa";
+import * as execa from "execa";
 
 async function generateTailwindClasses(figmaLink) {
   const { stdout } = await execa("figmagic", [
