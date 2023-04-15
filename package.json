@@ -21,6 +21,7 @@
     "axios": "^1.3.5",
     "camelcase": "^7.0.1",
     "eventsource-parser": "^0.0.5",
+    "execa": "^7.1.1",
     "express-rate-limit": "^6.7.0",
     "figma-js": "^1.16.0",
     "figmagic": "^4.5.8",
