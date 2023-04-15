@@ -19,6 +19,7 @@ export default async function handler(req, res) {
 
   try {
     const tailwindClasses = await generateTailwindClasses(figmaLink);
+    console.log(tailwindClasses);
     res.status(200).json(tailwindClasses);
   } catch (error) {
     res.status(500).json({ error: error.message });
