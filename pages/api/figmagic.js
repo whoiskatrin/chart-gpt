@@ -1,4 +1,4 @@
-const execa = require("execa");
+import execa from "execa";
 
 async function generateTailwindClasses(figmaLink) {
   const { stdout } = await execa("figmagic", [
@@ -14,7 +14,7 @@ async function generateTailwindClasses(figmaLink) {
   return JSON.parse(stdout);
 }
 
-export default async (req, res) => {
+export default async function handler(req, res) {
   const { figmaLink } = req.body;
 
   try {
@@ -23,4 +23,4 @@ export default async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
