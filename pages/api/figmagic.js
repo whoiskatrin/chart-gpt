@@ -16,7 +16,7 @@ async function generateFigmagicFiles(figmaLink) {
   const fileId = extractFigmaFileId(figmaLink);
 
   await execAsync(
-    `npx figmagic start --url ${fileId} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
+    `npx figmagic --token ${process.env.FIGMA_TOKEN} --url ${fileId} --output ${outputDir}`
   );
 
   console.log("executed the command");
