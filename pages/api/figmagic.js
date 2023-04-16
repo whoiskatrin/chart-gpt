@@ -1,6 +1,5 @@
 import { exec } from "child_process";
 import { promisify } from "util";
-import fs from "fs";
 import { createClient } from "@supabase/supabase-js";
 import extractFigmaFileId from "../../utils/helper";
 
@@ -12,22 +11,26 @@ const supabase = createClient(
 );
 
 async function generateFigmagicFiles(figmaLink) {
-  const outputDir = "/tmp";
   const fileId = extractFigmaFileId(figmaLink);
 
-  await execAsync(
-    `npx figmagic --token ${process.env.FIGMA_TOKEN} --url ${fileId} --file ${outputDir}/figma.json --base ${outputDir} --elements ${outputDir}/elements --graphics ${outputDir}/graphics --tokens ${outputDir}/tokens`
+  const { stdout, stderr } = await execAsync(
+    `npx figmagic --token ${process.env.FIGMA_TOKEN} --url ${fileId} -file - -base -elements -graphics -tokens`,
+    { encoding: "buffer" }
   );
 
-  console.log("executed the command");
+  if (stderr) {
+    console.error(stderr.toString());
+    throw new Error("Failed to generate figmagic files");
+  }
+
   // Upload each file to Supabase Storage
   await Promise.all([
-    uploadFileToStorage(`${outputDir}/css.css`, "css.css"),
-    uploadFileToStorage(`${outputDir}/tokens.ts`, "tokens.ts"),
-    uploadFileToStorage(`${outputDir}/elements.tsx`, "elements.tsx"),
-    uploadFileToStorage(`${outputDir}/graphics.tsx`, "graphics.tsx"),
-    uploadFileToStorage(`${outputDir}/storybook.js`, "storybook.js"),
-    uploadFileToStorage(`${outputDir}/description.md`, "description.md"),
+    uploadFileToStorage(stdout, "css.css"),
+    uploadFileToStorage(stdout, "tokens.ts"),
+    uploadFileToStorage(stdout, "elements.tsx"),
+    uploadFileToStorage(stdout, "graphics.tsx"),
+    uploadFileToStorage(stdout, "storybook.js"),
+    uploadFileToStorage(stdout, "description.md"),
   ]);
 
   // Return the URLs for each uploaded file
@@ -42,9 +45,7 @@ async function generateFigmagicFiles(figmaLink) {
   };
 }
 
-async function uploadFileToStorage(filePath, filename) {
-  console.log(process.env.SUPABASE_API_KEY);
-  const fileContent = fs.readFileSync(filePath);
+async function uploadFileToStorage(fileContent, filename) {
   const { data, error } = await supabase.storage
     .from(process.env.SUPABASE_BUCKET_NAME)
     .upload(filename, fileContent);
@@ -61,12 +62,12 @@ export default async function handler(req, res) {
     const figmagicFiles = await generateFigmagicFiles(figmaLink);
     console.log(figmagicFiles);
     res.status(200).send({
-      cssUrl: `${baseS3Url}/css.css`,
-      tokensUrl: `${baseS3Url}/tokens.ts`,
-      elementsUrl: `${baseS3Url}/elements.tsx`,
-      graphicsUrl: `${baseS3Url}/graphics.tsx`,
-      storybookUrl: `${baseS3Url}/storybook.js`,
-      descriptionUrl: `${baseS3Url}/description.md`,
+      cssUrl: figmagicFiles.cssUrl,
+      tokensUrl: figmagicFiles.tokensUrl,
+      elementsUrl: figmagicFiles.elementsUrl,
+      graphicsUrl: figmagicFiles.graphicsUrl,
+      storybookUrl: figmagicFiles.storybookUrl,
+      descriptionUrl: figmagicFiles.descriptionUrl,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
