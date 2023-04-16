@@ -14,14 +14,18 @@ const HomePage: React.FC = () => {
 
     setIsLoading(true);
 
+    const body = JSON.stringify({
+      figmaLink,
+    });
+
+    console.log(body);
+
     const response = await fetch("/api/figmagic", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        figmaLink,
-      }),
+      body: body,
     });
 
     const classes = await response.json();
