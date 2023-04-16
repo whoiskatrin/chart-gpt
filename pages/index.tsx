@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
       },
       body: body,
     });
-
+    console.log(response);
     const classes = await response.text();
     setTailwindClasses(classes);
     setIsLoading(false);
