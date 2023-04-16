@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
 });
 
 async function generateFigmagicFiles(figmaLink) {
-  const outputDir = "/tmp/figmagic-output";
+  const outputDir = "/tmp";
 
   await execAsync(
     `npx figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
