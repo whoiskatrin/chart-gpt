@@ -1,34 +1,41 @@
 import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs";
+import path from "path";
 
 const execAsync = promisify(exec);
 
 async function generateFigmagicFiles(figmaLink) {
+  // Create output directory if it does not exist
+  const outputDir = path.join(process.cwd(), ".figmagic", "output");
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
   await execAsync(
-    `npx figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output /tmp/figmagic-output`
+    `figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
   );
 
   // Read the contents of each generated file
-  const cssContent = fs.readFileSync("./.figmagic/output/css.css", "utf-8");
+  const cssContent = fs.readFileSync(path.join(outputDir, "css.css"), "utf-8");
   const tokensContent = fs.readFileSync(
-    "./.figmagic/output/tokens.ts",
+    path.join(outputDir, "tokens.ts"),
     "utf-8"
   );
   const elementsContent = fs.readFileSync(
-    "./.figmagic/output/elements.tsx",
+    path.join(outputDir, "elements.tsx"),
     "utf-8"
   );
   const graphicsContent = fs.readFileSync(
-    "./.figmagic/output/graphics.tsx",
+    path.join(outputDir, "graphics.tsx"),
     "utf-8"
   );
   const storybookContent = fs.readFileSync(
-    "./.figmagic/output/storybook.js",
+    path.join(outputDir, "storybook.js"),
     "utf-8"
   );
   const descriptionContent = fs.readFileSync(
-    "./.figmagic/output/description.md",
+    path.join(outputDir, "description.md"),
     "utf-8"
   );
 
