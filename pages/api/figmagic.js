@@ -1,13 +1,14 @@
 import { exec } from "child_process";
 import { promisify } from "util";
-import AWS from "aws-sdk";
+import fs from "fs";
+import { createClient } from "@supabase/supabase-js";
 
 const execAsync = promisify(exec);
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_API_KEY
+);
 
 async function generateFigmagicFiles(figmaLink) {
   const outputDir = "/tmp";
@@ -16,56 +17,36 @@ async function generateFigmagicFiles(figmaLink) {
     `npx figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
   );
 
-  // Upload each file to S3
-  const baseS3Url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com`;
+  // Upload each file to Supabase Storage
   await Promise.all([
-    uploadFileToS3(`${outputDir}/css.css`, "css.css"),
-    uploadFileToS3(`${outputDir}/tokens.ts`, "tokens.ts"),
-    uploadFileToS3(`${outputDir}/elements.tsx`, "elements.tsx"),
-    uploadFileToS3(`${outputDir}/graphics.tsx`, "graphics.tsx"),
-    uploadFileToS3(`${outputDir}/storybook.js`, "storybook.js"),
-    uploadFileToS3(`${outputDir}/description.md`, "description.md"),
+    uploadFileToStorage(`${outputDir}/css.css`, "css.css"),
+    uploadFileToStorage(`${outputDir}/tokens.ts`, "tokens.ts"),
+    uploadFileToStorage(`${outputDir}/elements.tsx`, "elements.tsx"),
+    uploadFileToStorage(`${outputDir}/graphics.tsx`, "graphics.tsx"),
+    uploadFileToStorage(`${outputDir}/storybook.js`, "storybook.js"),
+    uploadFileToStorage(`${outputDir}/description.md`, "description.md"),
   ]);
 
   // Return the URLs for each uploaded file
+  const baseStorageUrl = `${process.env.SUPABASE_URL}/storage/v1/object/${process.env.SUPABASE_BUCKET_NAME}`;
   return {
-    cssUrl: `${baseS3Url}/css.css`,
-    tokensUrl: `${baseS3Url}/tokens.ts`,
-    elementsUrl: `${baseS3Url}/elements.tsx`,
-    graphicsUrl: `${baseS3Url}/graphics.tsx`,
-    storybookUrl: `${baseS3Url}/storybook.js`,
-    descriptionUrl: `${baseS3Url}/description.md`,
+    cssUrl: `${baseStorageUrl}/css.css`,
+    tokensUrl: `${baseStorageUrl}/tokens.ts`,
+    elementsUrl: `${baseStorageUrl}/elements.tsx`,
+    graphicsUrl: `${baseStorageUrl}/graphics.tsx`,
+    storybookUrl: `${baseStorageUrl}/storybook.js`,
+    descriptionUrl: `${baseStorageUrl}/description.md`,
   };
 }
 
-async function uploadFileToS3(filePath, filename) {
-  const fileContent = await fs.promises.readFile(filePath);
-  return s3
-    .upload({
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: filename,
-      Body: fileContent,
-      ACL: "public-read",
-      ContentType: getContentType(filename),
-    })
-    .promise();
-}
+async function uploadFileToStorage(filePath, filename) {
+  const fileContent = fs.readFileSync(filePath);
+  const { data, error } = await supabase.storage
+    .from(process.env.SUPABASE_BUCKET_NAME)
+    .upload(filename, fileContent);
 
-function getContentType(filename) {
-  const extension = filename.split(".").pop().toLowerCase();
-  switch (extension) {
-    case "css":
-      return "text/css";
-    case "ts":
-      return "text/plain";
-    case "tsx":
-      return "text/plain";
-    case "js":
-      return "application/javascript";
-    case "md":
-      return "text/markdown";
-    default:
-      return "application/octet-stream";
+  if (error) {
+    throw new Error(error.message);
   }
 }
 
