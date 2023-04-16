@@ -56,7 +56,14 @@ export default async function handler(req, res) {
   try {
     const figmagicFiles = await generateFigmagicFiles(figmaLink);
     console.log(figmagicFiles);
-    res.status(200).json(figmagicFiles);
+    res.status(200).send({
+      cssUrl: `${baseS3Url}/css.css`,
+      tokensUrl: `${baseS3Url}/tokens.ts`,
+      elementsUrl: `${baseS3Url}/elements.tsx`,
+      graphicsUrl: `${baseS3Url}/graphics.tsx`,
+      storybookUrl: `${baseS3Url}/storybook.js`,
+      descriptionUrl: `${baseS3Url}/description.md`,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
