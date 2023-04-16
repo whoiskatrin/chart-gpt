@@ -14,7 +14,7 @@ async function generateFigmagicFiles(figmaLink) {
   const outputDir = "/tmp/figmagic-output";
 
   await execAsync(
-    `figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
+    `npx figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
   );
 
   // Read the contents of each generated file
