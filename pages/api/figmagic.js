@@ -1,6 +1,5 @@
 import { exec } from "child_process";
 import { promisify } from "util";
-import fs from "fs";
 import AWS from "aws-sdk";
 
 const execAsync = promisify(exec);
@@ -17,32 +16,18 @@ async function generateFigmagicFiles(figmaLink) {
     `npx figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
   );
 
-  // Read the contents of each generated file
-  const cssContent = fs.readFileSync(`${outputDir}/css.css`, "utf-8");
-  const tokensContent = fs.readFileSync(`${outputDir}/tokens.ts`, "utf-8");
-  const elementsContent = fs.readFileSync(`${outputDir}/elements.tsx`, "utf-8");
-  const graphicsContent = fs.readFileSync(`${outputDir}/graphics.tsx`, "utf-8");
-  const storybookContent = fs.readFileSync(
-    `${outputDir}/storybook.js`,
-    "utf-8"
-  );
-  const descriptionContent = fs.readFileSync(
-    `${outputDir}/description.md`,
-    "utf-8"
-  );
-
   // Upload each file to S3
+  const baseS3Url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com`;
   await Promise.all([
-    uploadFileToS3(cssContent, "css.css"),
-    uploadFileToS3(tokensContent, "tokens.ts"),
-    uploadFileToS3(elementsContent, "elements.tsx"),
-    uploadFileToS3(graphicsContent, "graphics.tsx"),
-    uploadFileToS3(storybookContent, "storybook.js"),
-    uploadFileToS3(descriptionContent, "description.md"),
+    uploadFileToS3(`${outputDir}/css.css`, "css.css"),
+    uploadFileToS3(`${outputDir}/tokens.ts`, "tokens.ts"),
+    uploadFileToS3(`${outputDir}/elements.tsx`, "elements.tsx"),
+    uploadFileToS3(`${outputDir}/graphics.tsx`, "graphics.tsx"),
+    uploadFileToS3(`${outputDir}/storybook.js`, "storybook.js"),
+    uploadFileToS3(`${outputDir}/description.md`, "description.md"),
   ]);
 
   // Return the URLs for each uploaded file
-  const baseS3Url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com`;
   return {
     cssUrl: `${baseS3Url}/css.css`,
     tokensUrl: `${baseS3Url}/tokens.ts`,
@@ -53,7 +38,8 @@ async function generateFigmagicFiles(figmaLink) {
   };
 }
 
-async function uploadFileToS3(fileContent, filename) {
+async function uploadFileToS3(filePath, filename) {
+  const fileContent = await fs.promises.readFile(filePath);
   return s3
     .upload({
       Bucket: process.env.AWS_S3_BUCKET_NAME,
