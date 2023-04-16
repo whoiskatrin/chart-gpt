@@ -3,16 +3,35 @@ import { Header } from "../components/Header";
 import Head from "next/head";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import SquigglyLines from "../components/SquigglyLines";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 const HomePage: React.FC = () => {
   const [figmaLink, setFigmaLink] = useState("");
-  const [tailwindClasses, setTailwindClasses] = useState<any>(null);
+  const [isDownloadReady, setIsDownloadReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [fileUrls, setFileUrls] = useState<{ [key: string]: string }>({});
+  const [error, setError] = useState(null);
+
+  const handleDownload = async () => {
+    const zip = new JSZip();
+
+    // Fetch the files and add them to the zip
+    for (const [filename, url] of Object.entries(fileUrls)) {
+      const response = await fetch(url);
+      const content = await response.blob();
+      zip.file(filename, content);
+    }
+
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    saveAs(zipBlob, "figma-to-tailwind.zip");
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setIsLoading(true);
+    setError(null);
 
     const body = JSON.stringify({
       figmaLink,
@@ -28,8 +47,18 @@ const HomePage: React.FC = () => {
       body: body,
     });
     console.log(response);
-    const classes = await response.text();
-    setTailwindClasses(classes);
+
+    if (response.ok) {
+      const data = await response.json();
+      setFileUrls(data);
+      setIsDownloadReady(true);
+    } else {
+      const errorData = await response.json();
+      setError(
+        errorData.error || "An error occurred while processing your request."
+      );
+    }
+
     setIsLoading(false);
   };
 
@@ -110,17 +139,28 @@ const HomePage: React.FC = () => {
             </svg>
           ) : null}
         </div>
-        {tailwindClasses && (
+        {isDownloadReady && (
           <div className="w-full max-w-md mt-6">
-            <div className="flex flex-col rounded-xl bg-white container-w-gradient-border dark:dark-container-w-gradient-border dark:bg-custom-gray p-3 h-full w-full">
-              <div className="flex flex-col flex-1">
-                <div className="designs-container">
-                  <pre className="whitespace-pre-wrap">
-                    {JSON.stringify(tailwindClasses, null, 2)}
-                  </pre>
-                </div>
-              </div>
-            </div>
+            <button
+              onClick={handleDownload}
+              className="text-blue-500 hover:text-blue-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 4v16m0 0-8-8m8 8h8"
+                />
+              </svg>
+              Download Code
+            </button>
           </div>
         )}
         <div className="w-full max-w-md mt-6">

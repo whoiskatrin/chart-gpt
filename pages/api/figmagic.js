@@ -2,6 +2,7 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs";
 import { createClient } from "@supabase/supabase-js";
+import extractFigmaFileId from "../../utils/helper";
 
 const execAsync = promisify(exec);
 
@@ -12,9 +13,10 @@ const supabase = createClient(
 
 async function generateFigmagicFiles(figmaLink) {
   const outputDir = "/tmp";
+  const fileId = extractFigmaFileId(figmaLink);
 
   await execAsync(
-    `npx figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
+    `npx figmagic start --url ${fileId} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
   );
 
   // Upload each file to Supabase Storage

@@ -27,10 +27,12 @@
     "express-rate-limit": "^6.7.0",
     "figma-js": "^1.16.0",
     "figmagic": "^4.5.8",
+    "file-saver": "^2.0.5",
     "fs": "^0.0.1-security",
     "grafbase": "^0.17.0",
     "graphql-request": "^6.0.0",
     "isomorphic-unfetch": "^4.0.2",
+    "jszip": "^3.10.1",
     "lodash": "^4.17.21",
     "next": "latest",
     "next-themes": "^0.2.1",
@@ -52,6 +54,7 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/node": "18.11.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
