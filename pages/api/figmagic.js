@@ -43,6 +43,7 @@ async function generateFigmagicFiles(figmaLink) {
 }
 
 async function uploadFileToStorage(filePath, filename) {
+  console.log(process.env.SUPABASE_API_KEY);
   const fileContent = fs.readFileSync(filePath);
   const { data, error } = await supabase.storage
     .from(process.env.SUPABASE_BUCKET_NAME)
