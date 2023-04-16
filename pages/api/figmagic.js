@@ -19,6 +19,7 @@ async function generateFigmagicFiles(figmaLink) {
     `npx figmagic start --url ${fileId} --token ${process.env.FIGMA_TOKEN} --output ${outputDir}`
   );
 
+  console.log("executed the command");
   // Upload each file to Supabase Storage
   await Promise.all([
     uploadFileToStorage(`${outputDir}/css.css`, "css.css"),

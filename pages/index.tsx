@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
     }
 
     const zipBlob = await zip.generateAsync({ type: "blob" });
-    saveAs(zipBlob, "figma-to-tailwind.zip");
+    saveAs(zipBlob, "figma-to-code.zip");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,7 +46,6 @@ const HomePage: React.FC = () => {
       },
       body: body,
     });
-    console.log(response);
 
     if (response.ok) {
       const data = await response.json();
