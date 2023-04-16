@@ -6,7 +6,7 @@ const execAsync = promisify(exec);
 
 async function generateFigmagicFiles(figmaLink) {
   await execAsync(
-    `npx figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN}`
+    `npx figmagic start --url ${figmaLink} --token ${process.env.FIGMA_TOKEN} --output /tmp/figmagic-output`
   );
 
   // Read the contents of each generated file
