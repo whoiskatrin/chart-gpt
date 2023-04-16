@@ -15,6 +15,7 @@
     "@headlessui/react": "^1.7.7",
     "@headlessui/tailwindcss": "^0.1.2",
     "@heroicons/react": "^2.0.13",
+    "@supabase/supabase-js": "^2.20.0",
     "@tailwindcss/forms": "^0.5.3",
     "@vercel/analytics": "^0.1.8",
     "ajv": "^8.12.0",
@@ -46,6 +47,7 @@
     "react-use-measure": "^2.1.1",
     "redis": "^4.6.5",
     "styled-components": "^5.3.9",
+    "supabase": "^1.50.4",
     "svgo": "^3.0.2",
     "util": "^0.12.5"
   },
