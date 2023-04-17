@@ -103,7 +103,7 @@ const HomePage: React.FC = () => {
                 height="24"
                 className="mr-2"
               />
-              Convert to Tailwind
+              Convert to code
             </button>
           </div>
         </form>
@@ -162,9 +162,7 @@ const HomePage: React.FC = () => {
             </button>
           </div>
         )}
-        <div className="w-full max-w-md mt-6">
-          <TwitterTweetEmbed tweetId="1645952548149555201" />
-        </div>
+        <div className="w-full max-w-md mt-6"></div>
       </div>
       <footer className="text-center font-inter text-gray-100 text-sm mb-4">
         Made with ❤️ using React, Next.js, Grafbase and Tailwind CSS

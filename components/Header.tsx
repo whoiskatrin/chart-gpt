@@ -20,12 +20,7 @@ export const Header = () => {
             alt="Figma Logo"
             className="w-6 h-6 mr-2"
           />
-          figmaToTailwind.css
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1024px-Tailwind_CSS_Logo.svg.png"
-            alt="Tailwind Logo"
-            className="w-6 h-6 mr-2 pl-2"
-          />
+          figmaToCode
         </h1>
         <p className="font-mono font-bold text-gray-200">
           Converter that tries to bridge the gap between designs and code using
