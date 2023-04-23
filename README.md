@@ -1,4 +1,4 @@
-# Chart-GPT - text to beatiful charts within seconds
+# Chart-GPT - text to beautiful charts within seconds
 
 <div align="center">
     <img src="https://github.com/whoiskatrin/chart-gpt/blob/main/UI.png" width="600" />
