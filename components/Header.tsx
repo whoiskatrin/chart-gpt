@@ -24,7 +24,7 @@ export const Header = () => {
           ChartGPT
         </h1>
         <p className="font-inter font-bold text-gray-700">
-          A tool that converts text into beatiful charts
+          A tool that converts text into beautiful charts
         </p>
       </Link>
       <div className="flex items-center gap-3 pt-4">
