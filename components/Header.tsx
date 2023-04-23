@@ -21,7 +21,7 @@ export const Header = () => {
             height="24"
             className="mr-2 filter brightness-0"
           />
-          AI Chart
+          ChartGPT
         </h1>
         <p className="font-inter font-bold text-gray-700">
           A tool that converts text into beatiful charts
