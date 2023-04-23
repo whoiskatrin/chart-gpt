@@ -30,7 +30,7 @@ export const Header = () => {
       <div className="flex items-center gap-3 pt-4">
         <a
           className="rounded-full text-gray-500 dark:text-gray-400"
-          href=""
+          href="https://github.com/whoiskatrin/chart-gpt"
           rel="noopener noreferrer"
           target="_blank"
         >
