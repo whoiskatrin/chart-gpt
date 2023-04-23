@@ -20,7 +20,7 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/api/translate.js",
-    "pages/api/figmagic.js"
+    "pages/api/check-fake-stars.ts"
   ],
   "exclude": ["node_modules"]
 }

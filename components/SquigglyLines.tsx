@@ -5,7 +5,7 @@ export default function SquigglyLines() {
     <svg
       aria-hidden="true"
       viewBox="0 0 418 42"
-      className="absolute px-4 mt-3 mx-auto squiggly"
+      className="absolute px-4 mx-auto squiggly"
       preserveAspectRatio="none"
       width="130"
       height="10"
