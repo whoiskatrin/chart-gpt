@@ -22,7 +22,7 @@ export default async function handler(
       body: JSON.stringify({
         prompt: prompt,
         temperature: 0.5,
-        max_tokens: 510,
+        max_tokens: 100,
         n: 1,
         stop: "\\n",
         model: "text-davinci-002",
