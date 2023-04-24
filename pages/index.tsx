@@ -4,6 +4,7 @@ import { Chart } from "../components/ChartComponent";
 import axios from "axios";
 import SquigglyLines from "../components/SquigglyLines";
 import LoadingDots from "../components/LoadingDots";
+import Head from "next/head";
 
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
