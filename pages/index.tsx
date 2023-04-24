@@ -60,6 +60,11 @@ const HomePage = () => {
   return (
     <div className="flex flex-col px-4 items-center justify-center min-h-screen bg-gradient-to-r from-slate-300 to-indigo-50 overflow-x-hidden">
       <Header />
+      <Head>
+        <title>
+          Tool that converts text into beautiful charts
+        </title>
+      </Head>
       <div className="flex flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-2">
         <form onSubmit={handleSubmit} className="w-full max-w-xl mb-6">
           <div className="flex flex-col items-center justify-center">
