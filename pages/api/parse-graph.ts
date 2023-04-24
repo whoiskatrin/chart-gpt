@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-const OPENAI_API_URL = "https://api.openai.com/v1/completions";
+const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,15 +20,13 @@ export default async function handler(
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        prompt: prompt,
+        messages: [{"role": "user", "content": prompt}],
         temperature: 0.5,
         max_tokens: 100,
         n: 1,
-        stop: "\\n",
-        model: "text-davinci-002",
+        model: "gpt-3.5-turbo",
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
-        logprobs: 10,
       }),
     });
 
@@ -39,7 +37,7 @@ export default async function handler(
     const data = await response.json();
     const graphData =
       data.choices && data.choices.length > 0
-        ? data.choices[0].text.trim()
+        ? data.choices[0].message.content.trim()
         : null;
     if (!graphData) {
       throw new Error("Failed to generate graph data");
