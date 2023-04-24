@@ -39,6 +39,7 @@
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
     "next": "latest",
+    "next-axiom": "^0.17.0",
     "next-themes": "^0.2.1",
     "node-fetch": "^3.3.1",
     "openai": "^3.2.1",
