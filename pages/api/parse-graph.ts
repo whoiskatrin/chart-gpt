@@ -20,7 +20,7 @@ export default async function handler(
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        messages: [{"role": "user", "content": prompt}],
+        messages: [{ role: "user", content: prompt }],
         temperature: 0.5,
         max_tokens: 100,
         n: 1,
