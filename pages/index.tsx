@@ -90,20 +90,20 @@ const HomePage = () => {
           </div>
         </form>
       </div>
-      {chartData && chartType && (
-        <div className="w-full max-w-2xl mb-6">
-          {isLoading ? (
-            <div className="flex items-center justify-center h-40">
-              <LoadingDots color={"blue"} />
-            </div>
-          ) : (
+      <div className="w-full max-w-2xl mb-6">
+        {isLoading ? (
+          <div className="flex items-center justify-center h-96">
+            <LoadingDots color={"blue"} />
+          </div>
+        ) : (
+          chartData &&
+          chartType && (
             <div className="flex items-center justify-center h-96">
               <Chart data={chartData} chartType={chartType} />
             </div>
-          )}
-        </div>
-      )}
-
+          )
+        )}
+      </div>
       <footer className="text-center font-inter text-gray-700 text-sm mb-4">
         Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
       </footer>
