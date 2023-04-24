@@ -10,6 +10,7 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chartType, setChartType] = useState("");
   const [chartData, setChartData] = useState([]);
+  const [error,setError]=useState(false)
 
   const generateChartData = async (prompt: string) => {
     try {
@@ -34,6 +35,7 @@ const HomePage = () => {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
+    setError(false)
     setIsLoading(true);
     console.log(inputValue);
     const chartType = await getChartType(inputValue);
@@ -48,9 +50,11 @@ const HomePage = () => {
         setChartData(JSON.parse(chartDataGenerate));
         setChartType(chartType.data);
       } catch (error) {
+        setError(true)
         console.error("Failed to parse chart data:", error);
       }
     } catch (error) {
+      setError(true)
       console.error("Failed to generate graph data:", error);
     } finally {
       setIsLoading(false);
@@ -90,16 +94,18 @@ const HomePage = () => {
           </div>
         </form>
       </div>
-      {chartData && chartType && (
+      {error ? ( <p style={{color:"red"}}>Ooops! Could not generate </p>): (
         <div className="w-full max-w-2xl mb-6">
           {isLoading ? (
             <div className="flex items-center justify-center h-40">
               <LoadingDots color={"blue"} />
             </div>
           ) : (
+            chartData.length && chartType && (
             <div className="flex items-center justify-center h-96">
               <Chart data={chartData} chartType={chartType} />
             </div>
+            )
           )}
         </div>
       )}
