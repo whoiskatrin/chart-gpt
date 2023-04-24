@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-const OPENAI_API_URL = "https://api.openai.com/v1/completions";
+const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,12 +18,12 @@ export default async function handler(
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        prompt: prompt,
+        messages: [{"role": "user", "content": prompt}],
         temperature: 0.5,
         max_tokens: 20,
         n: 1,
         stop: "\\n",
-        model: "text-davinci-002",
+        model: "gpt-3.5-turbo",
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
         logprobs: 10,
@@ -31,7 +31,7 @@ export default async function handler(
     });
 
     const result = await response.json();
-    const chartType = result.choices[0].text.trim();
+    const chartType = result.choices[0].message.content.trim();
 
     res.status(200).json(chartType);
   } catch (error) {
