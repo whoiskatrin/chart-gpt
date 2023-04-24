@@ -22,7 +22,7 @@ export default async function handler(
       body: JSON.stringify({
         messages: [{ role: "user", content: prompt }],
         temperature: 0.5,
-        max_tokens: 100,
+        max_tokens: 30,
         n: 1,
         model: "gpt-3.5-turbo",
         frequency_penalty: 0.5,
