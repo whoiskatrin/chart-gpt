@@ -22,11 +22,9 @@ export default async function handler(
         temperature: 0.5,
         max_tokens: 20,
         n: 1,
-        stop: "\\n",
         model: "gpt-3.5-turbo",
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
-        logprobs: 10,
       }),
     });
 
