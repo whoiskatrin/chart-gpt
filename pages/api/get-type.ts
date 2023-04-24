@@ -23,7 +23,7 @@ export default async function handler(
         max_tokens: 2048,
         n: 1,
         stop: "\\n",
-        model: "text-davinci-003",
+        model: "text-davinci-002",
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
         logprobs: 10,
@@ -31,6 +31,7 @@ export default async function handler(
     });
 
     const result = await response.json();
+    console.log(result);
     const chartType = result.choices[0].text.trim();
 
     res.status(200).json(chartType);
