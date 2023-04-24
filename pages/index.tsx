@@ -6,6 +6,7 @@ import SquigglyLines from "../components/SquigglyLines";
 import LoadingDots from "../components/LoadingDots";
 
 const HomePage = () => {
+  const [apiKey, setApiKey] = useState(undefined);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [chartType, setChartType] = useState("");
@@ -13,7 +14,7 @@ const HomePage = () => {
 
   const generateChartData = async (prompt: string) => {
     try {
-      const response = await axios.post("/api/parse-graph", { prompt });
+      const response = await axios.post("/api/parse-graph", { prompt, apiKey });
       console.log(response.data);
       return response.data;
     } catch (error) {
@@ -24,7 +25,7 @@ const HomePage = () => {
 
   const getChartType = async (inputData: string) => {
     try {
-      const response = await axios.post("/api/get-type", { inputData });
+      const response = await axios.post("/api/get-type", { inputData, apiKey });
       return response;
     } catch (error) {
       console.error("Failed to generate chart type:", error);

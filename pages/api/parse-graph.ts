@@ -11,13 +11,15 @@ export default async function handler(
     return;
   }
 
-  const { prompt } = req.body;
+  const { prompt, apiKey } = req.body;
+  const OPENAI_API_KEY = apiKey || process.env.OPENAI_API_KEY;
+  
   try {
     const response = await fetch(OPENAI_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
         messages: [{ role: "user", content: prompt }],
