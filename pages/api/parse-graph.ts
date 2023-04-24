@@ -12,7 +12,7 @@ export default async function handler(
   }
 
   const { prompt, apiKey } = req.body;
-  const OPENAI_API_KEY = apiKey || process.env.OPENAI_API_KEY;
+  const OPENAI_API_KEY = apiKey !== "" ? apiKey : process.env.OPENAI_API_KEY;
   
   try {
     const response = await fetch(OPENAI_API_URL, {

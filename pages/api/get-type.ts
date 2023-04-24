@@ -8,7 +8,7 @@ export default async function handler(
 ): Promise<void> {
   try {
     const { inputData, apiKey } = req.body;
-    const OPENAI_API_KEY = apiKey || process.env.OPENAI_API_KEY;
+    const OPENAI_API_KEY = apiKey !== "" ? apiKey : process.env.OPENAI_API_KEY;
 
     const prompt = `The following are the possible chart types supported by the code provided: area, bar, line, composed, scatter, pie, radar, radialBar, treemap, and funnel. Given the user input: ${inputData}, identify the chart type the user wants to display. Return just one word
 `;

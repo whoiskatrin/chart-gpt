@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Header } from "../components/Header";
 import { Chart } from "../components/ChartComponent";
+import { ApiKey } from "../components/ApiKey";
 import axios from "axios";
 import SquigglyLines from "../components/SquigglyLines";
 import LoadingDots from "../components/LoadingDots";
 
 const HomePage = () => {
-  const [apiKey, setApiKey] = useState(undefined);
+  const [apiKey, setApiKey] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [chartType, setChartType] = useState("");
@@ -35,6 +36,7 @@ const HomePage = () => {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
+
     setIsLoading(true);
     console.log(inputValue);
     const chartType = await getChartType(inputValue);
@@ -90,6 +92,7 @@ const HomePage = () => {
             </button>
           </div>
         </form>
+        {/* <ApiKey apiKey={apiKey} setApiKey={setApiKey} /> */}
       </div>
       <div className="w-full max-w-2xl mb-6">
         {isLoading ? (
