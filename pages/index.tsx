@@ -9,18 +9,16 @@ import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
 import InfoSection from "../components/InfoSection";
 
-
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [chartType, setChartType] = useState("");
   const [chartData, setChartData] = useState([]);
-  const [error,setError]=useState(false)
+  const [error, setError] = useState(false);
 
-  const generateChartData = async (prompt: string) => {
+  const generateChartData = async (prompt) => {
     try {
       const response = await axios.post("/api/parse-graph", { prompt });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Failed to generate chart data:", error);
@@ -28,7 +26,7 @@ const HomePage = () => {
     }
   };
 
-  const getChartType = async (inputData: string) => {
+  const getChartType = async (inputData) => {
     try {
       const response = await axios.post("/api/get-type", { inputData });
       return response;
@@ -38,35 +36,35 @@ const HomePage = () => {
     }
   };
 
-  const handleSubmit = async (event: { preventDefault: () => void }) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(false)
+    setError(false);
     setIsLoading(true);
-    console.log(inputValue);
-    const chartType = await getChartType(inputValue);
 
     try {
-       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
+      const chartTypeResponse = await getChartType(inputValue);
+      setChartType(chartTypeResponse.data);
+
+      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
 [{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
 
       const chartDataGenerate = await generateChartData(libraryPrompt);
 
       try {
         setChartData(JSON.parse(chartDataGenerate));
-        setChartType(chartType.data);
       } catch (error) {
-        setError(true)
+        setError(true);
         console.error("Failed to parse chart data:", error);
       }
     } catch (error) {
-      setError(true)
+      setError(true);
       console.error("Failed to generate graph data:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCaptureClick = async (selector: string) => {
+  const handleCaptureClick = async (selector) => {
     const element = document.querySelector<HTMLElement>(selector);
     if (!element) {
       return;
@@ -87,61 +85,63 @@ const HomePage = () => {
           <div className="flex flex-col items-center justify-center">
             <label
               htmlFor="textInput"
-              className="block font-inter font-semibold text-gray-700 dark:text-gray-200"
-            >
-              Describe your data and desired chart:
-              <SquigglyLines />
-            </label>
+                        className="block font-inter font-semibold text-gray-700 dark:text-gray-200"
+        >
+          Describe your data and desired chart:
+          <SquigglyLines />
+        </label>
 
-            <textarea
-              id="input"
-              rows={3}
-              placeholder=""
-              className="appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-center"
-              value={inputValue}
-              required
-              autoFocus
-              onChange={(e) => setInputValue(e.target.value)}
-            />
+        <textarea
+          id="input"
+          rows={3}
+          placeholder=""
+          className="appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-center"
+          value={inputValue}
+          required
+          autoFocus
+          onChange={(e) => setInputValue(e.target.value)}
+        />
 
-            <button
-              type="submit"
-              className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
-            >
-              Draw
-            </button>
-          </div>
-        </form>
+        <button
+          type="submit"
+          className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
+        >
+          Draw
+        </button>
       </div>
-      {error ? ( <p style={{color:"red"}}>Ooops! Could not generate </p>): (
-   <div className="w-full max-w-xl mb-6 p-4">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-96">
-            <LoadingDots color={"blue"} />
-          </div>
-        ) : (
-          chartData &&
-          chartType && (
-            <div className="flex items-center justify-center p-4">
-              <Chart data={chartData} chartType={chartType} />
-              <button
+    </form>
+  </div>
+  {error ? (
+    <p style={{ color: "red" }}>Ooops! Could not generate</p>
+  ) : (
+    <div className="w-full max-w-xl mb-6 p-4">
+      {isLoading ? (
+        <div className="flex items-center justify-center h-96">
+          <LoadingDots color={"blue"} />
+        </div>
+      ) : (
+        chartData &&
+        chartType && (
+          <div className="flex items-center justify-center p-4">
+            <Chart data={chartData} chartType={chartType} />
+            <button
               type="button"
               className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
-              onClick={() => handleCaptureClick('.recharts-wrapper')}
+              onClick={() => handleCaptureClick(".recharts-wrapper")}
             >
               Download
             </button>
-            </div>
-            
-          )
-        )}
-        <InfoSection />
-      </div>
-      <footer className="text-center font-inter text-gray-700 text-sm mb-4">
-        Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
-      </footer>
+          </div>
+        )
+      )}
+      <InfoSection />
     </div>
-  );
+  )}
+  <footer className="text-center font-inter text-gray-700 text-sm mb-4">
+    Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
+  </footer>
+</div>
+);
 };
 
 export default HomePage;
