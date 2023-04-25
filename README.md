@@ -37,6 +37,6 @@ If you would like to contribute to this project, please follow these steps:
 
 1. Fork this repository.
 2. Clone your forked repository:
-3. for your changes:
+3. For your changes:
 4. Make your changes, commit them, and push them to your forked repository:
 5. Create a pull request on this repository.

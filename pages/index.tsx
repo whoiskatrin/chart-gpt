@@ -7,6 +7,8 @@ import LoadingDots from "../components/LoadingDots";
 import Head from "next/head";
 import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
+import InfoSection from "../components/InfoSection";
+
 
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
@@ -74,9 +76,7 @@ const HomePage = () => {
     <div className="flex flex-col px-4 items-center justify-center min-h-screen bg-gradient-to-r from-slate-300 to-indigo-50 overflow-x-hidden">
       <Header />
       <Head>
-        <title>
-          Tool that converts text into beautiful charts
-        </title>
+        <title>Tool that converts text into beautiful charts</title>
       </Head>
       <div className="flex flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-2">
         <form onSubmit={handleSubmit} className="w-full max-w-xl mb-6">
@@ -95,6 +95,7 @@ const HomePage = () => {
               placeholder=""
               className="appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-center"
               value={inputValue}
+              required
               autoFocus
               onChange={(e) => setInputValue(e.target.value)}
             />
@@ -108,7 +109,7 @@ const HomePage = () => {
           </div>
         </form>
       </div>
-      <div className="w-full max-w-2xl mb-6">
+      <div className="w-full max-w-xl mb-6 p-4">
         {isLoading ? (
           <div className="flex items-center justify-center h-96">
             <LoadingDots color={"blue"} />
@@ -116,7 +117,7 @@ const HomePage = () => {
         ) : (
           chartData &&
           chartType && (
-            <div className="flex items-center justify-center h-96">
+            <div className="flex items-center justify-center p-4">
               <Chart data={chartData} chartType={chartType} />
               <button
               type="button"
@@ -129,7 +130,9 @@ const HomePage = () => {
             
           )
         )}
+        <InfoSection />
       </div>
+
       <footer className="text-center font-inter text-gray-700 text-sm mb-4">
         Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
       </footer>
