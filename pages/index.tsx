@@ -44,8 +44,8 @@ const HomePage = () => {
     const chartType = await getChartType(inputValue);
 
     try {
-      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12 }] for the following description for Recharts. \n\n${inputValue}\n`;
+       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
 
       const chartDataGenerate = await generateChartData(libraryPrompt);
 
