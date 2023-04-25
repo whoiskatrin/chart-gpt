@@ -5,6 +5,8 @@ import axios from "axios";
 import SquigglyLines from "../components/SquigglyLines";
 import LoadingDots from "../components/LoadingDots";
 import Head from "next/head";
+import downloadjs from "downloadjs";
+import html2canvas from "html2canvas";
 
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
@@ -41,7 +43,7 @@ const HomePage = () => {
 
     try {
       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
+[{ "name": "a", "value": 12 }] for the following description for Recharts. \n\n${inputValue}\n`;
 
       const chartDataGenerate = await generateChartData(libraryPrompt);
 
@@ -56,6 +58,16 @@ const HomePage = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCaptureClick = async (selector: string) => {
+    const element = document.querySelector<HTMLElement>(selector);
+    if (!element) {
+      return;
+    }
+    const canvas = await html2canvas(element);
+    const dataURL = canvas.toDataURL('image/png');
+    downloadjs(dataURL, 'chart.png', 'image/png');
   };
 
   return (
@@ -106,12 +118,20 @@ const HomePage = () => {
           chartType && (
             <div className="flex items-center justify-center h-96">
               <Chart data={chartData} chartType={chartType} />
+              <button
+              type="button"
+              className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
+              onClick={() => handleCaptureClick('.recharts-wrapper')}
+            >
+              Download
+            </button>
             </div>
+            
           )
         )}
       </div>
       <footer className="text-center font-inter text-gray-700 text-sm mb-4">
-        Made with ❤️ using React, Next.js, Recharts, OpenAI and Tailwind CSS
+        Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
       </footer>
     </div>
   );
