@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
   AreaChart,
   Area,
@@ -63,8 +63,8 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
   console.log("Chart data:", data, "Chart type:", chartType);
 
   const renderChart = () => {
-    const colors = useMemo(() => data.map((d: { color: any; }) => d.color), [data]);
-    const color = useMemo(() => mixColors(colors), [colors]);
+    const colors = data.map((d: { color: any; }) => d.color);
+    const color = mixColors(colors);
     chartType = chartType.toLowerCase();
     switch (chartType) {
       case "area":
