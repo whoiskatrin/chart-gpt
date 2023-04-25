@@ -16,7 +16,7 @@ const HomePage = () => {
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(false);
 
-  const generateChartData = async (prompt) => {
+  const generateChartData = async (prompt: string) => {
     try {
       const response = await axios.post("/api/parse-graph", { prompt });
       return response.data;
@@ -26,7 +26,7 @@ const HomePage = () => {
     }
   };
 
-  const getChartType = async (inputData) => {
+  const getChartType = async (inputData: string) => {
     try {
       const response = await axios.post("/api/get-type", { inputData });
       return response;
@@ -36,7 +36,7 @@ const HomePage = () => {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     setError(false);
     setIsLoading(true);
@@ -64,14 +64,14 @@ const HomePage = () => {
     }
   };
 
-  const handleCaptureClick = async (selector) => {
+  const handleCaptureClick = async (selector: string) => {
     const element = document.querySelector<HTMLElement>(selector);
     if (!element) {
       return;
     }
     const canvas = await html2canvas(element);
-    const dataURL = canvas.toDataURL('image/png');
-    downloadjs(dataURL, 'chart.png', 'image/png');
+    const dataURL = canvas.toDataURL("image/png");
+    downloadjs(dataURL, "chart.png", "image/png");
   };
 
   return (
@@ -85,63 +85,63 @@ const HomePage = () => {
           <div className="flex flex-col items-center justify-center">
             <label
               htmlFor="textInput"
-                        className="block font-inter font-semibold text-gray-700 dark:text-gray-200"
-        >
-          Describe your data and desired chart:
-          <SquigglyLines />
-        </label>
-
-        <textarea
-          id="input"
-          rows={3}
-          placeholder=""
-          className="appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-center"
-          value={inputValue}
-          required
-          autoFocus
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-
-        <button
-          type="submit"
-          className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
-        >
-          Draw
-        </button>
-      </div>
-    </form>
-  </div>
-  {error ? (
-    <p style={{ color: "red" }}>Ooops! Could not generate</p>
-  ) : (
-    <div className="w-full max-w-xl mb-6 p-4">
-      {isLoading ? (
-        <div className="flex items-center justify-center h-96">
-          <LoadingDots color={"blue"} />
-        </div>
-      ) : (
-        chartData &&
-        chartType && (
-          <div className="flex items-center justify-center p-4">
-            <Chart data={chartData} chartType={chartType} />
-            <button
-              type="button"
-              className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
-              onClick={() => handleCaptureClick(".recharts-wrapper")}
+              className="block font-inter font-semibold text-gray-700 dark:text-gray-200"
             >
-              Download
+              Describe your data and desired chart:
+              <SquigglyLines />
+            </label>
+
+            <textarea
+              id="input"
+              rows={3}
+              placeholder=""
+              className="appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-center"
+              value={inputValue}
+              required
+              autoFocus
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+
+            <button
+              type="submit"
+              className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
+            >
+              Draw
             </button>
           </div>
-        )
+        </form>
+      </div>
+      {error ? (
+        <p style={{ color: "red" }}>Ooops! Could not generate</p>
+      ) : (
+        <div className="w-full max-w-xl mb-6 p-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-96">
+              <LoadingDots color={"blue"} />
+            </div>
+          ) : (
+            chartData &&
+            chartType && (
+              <div className="flex items-center justify-center p-4">
+                <Chart data={chartData} chartType={chartType} />
+                <button
+                  type="button"
+                  className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
+                  onClick={() => handleCaptureClick(".recharts-wrapper")}
+                >
+                  Download
+                </button>
+              </div>
+            )
+          )}
+          <InfoSection />
+        </div>
       )}
-      <InfoSection />
+      <footer className="text-center font-inter text-gray-700 text-sm mb-4">
+        Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
+      </footer>
     </div>
-  )}
-  <footer className="text-center font-inter text-gray-700 text-sm mb-4">
-    Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
-  </footer>
-</div>
-);
+  );
 };
 
 export default HomePage;
