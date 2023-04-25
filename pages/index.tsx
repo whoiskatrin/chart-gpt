@@ -95,7 +95,6 @@ const HomePage = () => {
             </button>
           </div>
         </form>
-        <InfoSection />
       </div>
       <div className="w-full max-w-xl mb-6 p-4">
         {isLoading ? (
@@ -110,7 +109,9 @@ const HomePage = () => {
             </div>
           )
         )}
+        <InfoSection />
       </div>
+
       <footer className="text-center font-inter text-gray-700 text-sm mb-4">
         Made with ❤️ using React, Next.js, Recharts, OpenAI and Tailwind CSS
       </footer>
