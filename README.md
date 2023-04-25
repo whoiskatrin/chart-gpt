@@ -13,6 +13,12 @@ git clone https://github.com/whoiskatrin/chart-gpt.git
 cd chart-gpt
 ```
 
+Then duplicate the `.env.example` template with `cp .env.example .env` and add your OpenAI API key:
+
+```
+OPENAI_API_KEY="your-api-key"
+```
+
 Then install the dependencies and start the development server:
 
 ```
@@ -31,6 +37,6 @@ If you would like to contribute to this project, please follow these steps:
 
 1. Fork this repository.
 2. Clone your forked repository:
-3. for your changes:
+3. For your changes:
 4. Make your changes, commit them, and push them to your forked repository:
 5. Create a pull request on this repository.
