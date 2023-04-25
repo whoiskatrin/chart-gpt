@@ -81,6 +81,7 @@ const HomePage = () => {
               id="input"
               rows={3}
               placeholder=""
+              required
               className="appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-center"
               value={inputValue}
               autoFocus
