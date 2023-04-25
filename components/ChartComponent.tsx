@@ -29,6 +29,7 @@ import {
   Legend,
   Cell,
 } from "recharts";
+import { CustomCell } from "./CustomCell";
 
 interface ChartProps {
   data: any;
@@ -201,6 +202,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             dataKey="value"
             stroke="#fff"
             fill="#8884d8"
+            content={<CustomCell colors={colors} />}
           >
             <Tooltip />
           </Treemap>
