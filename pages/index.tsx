@@ -111,7 +111,7 @@ const HomePage = () => {
         )}
       </div>
       <footer className="text-center font-inter text-gray-700 text-sm mb-4">
-        Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
+        Made with ❤️ using React, Next.js, Recharts OpenAI and Tailwind CSS
       </footer>
     </div>
   );
