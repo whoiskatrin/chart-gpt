@@ -27,11 +27,36 @@ import {
   Tooltip,
   Scatter,
   Legend,
+  Cell,
 } from "recharts";
+import { CustomCell } from "./CustomCell";
 
 interface ChartProps {
   data: any;
   chartType: string;
+}
+
+function mixColors(colors: string[]): string {
+  // Convert hex color values to RGB
+  const rgbColors = colors.map(color => {
+    const r = parseInt(color.substring(1, 3), 16);
+    const g = parseInt(color.substring(3, 5), 16);
+    const b = parseInt(color.substring(5, 7), 16);
+    return [r, g, b];
+  });
+
+  // Calculate average color values
+  const avgColor = rgbColors.reduce((acc, val) => {
+    return [acc[0] + val[0], acc[1] + val[1], acc[2] + val[2]];
+  }, [0, 0, 0]).map(val => Math.round(val / rgbColors.length));
+
+  // Convert average RGB values to hex
+  const hexColor = '#' + avgColor.map(val => {
+    const hexVal = val.toString(16);
+    return hexVal.length === 1 ? '0' + hexVal : hexVal;
+  }).join('');
+
+  return hexColor;
 }
 
 //TODO: dynamic keys instead of default value
@@ -39,6 +64,8 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
   console.log("Chart data:", data, "Chart type:", chartType);
 
   const renderChart = () => {
+    const colors = data.map((d: { color: any; }) => d.color);
+    const color = mixColors(colors);
     chartType = chartType.toLowerCase();
     switch (chartType) {
       case "area":
@@ -48,7 +75,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Area type="monotone" dataKey="value" fill="#8884d8" />
+            <Area type="monotone" dataKey="value" fill={color} />
           </AreaChart>
         );
       case "bar":
@@ -59,7 +86,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" fill="#8884d8" />
+            <Bar dataKey="value" fill={color} />
           </BarChart>
         );
       case "line":
@@ -70,7 +97,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
+            <Line type="monotone" dataKey="value" stroke={color} />
           </LineChart>
         );
       case "composed":
@@ -107,7 +134,11 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
               cy="50%"
               fill="#8884d8"
               label
-            />
+            >
+              {colors.map((color: any, index: number) => (
+                <Cell key={`cell-${index}`} fill={color} />
+              ))}
+              </Pie>
             <Tooltip />
             <Legend />
           </PieChart>
@@ -171,6 +202,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             dataKey="value"
             stroke="#fff"
             fill="#8884d8"
+            content={<CustomCell colors={colors} />}
           >
             <Tooltip />
           </Treemap>
