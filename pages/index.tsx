@@ -40,7 +40,7 @@ const HomePage = () => {
       setChartType(chartTypeResponse.data);
 
       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts. Instead of naming value field value in JSON, name it based on what user requested.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes. \n\n${inputValue}\n`;
 
       const chartDataResponse = await axios.post("/api/parse-graph", {
         prompt: libraryPrompt,
@@ -125,7 +125,7 @@ const HomePage = () => {
       {error ? (
         <p style={{ color: "red" }}>Ooops! Could not generate</p>
       ) : (
-        <div className="w-full max-w-xl mb-6 p-4">
+        <div className="w-full max-w-4xl mb-6 p-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-96">
               <LoadingDots color={"blue"} />
@@ -133,7 +133,10 @@ const HomePage = () => {
           ) : (
             shouldRenderChart && (
               <>
-                <div className="flex items-center justify-center p-4">
+                <div
+                  className="flex items-center justify-center p-4"
+                  style={{ width: "100%", height: "300px", overflow: "scroll" }}
+                >
                   {chartComponent}
                 </div>
                 <div className="flex flex-col items-center justify-center p-4">

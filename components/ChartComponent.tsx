@@ -17,7 +17,7 @@ import {
   Radar,
   RadialBarChart,
   RadialBar,
-  Sankey,
+  ResponsiveContainer,
   Treemap,
   FunnelChart,
   Funnel,
@@ -125,12 +125,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
         );
       case "bar":
         return (
-          <BarChart
-            width={700}
-            height={300}
-            data={data}
-            margin={{ left: 30, right: 30 }}
-          >
+          <BarChart width={800} height={300} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -141,7 +136,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
         );
       case "line":
         return (
-          <LineChart width={500} height={300} data={data}>
+          <LineChart width={800} height={300} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -152,7 +147,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
         );
       case "composed":
         return (
-          <ComposedChart width={500} height={300} data={data}>
+          <ComposedChart width={800} height={400} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -269,7 +264,11 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
     }
   };
 
-  return <div>{renderChart()}</div>;
+  return (
+    <ResponsiveContainer width={"100%"} height={"100%"}>
+      <div>{renderChart()}</div>
+    </ResponsiveContainer>
+  );
 };
 
 export default Chart;
