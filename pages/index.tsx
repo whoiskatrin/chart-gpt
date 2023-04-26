@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Header } from "../components/Header";
 import { Chart } from "../components/ChartComponent";
 import axios from "axios";
@@ -17,30 +17,47 @@ const HomePage = () => {
   const [chartType, setChartType] = useState("");
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(false);
-  const [drawClicked, setDrawClicked] = useState(false);
+  const [shouldRenderChart, setShouldRenderChart] = useState(false);
 
-  const updateChart = async () => {
-    if (!drawClicked) return;
+  const chartComponent = useMemo(() => {
+    return <Chart data={chartData} chartType={chartType} />;
+  }, [chartData, chartType]);
+
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
+    event.preventDefault();
 
     setError(false);
     setIsLoading(true);
 
     try {
-      const chartTypeResponse = await getChartType(inputValue);
+    
+      const chartTypeResponse = await axios.post("/api/get-type", {
+        inputData: inputValue,
+      });
+          
       if(!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase())) return setError(true)
+      
       setChartType(chartTypeResponse.data);
 
       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-    [{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts. Instead of naming value field value in JSON, name it based on what user requested.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts. Instead of naming value field value in JSON, name it based on what user requested.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
 
-      const chartDataGenerate = await generateChartData(libraryPrompt);
+      const chartDataResponse = await axios.post("/api/parse-graph", {
+        prompt: libraryPrompt,
+      });
+
+      let parsedData;
 
       try {
-        setChartData(JSON.parse(chartDataGenerate));
+        parsedData = JSON.parse(chartDataResponse.data);
       } catch (error) {
         setError(true);
         console.error("Failed to parse chart data:", error);
       }
+
+      setChartData(parsedData);
+      setChartType(chartTypeResponse.data);
+      setShouldRenderChart(true);
     } catch (error) {
       setError(true);
       console.error("Failed to generate graph data:", error);
@@ -49,36 +66,8 @@ const HomePage = () => {
     }
   };
 
-  useEffect(() => {
-    if (drawClicked) {
-      updateChart();
-      setDrawClicked(false);
-    }
-  }, [drawClicked]);
-
-  const generateChartData = async (prompt: string) => {
-    try {
-      const response = await axios.post("/api/parse-graph", { prompt });
-      return response.data;
-    } catch (error) {
-      console.error("Failed to generate chart data:", error);
-      throw error;
-    }
-  };
-
-  const getChartType = async (inputData: string) => {
-    try {
-      const response = await axios.post("/api/get-type", { inputData });
-      return response;
-    } catch (error) {
-      console.error("Failed to generate chart type:", error);
-      throw error;
-    }
-  };
-
-  const handleSubmit = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    setDrawClicked(true); // Set the drawClicked flag to true
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(event.target.value);
   };
 
   const handleCaptureClick = async (selector: string) => {
@@ -116,7 +105,12 @@ const HomePage = () => {
               value={inputValue}
               required
               autoFocus
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={handleInputChange}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+                  handleSubmit(event);
+                }
+              }}
             />
 
             <button
@@ -137,11 +131,10 @@ const HomePage = () => {
               <LoadingDots color={"blue"} />
             </div>
           ) : (
-            chartData &&
-            chartType && (
+            shouldRenderChart && (
               <>
                 <div className="flex items-center justify-center p-4">
-                  <Chart data={chartData} chartType={chartType} />
+                  {chartComponent}
                 </div>
                 <div className="flex flex-col items-center justify-center p-4">
                   <button
