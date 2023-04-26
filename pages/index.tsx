@@ -133,7 +133,6 @@ const HomePage = () => {
               <LoadingDots color={"blue"} />
             </div>
           ) : (
-            drawClicked &&
             chartData &&
             chartType && (
               <>
