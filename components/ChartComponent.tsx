@@ -125,7 +125,12 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
         );
       case "bar":
         return (
-          <BarChart width={500} height={300} data={data}>
+          <BarChart
+            width={700}
+            height={300}
+            data={data}
+            margin={{ left: 30, right: 30 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
