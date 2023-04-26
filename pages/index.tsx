@@ -130,7 +130,7 @@ const HomePage = () => {
                 <button 
                   type="button"
                   className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
-                  onClick={() => handleCaptureClick('.recharts-wrapper')}
+                  onClick={() => handleCaptureClick(".recharts-wrapper")}
                 >
                   Download
                 </button>
