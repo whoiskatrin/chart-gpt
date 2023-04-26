@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Header } from "../components/Header";
 import { Chart } from "../components/ChartComponent";
 import axios from "axios";
@@ -15,6 +15,42 @@ const HomePage = () => {
   const [chartType, setChartType] = useState("");
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(false);
+  const [drawClicked, setDrawClicked] = useState(false);
+
+  const updateChart = async () => {
+    if (!drawClicked) return;
+
+    setError(false);
+    setIsLoading(true);
+
+    try {
+      const chartTypeResponse = await getChartType(inputValue);
+      setChartType(chartTypeResponse.data);
+
+      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
+    [{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts. Instead of naming value field value in JSON, name it based on what user requested.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
+
+      const chartDataGenerate = await generateChartData(libraryPrompt);
+
+      try {
+        setChartData(JSON.parse(chartDataGenerate));
+      } catch (error) {
+        setError(true);
+        console.error("Failed to parse chart data:", error);
+      }
+    } catch (error) {
+      setError(true);
+      console.error("Failed to generate graph data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (drawClicked) {
+      updateChart();
+    }
+  }, [drawClicked]);
 
   const generateChartData = async (prompt: string) => {
     try {
@@ -36,32 +72,9 @@ const HomePage = () => {
     }
   };
 
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+  const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    setError(false);
-    setIsLoading(true);
-
-    try {
-      const chartTypeResponse = await getChartType(inputValue);
-      setChartType(chartTypeResponse.data);
-
-      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
-
-      const chartDataGenerate = await generateChartData(libraryPrompt);
-
-      try {
-        setChartData(JSON.parse(chartDataGenerate));
-      } catch (error) {
-        setError(true);
-        console.error("Failed to parse chart data:", error);
-      }
-    } catch (error) {
-      setError(true);
-      console.error("Failed to generate graph data:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    setDrawClicked(true); // Set the drawClicked flag to true
   };
 
   const handleCaptureClick = async (selector: string) => {
@@ -120,21 +133,22 @@ const HomePage = () => {
               <LoadingDots color={"blue"} />
             </div>
           ) : (
+            drawClicked &&
             chartData &&
             chartType && (
               <>
-              <div className="flex items-center justify-center p-4">
-                <Chart data={chartData} chartType={chartType} />
-              </div>
-              <div className="flex flex-col items-center justify-center p-4">
-                <button 
-                  type="button"
-                  className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
-                  onClick={() => handleCaptureClick(".recharts-wrapper")}
-                >
-                  Download
-                </button>
-              </div>
+                <div className="flex items-center justify-center p-4">
+                  <Chart data={chartData} chartType={chartType} />
+                </div>
+                <div className="flex flex-col items-center justify-center p-4">
+                  <button
+                    type="button"
+                    className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
+                    onClick={() => handleCaptureClick(".recharts-wrapper")}
+                  >
+                    Download
+                  </button>
+                </div>
               </>
             )
           )}

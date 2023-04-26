@@ -36,6 +36,40 @@ interface ChartProps {
   chartType: string;
 }
 
+const colors = [
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#4BC0C0",
+  "#9966FF",
+  "#FF9F40",
+  "#E7E9ED",
+  "#FFA1B5",
+  "#52B0F5",
+  "#FFDA7D",
+  "#66C2A5",
+  "#AB63FA",
+  "#FFB74D",
+  "#A9A9A9",
+  "#8DD3C7",
+  "#FDB462",
+  "#FB8072",
+  "#80B1D3",
+  "#BEBADA",
+  "#FCCDE5",
+  "#BC80BD",
+  "#CCEBC5",
+  "#FFED6F",
+  "#1696D2",
+  "#D2E3F3",
+  "#F76F8E",
+  "#5C940D",
+  "#FF5A5F",
+  "#7BCCC4",
+  "#BA68C8",
+  "#8E0152",
+];
+
 function mixColors(colors: string[], randomFactor = 0.1): string {
   // Convert hex color values to RGB
   const rgbColors = colors.map((color) => {
@@ -74,44 +108,9 @@ function mixColors(colors: string[], randomFactor = 0.1): string {
 
 //TODO: dynamic keys instead of default value
 export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
-  console.log("Chart data:", data, "Chart type:", chartType);
-
+  const color = mixColors(colors);
+  const value = data.length > 0 ? Object.keys(data[0])[1] : "value";
   const renderChart = () => {
-    const colors = [
-      "#FF6384",
-      "#36A2EB",
-      "#FFCE56",
-      "#4BC0C0",
-      "#9966FF",
-      "#FF9F40",
-      "#E7E9ED",
-      "#FFA1B5",
-      "#52B0F5",
-      "#FFDA7D",
-      "#66C2A5",
-      "#AB63FA",
-      "#FFB74D",
-      "#A9A9A9",
-      "#8DD3C7",
-      "#FDB462",
-      "#FB8072",
-      "#80B1D3",
-      "#BEBADA",
-      "#FCCDE5",
-      "#BC80BD",
-      "#CCEBC5",
-      "#FFED6F",
-      "#1696D2",
-      "#D2E3F3",
-      "#F76F8E",
-      "#5C940D",
-      "#FF5A5F",
-      "#7BCCC4",
-      "#BA68C8",
-      "#8E0152",
-    ];
-
-    const color = mixColors(colors);
     chartType = chartType.toLowerCase();
     switch (chartType) {
       case "area":
@@ -121,7 +120,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Area type="monotone" dataKey="value" fill={color} />
+            <Area type="monotone" dataKey={value} fill={color} />
           </AreaChart>
         );
       case "bar":
@@ -132,7 +131,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" fill={color} />
+            <Bar dataKey={value} fill={color} />
           </BarChart>
         );
       case "line":
@@ -143,7 +142,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" stroke={color} />
+            <Line type="monotone" dataKey={value} stroke={color} />
           </LineChart>
         );
       case "composed":
@@ -154,7 +153,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
+            <Line type="monotone" dataKey={value} stroke="#8884d8" />
             <Bar dataKey="value" fill="#413ea0" />
           </ComposedChart>
         );
@@ -166,7 +165,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Scatter dataKey="value" fill="#8884d8" />
+            <Scatter dataKey={value} fill="#8884d8" />
           </ScatterChart>
         );
       case "pie":
