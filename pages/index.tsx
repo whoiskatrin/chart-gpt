@@ -117,20 +117,17 @@ const HomePage = () => {
         ) : (
           chartData &&
           chartType && (
-            <>
             <div className="flex items-center justify-center p-4">
               <Chart data={chartData} chartType={chartType} />
-            </div>
-            <div className="flex flex-col items-center justify-center p-4">
-              <button 
+              <button
               type="button"
               className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
               onClick={() => handleCaptureClick('.recharts-wrapper')}
-              >
-                Download
-              </button>
+            >
+              Download
+            </button>
             </div>
-            </>
+            
           )
         )}
         <InfoSection />
