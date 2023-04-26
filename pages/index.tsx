@@ -49,6 +49,7 @@ const HomePage = () => {
   useEffect(() => {
     if (drawClicked) {
       updateChart();
+      setDrawClicked(false);
     }
   }, [drawClicked]);
 
