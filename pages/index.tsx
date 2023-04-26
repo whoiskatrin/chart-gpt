@@ -9,17 +9,16 @@ import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
 import InfoSection from "../components/InfoSection";
 
-
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [chartType, setChartType] = useState("");
   const [chartData, setChartData] = useState([]);
+  const [error, setError] = useState(false);
 
   const generateChartData = async (prompt: string) => {
     try {
       const response = await axios.post("/api/parse-graph", { prompt });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Failed to generate chart data:", error);
@@ -37,25 +36,28 @@ const HomePage = () => {
     }
   };
 
-  const handleSubmit = async (event: { preventDefault: () => void }) => {
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
+    setError(false);
     setIsLoading(true);
-    console.log(inputValue);
-    const chartType = await getChartType(inputValue);
 
     try {
-       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
+      const chartTypeResponse = await getChartType(inputValue);
+      setChartType(chartTypeResponse.data);
+
+      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
 [{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
 
       const chartDataGenerate = await generateChartData(libraryPrompt);
 
       try {
         setChartData(JSON.parse(chartDataGenerate));
-        setChartType(chartType.data);
       } catch (error) {
+        setError(true);
         console.error("Failed to parse chart data:", error);
       }
     } catch (error) {
+      setError(true);
       console.error("Failed to generate graph data:", error);
     } finally {
       setIsLoading(false);
@@ -68,8 +70,8 @@ const HomePage = () => {
       return;
     }
     const canvas = await html2canvas(element);
-    const dataURL = canvas.toDataURL('image/png');
-    downloadjs(dataURL, 'chart.png', 'image/png');
+    const dataURL = canvas.toDataURL("image/png");
+    downloadjs(dataURL, "chart.png", "image/png");
   };
 
   return (
@@ -109,35 +111,38 @@ const HomePage = () => {
           </div>
         </form>
       </div>
-      <div className="w-full max-w-xl mb-6 p-4">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-96">
-            <LoadingDots color={"blue"} />
-          </div>
-        ) : (
-          chartData &&
-          chartType && (
-            <>
-            <div className="flex items-center justify-center p-4">
-              <Chart data={chartData} chartType={chartType} />
+      {error ? (
+        <p style={{ color: "red" }}>Ooops! Could not generate</p>
+      ) : (
+        <div className="w-full max-w-xl mb-6 p-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-96">
+              <LoadingDots color={"blue"} />
             </div>
-            <div className="flex flex-col items-center justify-center p-4">
-              <button 
-              type="button"
-              className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
-              onClick={() => handleCaptureClick('.recharts-wrapper')}
-              >
-                Download
-              </button>
-            </div>
-            </>
-          )
-        )}
-        <InfoSection />
-      </div>
-
+          ) : (
+            chartData &&
+            chartType && (
+              <>
+              <div className="flex items-center justify-center p-4">
+                <Chart data={chartData} chartType={chartType} />
+              </div>
+              <div className="flex flex-col items-center justify-center p-4">
+                <button 
+                  type="button"
+                  className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3"
+                  onClick={() => handleCaptureClick('.recharts-wrapper')}
+                >
+                  Download
+                </button>
+              </div>
+              </>
+            )
+          )}
+          <InfoSection />
+        </div>
+      )}
       <footer className="text-center font-inter text-gray-700 text-sm mb-4">
-        Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
+        Made with ❤️ using React, Next.js, Recharts, OpenAI and Tailwind CSS
       </footer>
     </div>
   );
