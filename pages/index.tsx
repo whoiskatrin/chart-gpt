@@ -9,7 +9,18 @@ import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
 import InfoSection from "../components/InfoSection";
 
-const CHART_TYPES=["area", "bar", "line", "composed", "scatter", "pie", "radar", "radialbar", "treemap","funnel"]
+const CHART_TYPES = [
+  "area",
+  "bar",
+  "line",
+  "composed",
+  "scatter",
+  "pie",
+  "radar",
+  "radialbar",
+  "treemap",
+  "funnel",
+];
 
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
@@ -30,17 +41,17 @@ const HomePage = () => {
     setIsLoading(true);
 
     try {
-    
       const chartTypeResponse = await axios.post("/api/get-type", {
         inputData: inputValue,
       });
-          
-      if(!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase())) return setError(true)
-      
+
+      if (!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase()))
+        return setError(true);
+
       setChartType(chartTypeResponse.data);
 
       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes. \n\n${inputValue}\n`;
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n`;
 
       const chartDataResponse = await axios.post("/api/parse-graph", {
         prompt: libraryPrompt,
