@@ -9,6 +9,8 @@ import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
 import InfoSection from "../components/InfoSection";
 
+const CHART_TYPES=["area", "bar", "line", "composed", "scatter", "pie", "radar", "radialbar", "treemap","funnel"]
+
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,9 +30,14 @@ const HomePage = () => {
     setIsLoading(true);
 
     try {
+    
       const chartTypeResponse = await axios.post("/api/get-type", {
         inputData: inputValue,
       });
+          
+      if(!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase())) return setError(true)
+      
+      setChartType(chartTypeResponse.data);
 
       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
 [{ "name": "a", "value": 12, "color": "#4285F4" }] for the following description for Recharts. Instead of naming value field value in JSON, name it based on what user requested.\nFor each object CHOOSE a "color" that is the most recognizable color for that object in your opinion. \n\n${inputValue}\n`;
