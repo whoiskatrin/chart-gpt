@@ -36,29 +36,38 @@ interface ChartProps {
   chartType: string;
 }
 
-function mixColors(colors: string[], randomFactor = 0.5): string {
+function mixColors(colors: string[], randomFactor = 0.1): string {
   // Convert hex color values to RGB
-  const rgbColors = colors.map(color => {
+  const rgbColors = colors.map((color) => {
     const r = parseInt(color.substring(1, 3), 16);
     const g = parseInt(color.substring(3, 5), 16);
     const b = parseInt(color.substring(5, 7), 16);
     return [r, g, b];
   });
 
-  // Calculate average color values with added randomness
-  const avgColor = rgbColors.reduce((acc, val) => {
-    return [acc[0] + val[0], acc[1] + val[1], acc[2] + val[2]];
-  }, [0, 0, 0]).map(val => {
-    const baseVal = Math.round(val / rgbColors.length);
-    const randomVal = baseVal * (1 + randomFactor * (Math.random() * 2 - 1));
+  const avgColor = rgbColors
+    .reduce(
+      (acc, val) => {
+        return [acc[0] + val[0], acc[1] + val[1], acc[2] + val[2]];
+      },
+      [0, 0, 0]
+    )
+    .map((val) => Math.round(val / rgbColors.length));
+
+  const randomizedColor = avgColor.map((val) => {
+    const randomVal =
+      val + Math.floor((Math.random() * 2 - 1) * randomFactor * val);
     return Math.max(0, Math.min(255, randomVal));
   });
 
-  // Convert average RGB values to hex
-  const hexColor = '#' + avgColor.map(val => {
-    const hexVal = val.toString(16);
-    return hexVal.length === 1 ? '0' + hexVal : hexVal;
-  }).join('');
+  const hexColor =
+    "#" +
+    randomizedColor
+      .map((val) => {
+        const hexVal = val.toString(16);
+        return hexVal.length === 1 ? "0" + hexVal : hexVal;
+      })
+      .join("");
 
   return hexColor;
 }
@@ -68,7 +77,40 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
   console.log("Chart data:", data, "Chart type:", chartType);
 
   const renderChart = () => {
-    const colors = data.map((d: { color: any; }) => d.color);
+    const colors = [
+      "#FF6384",
+      "#36A2EB",
+      "#FFCE56",
+      "#4BC0C0",
+      "#9966FF",
+      "#FF9F40",
+      "#E7E9ED",
+      "#FFA1B5",
+      "#52B0F5",
+      "#FFDA7D",
+      "#66C2A5",
+      "#AB63FA",
+      "#FFB74D",
+      "#A9A9A9",
+      "#8DD3C7",
+      "#FDB462",
+      "#FB8072",
+      "#80B1D3",
+      "#BEBADA",
+      "#FCCDE5",
+      "#BC80BD",
+      "#CCEBC5",
+      "#FFED6F",
+      "#1696D2",
+      "#D2E3F3",
+      "#F76F8E",
+      "#5C940D",
+      "#FF5A5F",
+      "#7BCCC4",
+      "#BA68C8",
+      "#8E0152",
+    ];
+
     const color = mixColors(colors);
     chartType = chartType.toLowerCase();
     switch (chartType) {
@@ -142,7 +184,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
               {colors.map((color: any, index: number) => (
                 <Cell key={`cell-${index}`} fill={color} />
               ))}
-              </Pie>
+            </Pie>
             <Tooltip />
             <Legend />
           </PieChart>
