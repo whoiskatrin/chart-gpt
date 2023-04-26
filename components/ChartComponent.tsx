@@ -36,7 +36,7 @@ interface ChartProps {
   chartType: string;
 }
 
-function mixColors(colors: string[], randomFactor = 0.2): string {
+function mixColors(colors: string[], randomFactor = 0.5): string {
   // Convert hex color values to RGB
   const rgbColors = colors.map(color => {
     const r = parseInt(color.substring(1, 3), 16);
