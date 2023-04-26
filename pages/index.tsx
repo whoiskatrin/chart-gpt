@@ -9,6 +9,8 @@ import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
 import InfoSection from "../components/InfoSection";
 
+const CHART_TYPES=["area", "bar", "line", "composed", "scatter", "pie", "radar", "radialbar", "treemap","funnel"]
+
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +27,7 @@ const HomePage = () => {
 
     try {
       const chartTypeResponse = await getChartType(inputValue);
+      if(!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase())) return setError(true)
       setChartType(chartTypeResponse.data);
 
       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
