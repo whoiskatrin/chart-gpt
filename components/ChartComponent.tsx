@@ -36,7 +36,7 @@ interface ChartProps {
   chartType: string;
 }
 
-function mixColors(colors: string[]): string {
+function mixColors(colors: string[], randomFactor = 0.2): string {
   // Convert hex color values to RGB
   const rgbColors = colors.map(color => {
     const r = parseInt(color.substring(1, 3), 16);
@@ -45,10 +45,14 @@ function mixColors(colors: string[]): string {
     return [r, g, b];
   });
 
-  // Calculate average color values
+  // Calculate average color values with added randomness
   const avgColor = rgbColors.reduce((acc, val) => {
     return [acc[0] + val[0], acc[1] + val[1], acc[2] + val[2]];
-  }, [0, 0, 0]).map(val => Math.round(val / rgbColors.length));
+  }, [0, 0, 0]).map(val => {
+    const baseVal = Math.round(val / rgbColors.length);
+    const randomVal = baseVal * (1 + randomFactor * (Math.random() * 2 - 1));
+    return Math.max(0, Math.min(255, randomVal));
+  });
 
   // Convert average RGB values to hex
   const hexColor = '#' + avgColor.map(val => {
