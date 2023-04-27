@@ -11,7 +11,7 @@ module.exports = {
 	darkMode: 'class',
 	theme: {
 		container: {
-			width: '100%',
+			width: '200%',
 		},
 		extend: {
 			textColor: ['placeholder'],
