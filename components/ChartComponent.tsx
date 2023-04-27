@@ -125,7 +125,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
         );
       case "bar":
         return (
-          <BarChart width={800} height={300} data={data}>
+          <BarChart width={500} height={300} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -136,7 +136,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
         );
       case "line":
         return (
-          <LineChart width={800} height={300} data={data}>
+          <LineChart width={500} height={300} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -147,7 +147,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
         );
       case "composed":
         return (
-          <ComposedChart width={800} height={400} data={data}>
+          <ComposedChart width={500} height={300} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
