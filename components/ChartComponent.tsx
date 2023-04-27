@@ -211,7 +211,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             />
           </RadarChart>
         );
-      case "radialBar":
+      case "radialbar":
         return (
           <RadialBarChart
             width={500}
