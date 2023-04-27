@@ -139,7 +139,7 @@ const HomePage = () => {
         <div className="w-full max-w-4xl mb-6 p-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-96">
-              <LoadingDots color={"blue"} />
+                <LoadingDots/>
             </div>
           ) : (
             shouldRenderChart && (
