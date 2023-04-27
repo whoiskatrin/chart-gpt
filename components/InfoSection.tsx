@@ -3,7 +3,7 @@ import React from 'react';
 
 const InfoSection: React.FC = () => {
 	return (
-		<div className='text-left text-center bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg mb-8'>
+		<div className='max-w-xl text-left text-center bg-indigo-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg mb-8'>
 			<h2 className='text-left font-semibold text-2xl mb-4 font-inter font-bold sm:text-xl flex items-center bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text text-transparent'>
 				How to use this tool
 			</h2>
