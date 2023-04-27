@@ -108,7 +108,7 @@ function mixColors(colors: string[], randomFactor = 0.1): string {
 
 //TODO: dynamic keys instead of default value
 export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
-  const color = mixColors(colors);
+  const color = data.length > 0 ? data[0]["color"] : mixColors(colors);
   const value = data.length > 0 ? Object.keys(data[0])[1] : "value";
   const renderChart = () => {
     chartType = chartType.toLowerCase();
