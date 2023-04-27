@@ -19,7 +19,7 @@ const InfoSection: React.FC = () => {
 			<h3 className='text-left font-semibold text-xl mt-6 mb-4 font-inter font-bold sm:text-xl flex items-center bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text text-transparent'>
 				Supported Chart Types
 			</h3>
-			<ul className='text-left list-disc pl-6 text-gray-700 dark:text-gray-300'>
+			<ul className='text-left list-disc pl-6 text-gray-700 dark:text-gray-300 marker:text-sky-400'>
 				<li>Area Chart</li>
 				<li>Bar Chart</li>
 				<li>Line Chart</li>
