@@ -10,9 +10,6 @@ module.exports = {
 	],
 	darkMode: 'class',
 	theme: {
-		infoContainer: {
-			// width: '200%',
-		},
 		extend: {
 			textColor: ['placeholder'],
 			backgroundColor: {
