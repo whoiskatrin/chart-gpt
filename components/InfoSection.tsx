@@ -1,7 +1,6 @@
 // components/InfoSection.tsx
 import React from 'react';
 
-//need to set max-width: 40rem to max-w-4xl class by changing the class to max-w-2xl
 const InfoSection: React.FC = () => {
 	return (
 		<div className='max-w-xl text-left text-center bg-indigo-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg mb-8'>
