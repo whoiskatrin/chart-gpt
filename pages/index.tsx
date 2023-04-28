@@ -51,7 +51,7 @@ const HomePage = () => {
 			setChartType(chartTypeResponse.data);
 
 			const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n`;
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n Provide JSON data only. `;
 
 			const chartDataResponse = await axios.post('/api/parse-graph', {
 				prompt: libraryPrompt,
@@ -99,9 +99,9 @@ const HomePage = () => {
 			<Head>
 				<title>AI tool to convert text to beautiful chart</title>
 			</Head>
-			<div className='flex flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-4 h-52'>
+			<div className='flex container flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-4 h-52'>
 				<form onSubmit={handleSubmit} className='w-full max-w-xl mb-6'>
-					<div className='flex flex-col items-center justify-center h-44'>
+					<div className='flex flex-col items-center justify-center'>
 						<label
 							htmlFor='textInput'
 							className='block font-inter font-semibold text-gray-700 dark:text-gray-200'
@@ -153,8 +153,8 @@ const HomePage = () => {
 									className='flex items-center justify-center p-4'
 									style={{
 										width: '100%',
-										height: '300px',
-										overflow: 'scroll',
+										height: '400px',
+										overflow: 'auto',
 									}}
 								>
 									{chartComponent}

@@ -8,12 +8,10 @@ const InfoSection: React.FC = () => {
 				How to use this tool
 			</h2>
 			<p className='text-left text-gray-700 dark:text-gray-300'>
-				<p>
-					To get started, simply enter a description of your data and
-					the desired single chart type in the input field. Our
-					generator will create the chart for you in just a few
-					seconds!
-				</p>
+				To get started, simply enter a description of your data and
+				the desired single chart type in the input field. Our
+				generator will create the chart for you in just a few
+				seconds!
 			</p>
 			<h3 className='text-left font-semibold text-xl mt-6 mb-4 font-inter font-bold sm:text-xl flex items-center bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text text-transparent'>
 				Supported Chart Types
