@@ -33,7 +33,7 @@ const HomePage = () => {
       });
 
       const {chartType, chartData} = chartTypeResponse.data;
-
+      
       if (chartTypeResponse.status !== 200) {
 
         console.error("Failed to parse API Response: ", JSON.stringify(chartTypeResponse.data));
@@ -71,7 +71,7 @@ const HomePage = () => {
       <Head>
         <title>Tool that converts text into beautiful charts</title>
       </Head>
-      <div className="flex flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-2">
+      <div className="flex container flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-2">
         <form onSubmit={handleSubmit} className="w-full max-w-xl mb-6">
           <div className="flex flex-col items-center justify-center">
             <label
@@ -110,17 +110,21 @@ const HomePage = () => {
       {error ? (
         <p style={{ color: "red" }}>Ooops! Could not generate</p>
       ) : (
-        <div className="w-full max-w-4xl mb-6 p-4">
+        <div className="w-full max-w-xl mb-6 p-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-96">
-              <LoadingDots color={"blue"} />
+              <LoadingDots />
             </div>
           ) : (
             shouldRenderChart && (
               <>
                 <div
                   className="flex items-center justify-center p-4"
-                  style={{ width: "100%", height: "300px", overflow: "scroll" }}
+                  style={{
+                    width: "100%",
+                    height: "400px",
+                    overflow: "auto",
+                  }}
                 >
                   {chartComponent}
                 </div>

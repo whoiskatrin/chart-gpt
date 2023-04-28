@@ -1,7 +1,7 @@
 export const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
 export const LIBRARY_PROMPT = (val: String) => `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${val}\n`
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${val}\n Provide JSON data only.`
 
 export const CHART_TYPES = new Set(["area", "bar", "line", "composed", "scatter", "pie",
                                    "radar", "radialbar", "treemap", "funnel"]);  
