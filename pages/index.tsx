@@ -134,7 +134,7 @@ const HomePage = () => {
         </form>
       </div>
       {error ? (
-        <p style={{ color: "red" }}>Ooops! Could not generate</p>
+        <p className="mb-6 text-lg font-semibold  text-red-500">Ooops! Could not generate</p>
       ) : (
         <div className="w-full max-w-xl mb-6 p-4">
           {isLoading ? (
@@ -166,9 +166,9 @@ const HomePage = () => {
               </>
             )
           )}
-          <InfoSection />
         </div>
       )}
+      <InfoSection />
       <footer className="text-center font-inter text-gray-700 text-sm mb-4">
         Made with ❤️ using React, Next.js, Recharts, OpenAI and Tailwind CSS
       </footer>
