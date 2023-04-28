@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 import { LIBRARY_PROMPT, CHART_TYPES, UNSUPPORTED_CHART_TYPE_CODE, UNSUPPORTED_CHART_TYPE_TEXT, 
-  INTERNAL_SERVER_ERROR_CODE, INTERNAL_SERVER_ERROR_TEXT } from "../constants";
-import { sanitizeURL } from "../utils";
+  INTERNAL_SERVER_ERROR_CODE, INTERNAL_SERVER_ERROR_TEXT } from "../../constants";
+import { sanitizeURL } from "../../utils";
 
 export default async function handler(
   req: NextApiRequest,

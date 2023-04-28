@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { OPENAI_API_URL } from "../constants";
+import { OPENAI_API_URL } from "../../constants";
 
 export default async function handler(
   req: NextApiRequest,
