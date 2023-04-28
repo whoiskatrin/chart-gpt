@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+import { OPENAI_API_URL } from "../constants";
 
 export default async function handler(
   req: NextApiRequest,

@@ -9,19 +9,6 @@ import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
 import InfoSection from "../components/InfoSection";
 
-const CHART_TYPES = [
-  "area",
-  "bar",
-  "line",
-  "composed",
-  "scatter",
-  "pie",
-  "radar",
-  "radialbar",
-  "treemap",
-  "funnel",
-];
-
 const HomePage = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -41,33 +28,20 @@ const HomePage = () => {
     setIsLoading(true);
 
     try {
-      const chartTypeResponse = await axios.post("/api/get-type", {
+      const chartTypeResponse = await axios.post("/api/get-code", {
         inputData: inputValue,
       });
 
-      if (!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase()))
+      const {chartType, chartData} = chartTypeResponse.data;
+
+      if (chartTypeResponse.status !== 200) {
+
+        console.error("Failed to parse API Response: ", JSON.stringify(chartTypeResponse.data));
         return setError(true);
-
-      setChartType(chartTypeResponse.data);
-
-      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n`;
-
-      const chartDataResponse = await axios.post("/api/parse-graph", {
-        prompt: libraryPrompt,
-      });
-
-      let parsedData;
-
-      try {
-        parsedData = JSON.parse(chartDataResponse.data);
-      } catch (error) {
-        setError(true);
-        console.error("Failed to parse chart data:", error);
       }
 
-      setChartData(parsedData);
-      setChartType(chartTypeResponse.data);
+      setChartType(chartType);
+      setChartData(chartData);
       setShouldRenderChart(true);
     } catch (error) {
       setError(true);

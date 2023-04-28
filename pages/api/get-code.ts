@@ -1,5 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
+import { LIBRARY_PROMPT, CHART_TYPES, UNSUPPORTED_CHART_TYPE_CODE, UNSUPPORTED_CHART_TYPE_TEXT, 
+  INTERNAL_SERVER_ERROR_CODE, INTERNAL_SERVER_ERROR_TEXT } from "../constants";
+import { sanitizeURL } from "../utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -7,7 +10,7 @@ export default async function handler(
 ): Promise<void> {
   try {
     const { inputData } =  req.body;
-    axios.defaults.baseURL = 'https://www.chartgpt.dev/';
+    axios.defaults.baseURL = sanitizeURL(`${process.env.VERCEL_URL}`);
 
     let response = await axios.post("/api/get-type", {
         "inputData": inputData
@@ -16,9 +19,11 @@ export default async function handler(
     let result = await response.data;
     const chartType = result.trim();
 
-    const prompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-    [{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals.
-    \n\n${inputData}\n`;
+    if (!CHART_TYPES.has(chartType)) {
+      res.status(400).send({"errorCode": UNSUPPORTED_CHART_TYPE_TEXT, "errorText": UNSUPPORTED_CHART_TYPE_CODE});
+    }
+
+    const prompt = LIBRARY_PROMPT(inputData);
 
     response = await axios.post("/api/parse-graph", {
         "prompt": prompt
@@ -32,6 +37,6 @@ export default async function handler(
     res.status(200).send(APIResponse);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({"errorCode": INTERNAL_SERVER_ERROR_CODE, "errorText": INTERNAL_SERVER_ERROR_TEXT});
   }
 }
