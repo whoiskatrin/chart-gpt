@@ -97,7 +97,7 @@ const HomePage = () => {
 		<div className='flex flex-col px-4 items-center justify-center bg-gradient-to-r from-slate-300 to-indigo-50 overflow-y-hidden'>
 			<Header />
 			<Head>
-				<title>AI tool to convert text to beautiful chart</title>
+				<title>AI tool to convert text to a beautiful chart</title>
 			</Head>
 			<div className='flex flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-4'>
 				<form onSubmit={handleSubmit} className='w-full max-w-xl mb-1'>
