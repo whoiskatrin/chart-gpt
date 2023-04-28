@@ -97,16 +97,16 @@ const HomePage = () => {
 		<div className='flex flex-col px-4 items-center justify-center min-h-screen bg-gradient-to-r from-slate-300 to-indigo-50 overflow-x-hidden'>
 			<Header />
 			<Head>
-				<title>Tool that converts text into beautiful charts</title>
+				<title>AI tool to convert text to beautiful chart</title>
 			</Head>
-			<div className='flex container flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-2'>
+			<div className='flex flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-4 h-52'>
 				<form onSubmit={handleSubmit} className='w-full max-w-xl mb-6'>
-					<div className='flex flex-col items-center justify-center'>
+					<div className='flex flex-col items-center justify-center h-44'>
 						<label
 							htmlFor='textInput'
 							className='block font-inter font-semibold text-gray-700 dark:text-gray-200'
 						>
-							Describe your data and desired chart:
+							Describe your data with desired Chart type
 							<SquigglyLines />
 						</label>
 
@@ -114,7 +114,7 @@ const HomePage = () => {
 							id='input'
 							rows={3}
 							placeholder=''
-							className='appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-center'
+							className='appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-left min-h-[46%]'
 							value={inputValue}
 							required
 							autoFocus
