@@ -1,4 +1,4 @@
-import { Card, Title } from "@tremor/react";
+import { Callout, Card, Title } from "@tremor/react";
 import axios from "axios";
 import downloadjs from "downloadjs";
 import html2canvas from "html2canvas";
@@ -98,7 +98,7 @@ const HomePage = () => {
 			<Head>
 				<title>AI tool to convert text to a beautiful chart</title>
 			</Head>
-			<div className='flex flex-col items-center w-full max-w-xl mb-6 gap-6 border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20 rounded-2xl p-4'>
+			<Card className='w-full max-w-xl mb-6 space-6'>
 				<form onSubmit={handleSubmit} className='w-full max-w-xl mb-1'>
 					<div className='flex flex-col items-center justify-center'>
 						<label
@@ -127,17 +127,21 @@ const HomePage = () => {
 
 						<button
 							type='submit'
-							className='cursor-pointer font-inter font-semibold py-2 px-10 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3'
+							className='cursor-pointer font-inter font-semibold py-2 px-10 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center'
 						>
 							Draw
 						</button>
 					</div>
 				</form>
-			</div>
+			</Card>
 			{error ? (
-				<p className='mb-6 text-lg font-semibold  text-red-500'>
-					Ooops! Could not generate
-				</p>
+				<Callout
+					className='mb-6'
+					title='Ooops! Could not generate'
+					color='rose'
+				>
+					Try again later or restructure your request.
+				</Callout>
 			) : (
 				<div className='w-full max-w-xl mb-6 p-4'>
 					{isLoading ? (
@@ -154,7 +158,7 @@ const HomePage = () => {
 								<div className='flex flex-col items-center justify-center p-4'>
 									<button
 										type='button'
-										className='cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3'
+										className='cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center'
 										onClick={() => handleCaptureClick(".recharts-wrapper")}
 									>
 										Download

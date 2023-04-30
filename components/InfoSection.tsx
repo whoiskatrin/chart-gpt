@@ -1,6 +1,10 @@
 // components/InfoSection.tsx
 import { Card, Text, Title } from "@tremor/react";
-import React from "react";
+import React, { ReactNode } from "react";
+
+const ListItem = ({ children }: { children: ReactNode }) => (
+	<li className='text-gray-500 text-sm font-normal'>{children}</li>
+);
 
 const InfoSection: React.FC = () => {
 	return (
@@ -17,16 +21,16 @@ const InfoSection: React.FC = () => {
 				Supported Chart Types
 			</h3>
 			<ul className='text-left list-disc pl-6 text-gray-700 dark:text-gray-300 marker:text-sky-400'>
-				<li>Area Chart</li>
-				<li>Bar Chart</li>
-				<li>Line Chart</li>
-				<li>Composed Chart</li>
-				<li>Scatter Chart</li>
-				<li>Pie Chart</li>
-				<li>Radar Chart</li>
-				<li>Radial Bar Chart</li>
-				<li>Treemap</li>
-				<li>Funnel Chart</li>
+				<ListItem>Area Chart</ListItem>
+				<ListItem>Bar Chart</ListItem>
+				<ListItem>Line Chart</ListItem>
+				<ListItem>Composed Chart</ListItem>
+				<ListItem>Scatter Chart</ListItem>
+				<ListItem>Pie Chart</ListItem>
+				<ListItem>Radar Chart</ListItem>
+				<ListItem>Radial Bar Chart</ListItem>
+				<ListItem>Treemap</ListItem>
+				<ListItem>Funnel Chart</ListItem>
 			</ul>
 		</Card>
 	);
