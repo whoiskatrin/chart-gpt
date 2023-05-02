@@ -1,9 +1,10 @@
-import { Analytics } from "@vercel/analytics/react";
-import "../styles/globals.css";
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "react-hot-toast";
+import { Analytics } from '@vercel/analytics/react';
+import { ThemeProvider } from 'next-themes';
+import { AppProps } from 'next/app';
+import { Toaster } from 'react-hot-toast';
+import '../styles/globals.css';
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ThemeProvider
