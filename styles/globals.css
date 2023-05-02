@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer components {
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+  }
   .blue-button-w-gradient-border {
     --blue500: theme(colors.blue.500);
     --blue700: theme(colors.blue.700);

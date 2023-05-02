@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from 'next-themes';
 import { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
+import { DefaultLayout } from '../components/templates/defaultLayout';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         enableSystem={true}
         defaultTheme="system"
       >
-        <Component {...pageProps} />
+        <DefaultLayout>
+          <Component {...pageProps} />
+        </DefaultLayout>
         <Toaster position="bottom-center" />
       </ThemeProvider>
       <Analytics />
