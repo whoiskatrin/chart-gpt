@@ -71,7 +71,7 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
           <ThemeButton />
         </div>
       </nav>
-      <div className="font-normal p-8">{children}</div>
+      <div className="font-normal p-8 h-full">{children}</div>
     </main>
   );
 };
