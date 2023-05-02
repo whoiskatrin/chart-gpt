@@ -5,7 +5,7 @@ import ThemeButton from '../ThemeButton';
 export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <main className="h-[calc(100vh-48px)]">
-      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-gray-200">
+      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-gray-200 dark:border-gray-800">
         <div>logo here</div>
         <div className="flex space-x-4">
           <Button size="xs" color="gray" variant="secondary">

@@ -8,6 +8,22 @@
     height: 100%;
     margin: 0;
   }
+  .dot-grid-gradient-light {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgb(209 213 219) 1px,
+      transparent 0
+    );
+    background-size: 24px 24px;
+  }
+  .dot-grid-gradient-dark {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgb(55 65 81) 1px,
+      transparent 0
+    );
+    background-size: 24px 24px;
+  }
   .blue-button-w-gradient-border {
     --blue500: theme(colors.blue.500);
     --blue700: theme(colors.blue.700);

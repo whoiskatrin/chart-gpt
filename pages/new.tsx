@@ -7,11 +7,11 @@ const NewHome: NextPage = () => {
       <Col
         numColSpan={1}
         numColSpanMd={2}
-        className="bg-gray-100 rounded-md p-4 border border-gray-200 h-full"
+        className="bg-gray-100 rounded-md p-4 border border-gray-200 dark:border-gray-800 dark:bg-gray-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark"
       >
         main section
       </Col>
-      <aside className="h-full space-y-4 w-[300px]">Sidebar</aside>
+      <aside className="h-full space-y-4 shrink-0 w-[300px]">Sidebar</aside>
     </Grid>
   );
 };
