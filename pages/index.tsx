@@ -196,7 +196,6 @@ const HomePage = () => {
       <footer className="text-center font-sans text-black dark:text-white text-ml mb-10">
         Made with ❤️ using React, Next.js, Recharts, Tremor, OpenAI and Tailwind
         CSS
-        <h4 className="text-blue-500">Enquries: @whoiskatrin </h4>
       </footer>
     </div>
   );
