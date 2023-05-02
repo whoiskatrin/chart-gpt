@@ -1,11 +1,22 @@
 import { Analytics } from "@vercel/analytics/react";
 import "../styles/globals.css";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "react-hot-toast";
 
-export default function App({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   return (
     <>
-      <Component {...pageProps} />
+      <ThemeProvider
+        attribute="class"
+        enableSystem={true}
+        defaultTheme="system"
+      >
+        <Component {...pageProps} />
+        <Toaster position="bottom-center" />
+      </ThemeProvider>
       <Analytics />
     </>
   );
 }
+
+export default MyApp;

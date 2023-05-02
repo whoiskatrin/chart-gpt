@@ -15,7 +15,7 @@ module.exports = {
     extend: {
       textColor: ["placeholder"],
       backgroundColor: {
-        "custom-gray-bg": "#F8F8F8",
+        "custom-gray-bg": "#EDEDED",
         "custom-gray": "#171717",
         "custom-dark-gray": "#1D1D1D",
         "frame-gray": "EEEEEE",

@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 
 const ListItem = ({ children }: { children: ReactNode }) => (
-  <li className="text-white">{children}</li>
+  <li className="text-black dark:text-white">{children}</li>
 );
 
 const InfoSection: React.FC = () => {
@@ -19,17 +19,17 @@ const InfoSection: React.FC = () => {
           the chart for you.
         </p>
         <div className="w-full max-w-[720px]">
-          <div className="bg-custom-gray text-base font-mono rounded-xl mt-8 mb-6 p-4 shadow-xl dark:shadow-outline-bright flex flex-col space-y-2 w-full">
+          <div className="bg-custom-gray-bg dark:bg-custom-gray text-base font-mono rounded-xl mt-8 mb-6 p-4 shadow-xl dark:shadow-outline-bright flex flex-col space-y-2 w-full">
             <span className="text-green-500 dark:text-green-400">
               you can request any data out there
             </span>
-            <span className="text-white">---</span>
+            <span className="text-black dark:text-white">---</span>
             <div className="Typist">
-              <span className="font-semibold text-md pb-4 leading-loose text-white ">
+              <span className="font-semibold text-md pb-4 leading-loose text-black dark:text-white">
                 ## Example
               </span>
               <br />
-              <span className="text-white">
+              <span className="text-black dark:text-white ">
                 show me a bar chart with COVID-19 cases in London in March 2020
               </span>
               <span className="animate-pulse opacity-0">|</span>
@@ -41,7 +41,7 @@ const InfoSection: React.FC = () => {
           <div className="shadow-lg from-gray-700 to-gray-400 w-10 h-10 rounded-full flex justify-center items-center font-bold text-white mb-4 bg-[url('/Blue.png')] bg-cover">
             2
           </div>
-          <h2 className="text-xl font-bold mb-2 text-white">
+          <h2 className="text-xl font-bold mb-2 text-black dark:text-white">
             Supported charts
           </h2>
           <p className="text-gray-500 px-8 text-center">
@@ -49,18 +49,18 @@ const InfoSection: React.FC = () => {
             of the app.
           </p>
           <div className="w-full max-w-[720px]">
-            <div className="bg-custom-gray text-base font-mono rounded-xl mt-8 mb-6 p-4 shadow-xl dark:shadow-outline-bright flex flex-col space-y-2 w-full">
+            <div className="bg-custom-gray-bg dark:bg-custom-gray text-base font-mono rounded-xl mt-8 mb-6 p-4 shadow-xl dark:shadow-outline-bright flex flex-col space-y-2 w-full">
               <span className="text-green-500 dark:text-green-400">
                 we use Recharts and Tremor libraries to draw
               </span>
-              <span className="text-white">---</span>
+              <span className="text-black dark:text-white">---</span>
               <div className="Typist">
-                <span className="font-semibold text-md pb-4 leading-loose text-white ">
+                <span className="font-semibold text-md pb-4 leading-loose text-black dark:text-white ">
                   ## List
                 </span>
                 <br />
-                <span className="text-white">
-                  <ul className="text-left list-disc pl-6 text-white marker:text-blue-500">
+                <span className="text-black dark:text-white">
+                  <ul className="text-left list-disc pl-6 text-black dark:text-white marker:text-blue-500">
                     <ListItem>Area Chart</ListItem>
                     <ListItem>Bar Chart</ListItem>
                     <ListItem>Line Chart</ListItem>
