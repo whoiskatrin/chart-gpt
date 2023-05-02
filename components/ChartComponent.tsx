@@ -1,5 +1,5 @@
-import { AreaChart, BarChart, DonutChart, LineChart } from "@tremor/react";
-import React from "react";
+import { AreaChart, BarChart, DonutChart, LineChart } from '@tremor/react';
+import React from 'react';
 import {
   Bar,
   CartesianGrid,
@@ -15,54 +15,15 @@ import {
   RadarChart,
   RadialBar,
   RadialBarChart,
-  Tooltip as RechartsTooltip,
   ResponsiveContainer,
   Scatter,
   ScatterChart,
   Treemap,
   XAxis,
   YAxis,
-} from "recharts";
-import { CustomCell } from "./CustomCell";
-
-const Tooltip = (props: any) => {
-  return (
-    <RechartsTooltip
-      wrapperStyle={{ outline: "none" }}
-      isAnimationActive={false}
-      cursor={{ fill: "#d1d5db", opacity: "0.15" }}
-      position={{ y: 0 }}
-      {...props}
-      content={({ active, payload, label }) => {
-        return active && payload ? (
-          <div className="bg-white dark:bg-zinc-400 text-sm rounded-md border shadow-lg">
-            <div className="border-b py-2 px-4">
-              <p className="text-elem text-gray-700 font-medium">{label}</p>
-            </div>
-            <div className="space-y-1 py-2 px-4">
-              {payload.map(({ value, name }, idx: number) => (
-                <div
-                  key={`id-${idx}`}
-                  className="flex items-center justify-between space-x-8"
-                >
-                  <div className="flex items-center space-x-2">
-                    <span className="shrink-0 h-3 w-3 border-white rounded-full border-2 shadow-md bg-[#36A2EB]" />
-                    <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
-                      {value}
-                    </p>
-                  </div>
-                  <p className="whitespace-nowrap font-normal text-gray-500">
-                    {name}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null;
-      }}
-    />
-  );
-};
+} from 'recharts';
+import { CustomCell } from './CustomCell';
+import { Tooltip } from './CustomTooltip';
 
 interface ChartProps {
   data: any;
@@ -70,42 +31,42 @@ interface ChartProps {
 }
 
 const colors = [
-  "#FF6384",
-  "#36A2EB",
-  "#FFCE56",
-  "#4BC0C0",
-  "#9966FF",
-  "#FF9F40",
-  "#E7E9ED",
-  "#FFA1B5",
-  "#52B0F5",
-  "#FFDA7D",
-  "#66C2A5",
-  "#AB63FA",
-  "#FFB74D",
-  "#A9A9A9",
-  "#8DD3C7",
-  "#FDB462",
-  "#FB8072",
-  "#80B1D3",
-  "#BEBADA",
-  "#FCCDE5",
-  "#BC80BD",
-  "#CCEBC5",
-  "#FFED6F",
-  "#1696D2",
-  "#D2E3F3",
-  "#F76F8E",
-  "#5C940D",
-  "#FF5A5F",
-  "#7BCCC4",
-  "#BA68C8",
-  "#8E0152",
+  '#FF6384',
+  '#36A2EB',
+  '#FFCE56',
+  '#4BC0C0',
+  '#9966FF',
+  '#FF9F40',
+  '#E7E9ED',
+  '#FFA1B5',
+  '#52B0F5',
+  '#FFDA7D',
+  '#66C2A5',
+  '#AB63FA',
+  '#FFB74D',
+  '#A9A9A9',
+  '#8DD3C7',
+  '#FDB462',
+  '#FB8072',
+  '#80B1D3',
+  '#BEBADA',
+  '#FCCDE5',
+  '#BC80BD',
+  '#CCEBC5',
+  '#FFED6F',
+  '#1696D2',
+  '#D2E3F3',
+  '#F76F8E',
+  '#5C940D',
+  '#FF5A5F',
+  '#7BCCC4',
+  '#BA68C8',
+  '#8E0152',
 ];
 
 function mixColors(colors: string[], randomFactor = 0.1): string {
   // Convert hex color values to RGB
-  const rgbColors = colors.map((color) => {
+  const rgbColors = colors.map(color => {
     const r = parseInt(color.substring(1, 3), 16);
     const g = parseInt(color.substring(3, 5), 16);
     const b = parseInt(color.substring(5, 7), 16);
@@ -119,64 +80,64 @@ function mixColors(colors: string[], randomFactor = 0.1): string {
       },
       [0, 0, 0]
     )
-    .map((val) => Math.round(val / rgbColors.length));
+    .map(val => Math.round(val / rgbColors.length));
 
-  const randomizedColor = avgColor.map((val) => {
+  const randomizedColor = avgColor.map(val => {
     const randomVal =
       val + Math.floor((Math.random() * 2 - 1) * randomFactor * val);
     return Math.max(0, Math.min(255, randomVal));
   });
 
   const hexColor =
-    "#" +
+    '#' +
     randomizedColor
-      .map((val) => {
+      .map(val => {
         const hexVal = val.toString(16);
-        return hexVal.length === 1 ? "0" + hexVal : hexVal;
+        return hexVal.length === 1 ? '0' + hexVal : hexVal;
       })
-      .join("");
+      .join('');
 
   return hexColor;
 }
 
 //TODO: dynamic keys instead of default value
 export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
-  const color = data.length > 0 ? data[0]["color"] : mixColors(colors);
-  const value = data.length > 0 ? Object.keys(data[0])[1] : "value";
+  const color = data.length > 0 ? data[0]['color'] : mixColors(colors);
+  const value = data.length > 0 ? Object.keys(data[0])[1] : 'value';
   const renderChart = () => {
     chartType = chartType.toLowerCase();
     switch (chartType) {
-      case "area":
+      case 'area':
         return (
           <AreaChart
             className="h-[300px]"
             data={data}
             index="name"
             categories={[value]}
-            colors={["indigo", "cyan"]}
+            colors={['indigo', 'cyan']}
           />
         );
-      case "bar":
+      case 'bar':
         return (
           <BarChart
             className="h-[300px]"
             data={data}
             index="name"
             categories={[value]}
-            colors={["blue"]}
+            colors={['blue']}
           />
         );
-      case "line":
+      case 'line':
         return (
           <LineChart
             className="h-[300px]"
             data={data}
             index="name"
             categories={[value]}
-            colors={["blue"]}
+            colors={['blue']}
           />
         );
-      case "composed":
+      case 'composed':
         return (
           <ComposedChart width={500} height={300} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -188,7 +149,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <Bar dataKey="value" fill="#413ea0" />
           </ComposedChart>
         );
-      case "scatter":
+      case 'scatter':
         return (
           <ScatterChart width={500} height={300} data={data}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -199,17 +160,17 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <Scatter dataKey={value} fill="#8884d8" />
           </ScatterChart>
         );
-      case "pie":
+      case 'pie':
         return (
           <DonutChart
             className="h-[300px]"
             data={data}
             category={value}
             index="name"
-            colors={["slate", "violet", "indigo", "rose", "cyan", "amber"]}
+            colors={['slate', 'violet', 'indigo', 'rose', 'cyan', 'amber']}
           />
         );
-      case "radar":
+      case 'radar':
         return (
           <RadarChart
             cx={300}
@@ -232,7 +193,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             />
           </RadarChart>
         );
-      case "radialbar":
+      case 'radialbar':
         return (
           <RadialBarChart
             width={500}
@@ -246,7 +207,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
           >
             <RadialBar
               angleAxisId={15}
-              label={{ position: "insideStart", fill: "#fff" }}
+              label={{ position: 'insideStart', fill: '#fff' }}
               dataKey="value"
             />
             <Legend
@@ -259,7 +220,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             />
           </RadialBarChart>
         );
-      case "treemap":
+      case 'treemap':
         return (
           <Treemap
             width={500}
@@ -273,7 +234,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <Tooltip />
           </Treemap>
         );
-      case "funnel":
+      case 'funnel':
         return (
           <FunnelChart width={500} height={300} data={data}>
             <Tooltip />
@@ -286,7 +247,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
   };
 
   return (
-    <ResponsiveContainer width={"100%"} height={"100%"}>
+    <ResponsiveContainer width={'100%'} height={'100%'}>
       {renderChart()}
     </ResponsiveContainer>
   );
