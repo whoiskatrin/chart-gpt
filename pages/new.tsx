@@ -20,6 +20,7 @@ import { NextPage } from 'next';
 import { useCallback, useState } from 'react';
 import { SegmentedControl } from '../components/atoms/SegmentedControl';
 import { TextArea } from '../components/atoms/TextArea';
+import { Toggle } from '../components/atoms/Toggle';
 
 const SectionHeader = ({
   stepNumber,
@@ -40,6 +41,8 @@ const SectionHeader = ({
 
 const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('');
+  const [showTitle, setShowTitle] = useState(true);
+  const [showLegend, setShowLegend] = useState(true);
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -113,13 +116,43 @@ const NewHome: NextPage = () => {
         <Divider className="h-px my-8" />
 
         <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
-        <SelectBox>
+        <SelectBox icon={SwatchIcon}>
           <SelectBoxItem value="blue" text="Blue" icon={SwatchIcon} />
           <SelectBoxItem value="purple" text="Purple" icon={SwatchIcon} />
           <SelectBoxItem value="green" text="Green" icon={SwatchIcon} />
           <SelectBoxItem value="pink" text="Pink" icon={SwatchIcon} />
           <SelectBoxItem value="yellow" text="Yellow" icon={SwatchIcon} />
         </SelectBox>
+        <div className="flex justify-between w-full">
+          <label
+            htmlFor="title"
+            className="text-gray-500 text-sm font-normal select-none	"
+          >
+            Show chart Title
+          </label>
+          <Toggle
+            id="title"
+            size="sm"
+            label="Show chart Title"
+            checked={showTitle}
+            setChecked={setShowTitle}
+          />
+        </div>
+        <div className="flex justify-between w-full">
+          <label
+            htmlFor="legend"
+            className="text-gray-500 text-sm font-normal select-none	"
+          >
+            Show chart Legend
+          </label>
+          <Toggle
+            id="legend"
+            size="sm"
+            label="Show chart Legend"
+            checked={showLegend}
+            setChecked={setShowLegend}
+          />
+        </div>
         <Button className="w-full" icon={PencilSquareIcon}>
           Draw Chart
         </Button>
