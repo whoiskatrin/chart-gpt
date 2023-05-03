@@ -138,6 +138,8 @@ const NewHome: NextPage = () => {
     downloadjs(dataURL, 'chart.png', 'image/png');
   };
 
+  console.log({ chartData });
+
   return (
     <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-4 h-full">
       <Col
@@ -147,25 +149,29 @@ const NewHome: NextPage = () => {
         className="bg-gray-100 rounded-md py-12 px-4 lg:py-4 border border-gray-200 dark:border-gray-800 dark:bg-gray-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
       >
         <div className="flex absolute top-4 right-4 space-x-4">
-          <Button
-            variant="light"
-            color="gray"
-            icon={ArrowPathIcon}
-            className="dark:text-gray-100 dark:hover:text-gray-300 outline-none"
-            type="submit"
-            form="generate-chart"
-          >
-            Retry
-          </Button>
-          <Button
-            size="xs"
-            color="gray"
-            icon={ArrowDownTrayIcon}
-            className="dark:bg-white dark:hover:bg-gray-200 dark:text-gray-900 outline-none"
-            onClick={() => handleDownloadClick('#chart-card')}
-          >
-            Download
-          </Button>
+          {(chartData == undefined || chartData?.length > 0) && (
+            <Button
+              variant="light"
+              color="gray"
+              icon={ArrowPathIcon}
+              className="dark:text-gray-100 dark:hover:text-gray-300 outline-none"
+              type="submit"
+              form="generate-chart"
+            >
+              Retry
+            </Button>
+          )}
+          {shouldRenderChart && (
+            <Button
+              size="xs"
+              color="gray"
+              icon={ArrowDownTrayIcon}
+              className="dark:bg-white dark:hover:bg-gray-200 dark:text-gray-900 outline-none"
+              onClick={() => handleDownloadClick('#chart-card')}
+            >
+              Download
+            </Button>
+          )}
         </div>
 
         {error ? (
