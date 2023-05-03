@@ -137,11 +137,12 @@ const NewHome: NextPage = () => {
   };
 
   return (
-    <Grid numCols={1} numColsSm={2} numColsLg={4} className="gap-4 h-full">
+    <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-4 h-full">
       <Col
         numColSpan={1}
-        numColSpanMd={3}
-        className="bg-gray-100 rounded-md p-4 border border-gray-200 dark:border-gray-800 dark:bg-gray-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
+        numColSpanSm={2}
+        numColSpanMd={2}
+        className="bg-gray-100 rounded-md py-12 px-4 lg:py-4 border border-gray-200 dark:border-gray-800 dark:bg-gray-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
       >
         <div className="flex absolute top-4 right-4 space-x-4">
           <Button
@@ -149,6 +150,8 @@ const NewHome: NextPage = () => {
             color="gray"
             icon={ArrowPathIcon}
             className="dark:text-gray-100 dark:hover:text-gray-300 outline-none"
+            type="submit"
+            form="generate-chart"
           >
             Retry
           </Button>
@@ -194,7 +197,7 @@ const NewHome: NextPage = () => {
         )}
       </Col>
 
-      <aside className="h-full shrink-0 w-full flex flex-col justify-between">
+      <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2">
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
           <SectionHeader
             stepNumber={1}
