@@ -30,6 +30,7 @@ import { useCallback, useMemo, useState } from 'react';
 import Chart from '../components/ChartComponent';
 import LoadingDots from '../components/LoadingDots';
 import { SegmentedControl } from '../components/atoms/SegmentedControl';
+import { Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
 
@@ -310,13 +311,26 @@ const NewHome: NextPage = () => {
           </div>
 
           <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
-          <SelectBox icon={SwatchIcon}>
-            <SelectBoxItem value="blue" text="Blue" icon={SwatchIcon} />
-            <SelectBoxItem value="purple" text="Purple" icon={SwatchIcon} />
-            <SelectBoxItem value="green" text="Green" icon={SwatchIcon} />
-            <SelectBoxItem value="pink" text="Pink" icon={SwatchIcon} />
-            <SelectBoxItem value="yellow" text="Yellow" icon={SwatchIcon} />
-          </SelectBox>
+          <div>
+            <label
+              htmlFor="title"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	mb-3"
+            >
+              Color
+            </label>
+            <Select
+              defaultValue="blue"
+              leftIcon={SwatchIcon}
+              items={[
+                { value: 'blue', textValue: 'Blue' },
+                { value: 'purple', textValue: 'Purple' },
+                { value: 'green', textValue: 'Green' },
+                { value: 'pink', textValue: 'Pink' },
+                { value: 'yellow', textValue: 'Yellow' },
+              ]}
+            />
+          </div>
+
           <div className="flex justify-between w-full">
             <label
               htmlFor="title"

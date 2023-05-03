@@ -32,10 +32,10 @@ export const Toggle = ({
       disabled={disabled}
       onChange={setChecked}
       className={clsx(
-        'bg-gray-100 relative inline-flex items-center rounded-full border border-transparent',
+        'bg-gray-200 dark:bg-gray-500/20 relative inline-flex items-center rounded-full border border-transparent',
         'outline-none transition focus:outline-none focus-visible:border focus-visible:ring',
         {
-          'bg-blue-500': checked,
+          '!bg-blue-500': checked,
         },
         {
           'h-5 w-[36px]': size === 'sm',
