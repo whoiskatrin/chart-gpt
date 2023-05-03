@@ -3,6 +3,7 @@ import {
   ArrowPathIcon,
   ChartBarIcon,
   ChevronDownIcon,
+  ChevronUpIcon,
   PencilSquareIcon,
   PresentationChartLineIcon,
   SwatchIcon,
@@ -65,6 +66,7 @@ const CHART_TYPES = [
 const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [chartType, setChartType] = useState('');
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(false);
@@ -217,77 +219,89 @@ const NewHome: NextPage = () => {
               }
             }}
           />
-          <Button variant="light" className="mx-auto" icon={ChevronDownIcon}>
+          <Button
+            type="button"
+            variant="light"
+            className="w-full"
+            icon={showAdvanced ? ChevronUpIcon : ChevronDownIcon}
+            onClick={() => setShowAdvanced(!showAdvanced)}
+          >
             Advanced
           </Button>
-          <SegmentedControl
-            items={[
-              {
-                children: 'Chart',
-                icon: ChartBarIcon,
-              },
-              { children: 'PowerPoint', icon: PresentationChartLineIcon },
-            ]}
-            fullWidth
-          />
-          <div>
-            <Text className="mb-1 dark:text-gray-400">Chart type</Text>
-            <SelectBox>
-              <SelectBoxItem
-                value="bar"
-                text="Bar Chart"
-                icon={BarChartIcon}
-                className="dark:bg-gray-900 text-gray-100"
+          {showAdvanced && (
+            <div className="space-y-4">
+              <SegmentedControl
+                items={[
+                  {
+                    children: 'Chart',
+                    icon: ChartBarIcon,
+                  },
+                  { children: 'PowerPoint', icon: PresentationChartLineIcon },
+                ]}
+                fullWidth
               />
-              <SelectBoxItem
-                value="area"
-                text="Area Chart"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-              <SelectBoxItem
-                value="line"
-                text="Line Chart"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-              <SelectBoxItem
-                value="composed"
-                text="Composed Chart"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-              <SelectBoxItem
-                value="pie"
-                text="Pie Chart"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-              <SelectBoxItem
-                value="scatter"
-                text="Scatter Chart"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-              <SelectBoxItem
-                value="radar"
-                text="Radar Chart"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-              <SelectBoxItem
-                value="radial"
-                text="Radial Bar Chart"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-              <SelectBoxItem
-                value="treemap"
-                text="Treemap"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-              <SelectBoxItem
-                value="funnel"
-                text="Funnel Chart"
-                className="dark:bg-gray-900 text-gray-100"
-              />
-            </SelectBox>
-          </div>
+              <div>
+                <Text className="mb-1 dark:text-gray-400">Chart type</Text>
+                <SelectBox>
+                  <SelectBoxItem
+                    value="bar"
+                    text="Bar Chart"
+                    icon={BarChartIcon}
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="area"
+                    text="Area Chart"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="line"
+                    text="Line Chart"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="composed"
+                    text="Composed Chart"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="pie"
+                    text="Pie Chart"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="scatter"
+                    text="Scatter Chart"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="radar"
+                    text="Radar Chart"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="radial"
+                    text="Radial Bar Chart"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="treemap"
+                    text="Treemap"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                  <SelectBoxItem
+                    value="funnel"
+                    text="Funnel Chart"
+                    className="dark:bg-gray-900 text-gray-100"
+                  />
+                </SelectBox>
+              </div>
+            </div>
+          )}
 
-          <Divider className="h-px my-8 dark:bg-gray-800" />
+          <div className="py-2">
+            <Divider className="h-px dark:bg-gray-800" />
+          </div>
 
           <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
           <SelectBox icon={SwatchIcon}>

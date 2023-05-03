@@ -1,3 +1,4 @@
+import { StarIcon } from '@heroicons/react/24/outline';
 import { Button } from '@tremor/react';
 import { FC, PropsWithChildren } from 'react';
 import ThemeButton from '../ThemeButton';
@@ -62,7 +63,7 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
       <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-gray-200 dark:border-gray-800">
         <Logo />
         <div className="flex space-x-4">
-          <Button size="xs" color="gray" variant="secondary">
+          <Button size="xs" color="gray" variant="secondary" icon={StarIcon}>
             Star on GitHub
           </Button>
           <Button size="xs" color="gray" variant="secondary">
