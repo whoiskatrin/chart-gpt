@@ -1,5 +1,5 @@
-import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
+import { Icon } from '@tremor/react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
@@ -23,11 +23,12 @@ export default function ThemeButton({ className }: { className?: string }) {
       }
       className={className}
     >
-      {currentTheme === 'dark' ? (
-        <FontAwesomeIcon icon={faSun} className="w-4 h-4 text-gray-400" />
-      ) : (
-        <FontAwesomeIcon icon={faMoon} className="w-4 h-4 text-blue-500" />
-      )}
+      <Icon
+        variant="light"
+        color={currentTheme === 'dark' ? 'yellow' : 'blue'}
+        icon={currentTheme === 'dark' ? SunIcon : MoonIcon}
+        className="dark:bg-yellow-500/20 dark:text-yellow-500 text-blue-500"
+      />
     </button>
   );
 }
