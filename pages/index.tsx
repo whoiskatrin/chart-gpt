@@ -1,43 +1,43 @@
-import { Callout, Card, Title } from "@tremor/react";
-import axios from "axios";
-import downloadjs from "downloadjs";
-import html2canvas from "html2canvas";
-import Head from "next/head";
-import React, { useMemo, useState } from "react";
-import { Chart } from "../components/ChartComponent";
-import { Header } from "../components/Header";
-import InfoSection from "../components/InfoSection";
-import LoadingDots from "../components/LoadingDots";
-import { useTheme } from "next-themes";
-import ThemeButton from "../components/ThemeButton";
+import { Callout, Card, Title } from '@tremor/react';
+import axios from 'axios';
+import downloadjs from 'downloadjs';
+import html2canvas from 'html2canvas';
+import { useTheme } from 'next-themes';
+import Head from 'next/head';
+import React, { useMemo, useState } from 'react';
+import { Chart } from '../components/ChartComponent';
+import { Header } from '../components/Header';
+import InfoSection from '../components/InfoSection';
+import LoadingDots from '../components/LoadingDots';
+import ThemeButton from '../components/ThemeButton';
 
 const CHART_TYPES = [
-  "area",
-  "bar",
-  "line",
-  "composed",
-  "scatter",
-  "pie",
-  "radar",
-  "radialbar",
-  "treemap",
-  "funnel",
+  'area',
+  'bar',
+  'line',
+  'composed',
+  'scatter',
+  'pie',
+  'radar',
+  'radialbar',
+  'treemap',
+  'funnel',
 ];
 
 const HomePage = () => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [chartType, setChartType] = useState("");
+  const [chartType, setChartType] = useState('');
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(false);
   const [shouldRenderChart, setShouldRenderChart] = useState(false);
 
   const { resolvedTheme } = useTheme();
-  const svgFillColor = resolvedTheme === "dark" ? "#D8D8D8" : "black";
+  const svgFillColor = resolvedTheme === 'dark' ? '#D8D8D8' : 'black';
   const btnBgColor =
-    resolvedTheme === "dark"
-      ? "dark-button-w-gradient-border"
-      : "light-button-w-gradient-border";
+    resolvedTheme === 'dark'
+      ? 'dark-button-w-gradient-border'
+      : 'light-button-w-gradient-border';
 
   const chartComponent = useMemo(() => {
     return <Chart data={chartData} chartType={chartType} />;
@@ -50,7 +50,7 @@ const HomePage = () => {
     setIsLoading(true);
 
     try {
-      const chartTypeResponse = await axios.post("/api/get-type", {
+      const chartTypeResponse = await axios.post('/api/get-type', {
         inputData: inputValue,
       });
 
@@ -62,7 +62,7 @@ const HomePage = () => {
       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
 [{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n Provide JSON data only. `;
 
-      const chartDataResponse = await axios.post("/api/parse-graph", {
+      const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
       });
 
@@ -72,7 +72,7 @@ const HomePage = () => {
         parsedData = JSON.parse(chartDataResponse.data);
       } catch (error) {
         setError(true);
-        console.error("Failed to parse chart data:", error);
+        console.error('Failed to parse chart data:', error);
       }
 
       setChartData(parsedData);
@@ -80,7 +80,7 @@ const HomePage = () => {
       setShouldRenderChart(true);
     } catch (error) {
       setError(true);
-      console.error("Failed to generate graph data:", error);
+      console.error('Failed to generate graph data:', error);
     } finally {
       setIsLoading(false);
     }
@@ -96,8 +96,8 @@ const HomePage = () => {
       return;
     }
     const canvas = await html2canvas(element);
-    const dataURL = canvas.toDataURL("image/png");
-    downloadjs(dataURL, "chart.png", "image/png");
+    const dataURL = canvas.toDataURL('image/png');
+    downloadjs(dataURL, 'chart.png', 'image/png');
   };
 
   return (
@@ -121,8 +121,8 @@ const HomePage = () => {
                 src="/stars.svg"
                 className="p-1"
                 style={{
-                  filter: resolvedTheme === "dark" ? "invert(0)" : "invert(1)",
-                  fill: resolvedTheme === "dark" ? "white" : "black",
+                  filter: resolvedTheme === 'dark' ? 'invert(0)' : 'invert(1)',
+                  fill: resolvedTheme === 'dark' ? 'white' : 'black',
                 }}
               />
               What would you like to visualise?
@@ -136,8 +136,8 @@ const HomePage = () => {
               required
               autoFocus
               onChange={handleInputChange}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+              onKeyDown={event => {
+                if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
                   handleSubmit(event);
                 }
               }}
@@ -171,7 +171,7 @@ const HomePage = () => {
           ) : (
             shouldRenderChart && (
               <>
-                <Card className="bg-white dark:bg-zinc-300">
+                <Card className="bg-white dark:bg-gray-300">
                   <Title>{inputValue}</Title>
                   {chartComponent}
                 </Card>
@@ -179,7 +179,7 @@ const HomePage = () => {
                   <button
                     type="button"
                     className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center"
-                    onClick={() => handleCaptureClick(".recharts-wrapper")}
+                    onClick={() => handleCaptureClick('.recharts-wrapper')}
                   >
                     Download
                   </button>
