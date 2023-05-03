@@ -59,7 +59,7 @@ export const SegmentedControlList = ({
   return (
     <Tab.List
       className={clsx(
-        'bg-gray-100 dark:bg-gray-800 flex h-10 appearance-none items-center overflow-scroll rounded-lg p-1',
+        'bg-zinc-100 dark:bg-zinc-800 flex h-10 appearance-none items-center overflow-scroll rounded-lg p-1',
         {
           'max-w-fit': !fullWidth,
         },
@@ -91,7 +91,7 @@ export const SegmentedControlListItem = ({
         >
           {selected && (
             <motion.div
-              className="border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 absolute inset-0 z-[1] flex items-center justify-center rounded-md border-[0.5px]"
+              className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 absolute inset-0 z-[1] flex items-center justify-center rounded-md border-[0.5px]"
               layoutId="active"
               transition={{
                 duration: 0.15,
@@ -103,7 +103,7 @@ export const SegmentedControlListItem = ({
               <Icon
                 size="sm"
                 icon={icon}
-                className="mr-3 text-gray-700 dark:text-gray-300"
+                className="mr-3 text-zinc-700 dark:text-zinc-300"
               />
             )}
             {children}

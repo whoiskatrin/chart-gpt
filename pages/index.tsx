@@ -146,7 +146,7 @@ const NewHome: NextPage = () => {
         numColSpan={1}
         numColSpanSm={2}
         numColSpanMd={2}
-        className="bg-gray-100 rounded-md py-12 px-4 lg:py-4 border border-gray-200 dark:border-gray-800 dark:bg-gray-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
+        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-800 dark:bg-zinc-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
       >
         <div className="flex absolute top-4 right-4 space-x-4">
           {(chartData == undefined || chartData?.length > 0) && (
@@ -154,7 +154,7 @@ const NewHome: NextPage = () => {
               variant="light"
               color="gray"
               icon={ArrowPathIcon}
-              className="dark:text-gray-100 dark:hover:text-gray-300 outline-none"
+              className="dark:text-zinc-100 dark:hover:text-zinc-300 outline-none"
               type="submit"
               form="generate-chart"
             >
@@ -166,7 +166,7 @@ const NewHome: NextPage = () => {
               size="xs"
               color="gray"
               icon={ArrowDownTrayIcon}
-              className="dark:bg-white dark:hover:bg-gray-200 dark:text-gray-900 outline-none"
+              className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
               onClick={() => handleDownloadClick('#chart-card')}
             >
               Download
@@ -192,7 +192,7 @@ const NewHome: NextPage = () => {
               shouldRenderChart && (
                 <Card
                   id="chart-card"
-                  className="bg-white dark:bg-black dark:ring-gray-800"
+                  className="bg-white dark:bg-black dark:ring-zinc-800"
                 >
                   {showTitle && (
                     <Title className="dark:text-white">{inputValue}</Title>
@@ -247,58 +247,58 @@ const NewHome: NextPage = () => {
                 fullWidth
               />
               <div>
-                <Text className="mb-1 dark:text-gray-400">Chart type</Text>
+                <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
                 <SelectBox>
                   <SelectBoxItem
                     value="bar"
                     text="Bar Chart"
                     icon={BarChartIcon}
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="area"
                     text="Area Chart"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="line"
                     text="Line Chart"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="composed"
                     text="Composed Chart"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="pie"
                     text="Pie Chart"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="scatter"
                     text="Scatter Chart"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="radar"
                     text="Radar Chart"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="radial"
                     text="Radial Bar Chart"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="treemap"
                     text="Treemap"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                   <SelectBoxItem
                     value="funnel"
                     text="Funnel Chart"
-                    className="dark:bg-gray-900 text-gray-100"
+                    className="dark:bg-zinc-900 text-zinc-100"
                   />
                 </SelectBox>
               </div>
@@ -306,7 +306,7 @@ const NewHome: NextPage = () => {
           )}
 
           <div className="py-2">
-            <Divider className="h-px dark:bg-gray-800" />
+            <Divider className="h-px dark:bg-zinc-800" />
           </div>
 
           <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
@@ -320,7 +320,7 @@ const NewHome: NextPage = () => {
           <div className="flex justify-between w-full">
             <label
               htmlFor="title"
-              className="text-gray-500 dark:text-gray-400 text-sm font-normal select-none	"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	"
             >
               Show chart Title
             </label>
@@ -335,7 +335,7 @@ const NewHome: NextPage = () => {
           <div className="flex justify-between w-full">
             <label
               htmlFor="legend"
-              className="text-gray-500 dark:text-gray-400 text-sm font-normal select-none	"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	"
             >
               Show chart Legend
             </label>

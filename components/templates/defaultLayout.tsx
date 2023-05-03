@@ -60,13 +60,24 @@ const Logo = () => (
 export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <main className="h-[calc(100vh-48px)]">
-      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-gray-200 dark:border-gray-800">
+      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:border-zinc-800">
         <Logo />
         <div className="flex space-x-4">
-          <Button size="xs" color="gray" variant="secondary" icon={StarIcon}>
+          <Button
+            size="xs"
+            color="zinc"
+            variant="secondary"
+            icon={StarIcon}
+            className="dark:hover:bg-zinc-500/20 dark:text-zinc-100"
+          >
             Star on GitHub
           </Button>
-          <Button size="xs" color="gray" variant="secondary">
+          <Button
+            size="xs"
+            color="zinc"
+            variant="secondary"
+            className="dark:hover:bg-zinc-500/20 dark:text-zinc-100"
+          >
             Twitter
           </Button>
           <ThemeButton />
