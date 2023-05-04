@@ -1,6 +1,7 @@
-import { StarIcon } from '@heroicons/react/24/outline';
 import { Button } from '@tremor/react';
+import Link from 'next/link';
 import { FC, PropsWithChildren } from 'react';
+import Github from '../GitHub';
 import ThemeButton from '../ThemeButton';
 
 const Logo = () => (
@@ -61,25 +62,25 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <main className="h-[calc(100vh-48px)]">
       <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:border-zinc-800">
-        <Logo />
+        <Link href="/">
+          <Logo />
+        </Link>
         <div className="flex space-x-4">
-          <Button
-            size="xs"
-            color="zinc"
-            variant="secondary"
-            icon={StarIcon}
-            className="dark:hover:bg-zinc-500/20 dark:text-zinc-100"
+          <a
+            href="https://github.com/whoiskatrin/chart-gpt"
+            rel="noopener noreferrer"
+            target="_blank"
           >
-            Star on GitHub
-          </Button>
-          <Button
-            size="xs"
-            color="zinc"
-            variant="secondary"
-            className="dark:hover:bg-zinc-500/20 dark:text-zinc-100"
-          >
-            Twitter
-          </Button>
+            <Button
+              size="xs"
+              color="zinc"
+              variant="secondary"
+              icon={Github}
+              className="dark:hover:bg-zinc-500/20 dark:text-zinc-100"
+            >
+              Star on GitHub
+            </Button>
+          </a>
           <ThemeButton />
         </div>
       </nav>

@@ -139,8 +139,13 @@ const NewHome: NextPage = () => {
   console.log({ chartData });
 
   return (
-    <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-4 h-full">
-      <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2">
+    <Grid
+      numCols={1}
+      numColsSm={2}
+      numColsLg={3}
+      className="gap-y-4 lg:gap-x-4 h-full"
+    >
+      <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2 order-last lg:order-first">
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
           <SectionHeader
             stepNumber={1}
