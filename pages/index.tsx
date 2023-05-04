@@ -143,69 +143,6 @@ const NewHome: NextPage = () => {
 
   return (
     <Grid numCols={1} numColsSm={2} numColsLg={3} className="gap-4 h-full">
-      <Col
-        numColSpan={1}
-        numColSpanSm={2}
-        numColSpanMd={2}
-        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-800 dark:bg-zinc-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
-      >
-        <div className="flex absolute top-4 right-4 space-x-4">
-          {(chartData == undefined || chartData?.length > 0) && (
-            <Button
-              variant="light"
-              color="gray"
-              icon={ArrowPathIcon}
-              className="dark:text-zinc-100 dark:hover:text-zinc-300 outline-none"
-              type="submit"
-              form="generate-chart"
-            >
-              Retry
-            </Button>
-          )}
-          {shouldRenderChart && (
-            <Button
-              size="xs"
-              color="gray"
-              icon={ArrowDownTrayIcon}
-              className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
-              onClick={() => handleDownloadClick('#chart-card')}
-            >
-              Download
-            </Button>
-          )}
-        </div>
-
-        {error ? (
-          <Callout
-            className="mb-6"
-            title="Ooops! Could not generate"
-            color="rose"
-          >
-            Try again later or restructure your request.
-          </Callout>
-        ) : (
-          <div className="w-full max-w-xl mb-6 p-4">
-            {isLoading ? (
-              <div className="flex items-center justify-center h-96">
-                <LoadingDots />
-              </div>
-            ) : (
-              shouldRenderChart && (
-                <Card
-                  id="chart-card"
-                  className="bg-white dark:bg-black dark:ring-zinc-800"
-                >
-                  {showTitle && (
-                    <Title className="dark:text-white">{inputValue}</Title>
-                  )}
-                  {chartComponent}
-                </Card>
-              )
-            )}
-          </div>
-        )}
-      </Col>
-
       <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2">
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
           <SectionHeader
@@ -371,6 +308,69 @@ const NewHome: NextPage = () => {
           Draw Chart
         </Button>
       </aside>
+
+      <Col
+        numColSpan={1}
+        numColSpanSm={2}
+        numColSpanMd={2}
+        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-800 dark:bg-zinc-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
+      >
+        <div className="flex absolute top-4 right-4 space-x-4">
+          {(chartData == undefined || chartData?.length > 0) && (
+            <Button
+              variant="light"
+              color="gray"
+              icon={ArrowPathIcon}
+              className="dark:text-zinc-100 dark:hover:text-zinc-300 outline-none"
+              type="submit"
+              form="generate-chart"
+            >
+              Retry
+            </Button>
+          )}
+          {shouldRenderChart && (
+            <Button
+              size="xs"
+              color="gray"
+              icon={ArrowDownTrayIcon}
+              className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
+              onClick={() => handleDownloadClick('#chart-card')}
+            >
+              Download
+            </Button>
+          )}
+        </div>
+
+        {error ? (
+          <Callout
+            className="mb-6"
+            title="Ooops! Could not generate"
+            color="rose"
+          >
+            Try again later or restructure your request.
+          </Callout>
+        ) : (
+          <div className="w-full max-w-xl mb-6 p-4">
+            {isLoading ? (
+              <div className="flex items-center justify-center h-96">
+                <LoadingDots />
+              </div>
+            ) : (
+              shouldRenderChart && (
+                <Card
+                  id="chart-card"
+                  className="bg-white dark:bg-black dark:ring-zinc-800"
+                >
+                  {showTitle && (
+                    <Title className="dark:text-white">{inputValue}</Title>
+                  )}
+                  {chartComponent}
+                </Card>
+              )
+            )}
+          </div>
+        )}
+      </Col>
     </Grid>
   );
 };
