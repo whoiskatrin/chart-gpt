@@ -98,7 +98,7 @@ const HomePage = () => {
             </button>
           </div>
         </form>
-        {/* <ApiKey apiKey={apiKey} setApiKey={setApiKey} /> */}
+        <ApiKey apiKey={apiKey} setApiKey={setApiKey} />
       </div>
       <div className="w-full max-w-2xl mb-6">
         {isLoading ? (
