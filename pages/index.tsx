@@ -8,6 +8,7 @@ import Head from 'next/head';
 import downloadjs from 'downloadjs';
 import html2canvas from 'html2canvas';
 import InfoSection from '../components/InfoSection';
+import style from 'react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark';
 
 const CHART_TYPES = [
 	'area',
@@ -28,6 +29,7 @@ const HomePage = () => {
 	const [chartType, setChartType] = useState('');
 	const [chartData, setChartData] = useState([]);
 	const [error, setError] = useState(false);
+	const [formError, setFormError] = useState(false);
 	const [shouldRenderChart, setShouldRenderChart] = useState(false);
 
 	const chartComponent = useMemo(() => {
@@ -36,7 +38,6 @@ const HomePage = () => {
 
 	const handleSubmit = async (event: { preventDefault: () => void }) => {
 		event.preventDefault();
-
 		setError(false);
 		setIsLoading(true);
 
@@ -77,10 +78,23 @@ const HomePage = () => {
 		}
 	};
 
+	/*****************************************************************
+	 *****************************************************************
+	 ************** Handle Text Area input changes ******************/
+
 	const handleInputChange = (
 		event: React.ChangeEvent<HTMLTextAreaElement>
 	) => {
-		setInputValue(event.target.value);
+		event.preventDefault();
+		const input = event.target.value;
+		setInputValue(input);
+		if (input.match(/^\s/)) {
+			setFormError(true);
+			setInputValue('');
+		} else {
+			setFormError(false);
+			setInputValue(input);
+		}
 	};
 
 	const handleCaptureClick = async (selector: string) => {
@@ -113,7 +127,7 @@ const HomePage = () => {
 						<textarea
 							id='input'
 							rows={3}
-							placeholder=''
+							placeholder='Generate a scatterplot chart between Apple and oranges.....'
 							className='appearance-none font-inter mt-8 border border-gray-300 dark:border-gray-600 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 bg-custom-gray-bg dark:bg-custom-dark-gray text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline text-left min-h-[120px] max-h-[200px]'
 							value={inputValue}
 							required
@@ -129,6 +143,25 @@ const HomePage = () => {
 							}}
 						/>
 
+						{formError && (
+							<div className='error-message py-1'>
+								<ul className='text-left py-2 b-2 font-sans'>
+									<li className='list-text-color list-one text-rose-600 text-xs py-2 font-semibold'>
+										🙅🏻‍♀️ Blank Spaces wont give accurate
+										results
+									</li>
+									<li className='list-text-color list-two text-blue-600 text-xs font-semibold'>
+										👍🏼 Entering Valid description with data
+										would generate correct visualisations
+									</li>
+								</ul>
+							</div>
+						)}
+						{/* {formError ? (
+							<button disabled={true}></button>
+						) : (
+							<button disabled={false}></button>
+						)} */}
 						<button
 							type='submit'
 							className='cursor-pointer font-inter font-semibold py-2 px-10 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center mt-3'
