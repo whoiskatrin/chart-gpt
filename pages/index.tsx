@@ -8,7 +8,6 @@ import {
   PresentationChartLineIcon,
   SwatchIcon,
 } from '@heroicons/react/24/outline';
-import { ChartBarIcon as BarChartIcon } from '@heroicons/react/24/solid';
 import {
   Button,
   Callout,
@@ -16,8 +15,6 @@ import {
   Col,
   Divider,
   Grid,
-  SelectBox,
-  SelectBoxItem,
   Subtitle,
   Text,
   Title,
@@ -166,7 +163,7 @@ const NewHome: NextPage = () => {
           <Button
             type="button"
             variant="light"
-            className="w-full"
+            className="w-full outline-none focus:outline-none"
             icon={showAdvanced ? ChevronUpIcon : ChevronDownIcon}
             onClick={() => setShowAdvanced(!showAdvanced)}
           >
@@ -186,59 +183,22 @@ const NewHome: NextPage = () => {
               />
               <div>
                 <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
-                <SelectBox>
-                  <SelectBoxItem
-                    value="bar"
-                    text="Bar Chart"
-                    icon={BarChartIcon}
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="area"
-                    text="Area Chart"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="line"
-                    text="Line Chart"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="composed"
-                    text="Composed Chart"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="pie"
-                    text="Pie Chart"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="scatter"
-                    text="Scatter Chart"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="radar"
-                    text="Radar Chart"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="radial"
-                    text="Radial Bar Chart"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="treemap"
-                    text="Treemap"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                  <SelectBoxItem
-                    value="funnel"
-                    text="Funnel Chart"
-                    className="dark:bg-zinc-900 text-zinc-100"
-                  />
-                </SelectBox>
+                <Select
+                  name="chart-type"
+                  defaultValue="bar"
+                  items={[
+                    { value: 'bar', textValue: 'Bar Chart' },
+                    { value: 'area', textValue: 'Area Chart' },
+                    { value: 'line', textValue: 'Line Chart' },
+                    { value: 'composed', textValue: 'Composed Chart' },
+                    { value: 'pie', textValue: 'Pie Chart' },
+                    { value: 'scatter', textValue: 'Scatter Chart' },
+                    { value: 'radar', textValue: 'Radar Chart' },
+                    { value: 'radial-bar', textValue: 'Radial Bar Chart' },
+                    { value: 'treemap', textValue: 'Treemap' },
+                    { value: 'funnel', textValue: 'Funnel Chart' },
+                  ]}
+                />
               </div>
             </div>
           )}

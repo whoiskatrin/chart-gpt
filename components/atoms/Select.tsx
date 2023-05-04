@@ -236,7 +236,7 @@ export const Select = forwardRef<
             <IconPrimitive>
               <Icon
                 icon={ChevronDownIcon}
-                className="text-zinc-800 dark:text-zinc-100 pointer-events-none mt-[5px] pr-3 text-sm"
+                className="text-zinc-800 dark:text-zinc-100 pointer-events-none mt-[3px] pr-3"
                 size="md"
               />
             </IconPrimitive>
