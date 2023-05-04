@@ -91,7 +91,7 @@ const HomePage = () => {
               ChartGPT
             </h1>
             <p className="text-gray-700">
-              A tool that converts text into beautiful charts
+              AI tool to convert text to a beautiful chart
             </p>
           </Link>
         </header>
