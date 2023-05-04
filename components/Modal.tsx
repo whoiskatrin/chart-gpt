@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {  XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -28,7 +28,7 @@ export default function Modal({ children, openModal, title="Modal", toggleModal 
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div className="flex min-h-full items-end justify-center p-2 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -50,7 +50,7 @@ export default function Modal({ children, openModal, title="Modal", toggleModal 
                   </button>
                 </div>
                 <div>
-                  <div className="mt-3 text-center sm:mt-1">
+                  <div className="mt-1 text-left">
                     <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                       {title}
                     </Dialog.Title>

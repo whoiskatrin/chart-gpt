@@ -12,7 +12,7 @@ export const Header = () => {
       : "light-button-w-gradient-border";
 
   return (
-    <header className="flex flex-col sm:flex-row sm:justify-betweenw-full max-w-5xl mb-6 gap-6 pt-4 pb-8 px-2 mt-3 border-b pb-7 sm:px-4 px-2 border-gray-200 gap-2">
+    <header className="flex flex-col sm:flex-row sm:justify-betweenw-full max-w-5xl mb-6 gap-6 pt-4 px-2 mt-3 border-b pb-7 sm:px-4 border-gray-200">
       <Link href="/" className="flex flex-col">
         <h1 className="font-inter font-bold sm:text-xl flex items-center bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text text-transparent">
           <img

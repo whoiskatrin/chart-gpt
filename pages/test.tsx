@@ -153,7 +153,14 @@ const HomePage = () => {
               </button>
             </form> 
           </div>
-          <Modal openModal={openModal} title="Set your own OpenAI API Key" toggleModal={toggleModal}>
+          {apiKey !== "" ? 
+            <div className="text-sm w-full text-align-left pl-2">
+              🟢 Using custom  <a href="#" onClick={toggleModal} className="rounded-full text-gray-500 dark:text-gray-400"> API Key </a>
+            </div>
+            :
+            null
+          }
+          <Modal openModal={openModal} title="Set OpenAI API Key" toggleModal={toggleModal}>
             <ApiKey apiKey={apiKey} setApiKey={setApiKey} />
           </Modal>
         </div>
