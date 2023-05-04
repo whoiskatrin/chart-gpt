@@ -78,8 +78,8 @@ const HomePage = () => {
           Tool that converts text into beautiful charts
         </title>
       </Head>
-      <div className="flex flex-col px-4 items-center  min-h-screen bg-gradient-to-r from-slate-300 to-indigo-50 overflow-x-hidden">
-        <header className="max-w-xl w-full pt-5 pb-5"> 
+      <div className="flex flex-col px-4 items-center min-h-screen bg-gradient-to-r from-slate-300 to-indigo-50 overflow-x-hidden">
+        <header className="max-w-2xl w-full pt-5 pb-5"> 
           <Link href="/">
             <h1 className="font-bold sm:text-3xl flex bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text text-transparent">
               <img
@@ -95,34 +95,44 @@ const HomePage = () => {
             </p>
           </Link>
         </header>
-        <div className="flex flex-col items-center w-full max-w-xl p-2 rounded-2xl border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20">
+        <div className="flex flex-col items-center w-full max-w-2xl p-2 rounded-2xl border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20">
           <div className="w-full bg-white rounded-2xl">
+           
             <ChatBubble show={false} wait={100} showLoading={true}>
-              ℹ️ ChartGPT was created with ❤️ by Kate. Follow on 
+              🖌️ Create a graph by describing your data and desired chart (e.g 
+              <a 
+                className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
+                href="#" 
+                onClick={setExample}>like this</a>
+              ). 
+              Add your API Key 
+              <a 
+                className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
+                href="#" 
+                onClick={toggleModal} 
+              >here</a> to avoid rate limits 👌
+            </ChatBubble>
+
+            <ChatBubble show={false} wait={200} showLoading={true}>
+              ℹ️ ChartGPT was created with ❤️ by Kate. Follow on
                 <a
-                  href="https://github.com/whoiskatrin/chart-gpt"
+                  href="https://twitter.com/whoiskatrin"
                   target="_blank"
-                  className="rounded-full text-gray-500 dark:text-gray-400"
-                > Twitter </a> 
-                or ⭐ on 
+                  className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
+                >Twitter</a> 
+                 or ⭐ on  
                 <a 
                   href="https://github.com/whoiskatrin/chart-gpt" 
                   target="_blank"
-                  className="rounded-full text-gray-500 dark:text-gray-400"
+                  className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
                 > GitHub </a> 
                 for updates!
-            </ChatBubble>
-           
-            <ChatBubble show={false} wait={200} showLoading={true}>
-              🖌️ Create a graph by describing your data and desired chart (e.g 
-              <a className="rounded-full text-gray-500 dark:text-gray-400" href="#" onClick={setExample}> try this</a>). 
-              Add your API Key <a href="#" onClick={toggleModal} className="rounded-full text-gray-500 dark:text-gray-400"> here </a> to avoid rate limits 👌
             </ChatBubble>
             
             <div className="mb-6">
             {isLoading ? (
               <div className="flex items-center justify-center h-96">
-                <LoadingDots color={"blue"} />
+                <LoadingDots color={"#4372E5"} />
               </div>
             ) : (
               chartData &&
@@ -134,8 +144,8 @@ const HomePage = () => {
             )}
             </div>
           </div>
-          <div className="flex flex-col w-full max-w-xl p-2">
-            <form onSubmit={handleSubmit} className="flex flex-row w-full gap-2 max-w-xl">
+          <div className="flex flex-col w-full max-w-2xl p-2">
+            <form onSubmit={handleSubmit} className="flex flex-row w-full gap-2">
               <textarea
                 id="input"
                 rows={3}
@@ -152,14 +162,17 @@ const HomePage = () => {
                 Draw
               </button>
             </form> 
-          </div>
-          {apiKey !== "" ? 
-            <div className="text-sm w-full text-align-left pl-2">
-              🟢 Using custom  <a href="#" onClick={toggleModal} className="rounded-full text-gray-500 dark:text-gray-400"> API Key </a>
+            {apiKey !== "" ? 
+            <div className="text-sm w-full text-align-left pl-2 pt-2">
+              🟢 Using custom  
+                <a href="#" onClick={toggleModal} className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1">
+                  API Key
+                </a>
             </div>
             :
             null
           }
+          </div>
           <Modal openModal={openModal} title="Set OpenAI API Key" toggleModal={toggleModal}>
             <ApiKey apiKey={apiKey} setApiKey={setApiKey} />
           </Modal>
