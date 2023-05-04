@@ -125,21 +125,17 @@ const HomePage = () => {
         <div className="flex flex-col items-center w-full max-w-2xl p-2 rounded-2xl border-gray-300 bg-indigo-50 dark:text-white dark:bg-black dark:border dark:border-white/20">
           <div className="w-full bg-white rounded-2xl">
            
-            <ChatBubble show={false} wait={100} showLoading={true}>
-              🖌️ Create a graph by describing your data and desired chart (e.g 
+            <ChatBubble show={false} wait={400} showLoading={true}>
+            To get started, simply enter a description of your data and the desired single chart type in the input field. Our generator will create the chart for you in just a few seconds!
+
+(e.g 
               <a 
                 className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
                 href="#" 
-                onClick={setExample}>like this</a>). 
-              Add your API Key 
-              <a 
-                className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
-                href="#" 
-                onClick={toggleModal} 
-              >here</a> to avoid rate limits 👌
+                onClick={setExample}>click here</a>) 
             </ChatBubble>
 
-            <ChatBubble show={false} wait={200} showLoading={true}>
+            <ChatBubble show={false} wait={800} showLoading={true}>
               ℹ️ ChartGPT was created with ❤️ by Kate. Follow on
                 <a
                   href="https://twitter.com/whoiskatrin"
@@ -156,19 +152,17 @@ const HomePage = () => {
             </ChatBubble>
             
             <div className="p-2">
-            {error ? (
-                <p className="text-left p-2 mb-2  text-red-500">
+            {error ? (  
+                <ul className="text-left p-2 mb-2 text-red-500 list-disc list-inside">
                   Something went terribly wrong! Common issues: 
-                  <ul className="list-disc list-inside">
-                    <li>👉 Quota issues, try using our own 
-                        <a href="#" onClick={toggleModal} className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1">
-                          API Key
-                        </a>
-                    </li>
-                    <li>👉 Try modifying the prompt, make it as clear as possible </li>
-                    <li>👉 Make sure you are using the correct format for your chart type</li>
-                  </ul>
-                </p>
+                  <li>👉 Quota issues, try using our own 
+                      <a href="#" onClick={toggleModal} className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1">
+                        API Key
+                      </a>
+                  </li>
+                  <li>👉 Try modifying the prompt, make it as clear as possible </li>
+                  <li>👉 Make sure you are using the correct format for your chart type</li>
+                </ul>
               ) : (
                 <div className='w-full max-w-xl p-4'>
                   {isLoading ? (
@@ -234,7 +228,14 @@ const HomePage = () => {
                 </a>
             </div>
             :
-            null
+            <div className="text-sm w-full text-align-left pl-2 pt-2">
+              Add your API Key 
+              <a 
+                className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
+                href="#" 
+                onClick={toggleModal} 
+              >here</a> to avoid rate limits 👌
+            </div>
           }
           </div>
           <Modal openModal={openModal} title="Set OpenAI API Key" toggleModal={toggleModal}>
@@ -242,7 +243,7 @@ const HomePage = () => {
           </Modal>
         </div>
 
-        <footer className="text-center font-inter text-gray-700 text-sm mt-4">
+        <footer className="text-center font-inter text-gray-700 text-sm p-4">
           Made with ❤️ using React, Next.js, OpenAI and Tailwind CSS
         </footer>
       </div>

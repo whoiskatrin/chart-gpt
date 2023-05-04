@@ -1,6 +1,5 @@
 import { Fragment, ReactNode, useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react';
-import LoadingDots from "./LoadingDots";
 
 type Props = {
   children?: ReactNode,
