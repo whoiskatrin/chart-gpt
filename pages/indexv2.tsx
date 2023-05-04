@@ -1,12 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import axios from "axios";
+import downloadjs from 'downloadjs';
+import html2canvas from 'html2canvas';
 import { Chart } from "../components/ChartComponent";
 import ApiKey from "../components/ApiKey";
 import Modal from "../components/Modal";
 import LoadingDots from "../components/LoadingDots";
 import ChatBubble from "../components/ChatBubble";
+
+const CHART_TYPES = [
+	'area',
+	'bar',
+	'line',
+	'composed',
+	'scatter',
+	'pie',
+	'radar',
+	'radialbar',
+	'treemap',
+	'funnel',
+];
 
 const HomePage = () => {
   const [apiKey, setApiKey] = useState("");
@@ -15,27 +30,12 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [chartType, setChartType] = useState("");
   const [chartData, setChartData] = useState([]);
+  const [error, setError] = useState(false);
+  const [shouldRenderChart, setShouldRenderChart] = useState(false);
 
-  const generateChartData = async (prompt: string) => {
-    try {
-      const response = await axios.post("/api/parse-graph", { prompt, apiKey });
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Failed to generate chart data:", error);
-      throw error;
-    }
-  };
-
-  const getChartType = async (inputData: string) => {
-    try {
-      const response = await axios.post("/api/get-type", { inputData, apiKey });
-      return response;
-    } catch (error) {
-      console.error("Failed to generate chart type:", error);
-      throw error;
-    }
-  };
+  const chartComponent = useMemo(() => {
+		return <Chart data={chartData} chartType={chartType} />;
+	}, [chartData, chartType]);
   
   const toggleModal = () => {
     setOpenModal(!openModal);
@@ -46,37 +46,64 @@ const HomePage = () => {
   }
   
   const handleSubmit = async (event: { preventDefault: () => void }) => {
-    event.preventDefault();
+		event.preventDefault();
 
-    setIsLoading(true);
-    console.log(inputValue);
-    const chartType = await getChartType(inputValue);
+		setError(false);
+		setIsLoading(true);
 
-    try {
-      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12 }] for the following description for Recharts. \n\n${inputValue}\n`;
+		try {
+			const chartTypeResponse = await axios.post('/api/get-type', {
+				inputData: inputValue,
+        apiKey
+			});
 
-      const chartDataGenerate = await generateChartData(libraryPrompt);
+			if (!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase()))
+				return setError(true);
 
-      try {
-        setChartData(JSON.parse(chartDataGenerate));
-        setChartType(chartType.data);
-      } catch (error) {
-        console.error("Failed to parse chart data:", error);
-      }
-    } catch (error) {
-      console.error("Failed to generate graph data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+			setChartType(chartTypeResponse.data);
+
+			const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
+[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n Provide JSON data only. `;
+
+			const chartDataResponse = await axios.post('/api/parse-graph', {
+				prompt: libraryPrompt,
+        apiKey
+			});
+
+			let parsedData;
+
+			try {
+				parsedData = JSON.parse(chartDataResponse.data);
+			} catch (error) {
+				setError(true);
+				console.error('Failed to parse chart data:', error);
+			}
+			
+      setChartData(parsedData);
+			setChartType(chartTypeResponse.data);
+			setShouldRenderChart(true);
+		} catch (error) {
+			setError(true);
+			console.error('Failed to generate graph data:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+  const handleCaptureClick = async (selector: string) => {
+		const element = document.querySelector<HTMLElement>(selector);
+		if (!element) {
+			return;
+		}
+		const canvas = await html2canvas(element);
+		const dataURL = canvas.toDataURL('image/png');
+		downloadjs(dataURL, 'chart.png', 'image/png');
+	};
 
   return (
     <>
       <Head>
-        <title>
-          Tool that converts text into beautiful charts
-        </title>
+        <title>AI tool to convert text to a beautiful chart</title>
       </Head>
       <div className="flex flex-col px-4 items-center min-h-screen bg-gradient-to-r from-slate-300 to-indigo-50 overflow-x-hidden">
         <header className="max-w-2xl w-full pt-5 pb-5"> 
@@ -103,8 +130,7 @@ const HomePage = () => {
               <a 
                 className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
                 href="#" 
-                onClick={setExample}>like this</a>
-              ). 
+                onClick={setExample}>like this</a>). 
               Add your API Key 
               <a 
                 className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1"
@@ -129,19 +155,57 @@ const HomePage = () => {
                 for updates!
             </ChatBubble>
             
-            <div className="mb-6">
-            {isLoading ? (
-              <div className="flex items-center justify-center h-96">
-                <LoadingDots color={"#4372E5"} />
-              </div>
-            ) : (
-              chartData &&
-              chartType && (
-                <div className="flex items-center justify-center h-96">
-                  <Chart data={chartData} chartType={chartType} />
+            <div className="p-2">
+            {error ? (
+                <p className="text-left p-2 mb-2  text-red-500">
+                  Something went terribly wrong! Common issues: 
+                  <ul className="list-disc list-inside">
+                    <li>👉 Quota issues, try using our own 
+                        <a href="#" onClick={toggleModal} className="text-blue-700 hover:text-blue-500 underline decoration-dotted underline-offset-2 mx-1">
+                          API Key
+                        </a>
+                    </li>
+                    <li>👉 Try modifying the prompt, make it as clear as possible </li>
+                    <li>👉 Make sure you are using the correct format for your chart type</li>
+                  </ul>
+                </p>
+              ) : (
+                <div className='w-full max-w-xl p-4'>
+                  {isLoading ? (
+                    <div className='flex items-center justify-center h-96'>
+                      <LoadingDots />
+                    </div>
+                  ) : (
+                    shouldRenderChart && (
+                      <>
+                        <div
+                          className='flex items-center justify-center p-4'
+                          style={{
+                            width: '100%',
+                            height: '400px',
+                            overflow: 'auto',
+                          }}
+                        >
+                          {chartComponent}
+                        </div>
+                        <div className='flex flex-col items-center justify-center p-4'>
+                          <button
+                            type='button'
+                            className='cursor-pointer font-inter font-semibold py-2 px-4 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center'
+                            onClick={() =>
+                              handleCaptureClick(
+                                '.recharts-wrapper'
+                              )
+                            }
+                          >
+                            💾 Download
+                          </button>
+                        </div>
+                      </>
+                    )
+                  )}
                 </div>
-              )
-            )}
+              )}
             </div>
           </div>
           <div className="flex flex-col w-full max-w-2xl p-2">
@@ -159,7 +223,7 @@ const HomePage = () => {
                 type="submit"
                 className="cursor-pointer font-inter font-semibold basis-1/5 rounded-xl blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl"
               >
-                Draw
+                🖌️ Draw
               </button>
             </form> 
             {apiKey !== "" ? 

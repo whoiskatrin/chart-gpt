@@ -26,7 +26,7 @@ export default function ChatBubble({ children, show=false, wait=0, showLoading }
      <div className="p-2 m-2 bg-indigo-50 text-black border-indigo-100 rounded-2xl" >
         { showLoadingIndicator && 
           <div className="pl-2">
-            <LoadingDots color={"#4372E5"}/> 
+            🧘‍♀️
           </div>
         }
         <Transition 
