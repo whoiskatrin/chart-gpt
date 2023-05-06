@@ -91,7 +91,6 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
             <Button
               size="xs"
               color="zinc"
-              variant="secondary"
               className="dark:text-zinc-100 width:auto borded-0"
             >
               <SignIn />

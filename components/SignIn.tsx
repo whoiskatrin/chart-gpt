@@ -4,11 +4,10 @@ import { Subscription, User } from '@supabase/supabase-js';
 
 const SignIn = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   useEffect(() => {
     // Subscribe to auth changes (login/logout)
-    const { data: authSubscription } = supabase.auth.onAuthStateChange(
+    const authListener = supabase.auth.onAuthStateChange(
       async (event, session) => {
         const currentUser = session?.user;
         setUser(currentUser || null);
@@ -41,13 +40,10 @@ const SignIn = () => {
       }
     );
 
-    setSubscription(authSubscription.subscription);
-
     return () => {
-      // Cleanup the listener on unmount
-      subscription?.unsubscribe();
+      authListener.data.subscription.unsubscribe();
     };
-  }, [subscription]);
+  }, []);
 
   async function handleSignIn() {
     // Use Supabase authentication
@@ -71,10 +67,10 @@ const SignIn = () => {
 
   if (user) {
     return (
-      <div>
+      <span>
         <h1>Welcome, {user.user_metadata.full_name}!</h1>
         <button onClick={handleSignOut}>Sign out</button>
-      </div>
+      </span>
     );
   } else {
     return <button onClick={handleSignIn}>Sign in with Google</button>;
