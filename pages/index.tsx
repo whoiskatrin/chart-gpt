@@ -330,7 +330,7 @@ const NewHome: NextPage = () => {
             Try again later or restructure your request.
           </Callout>
         ) : (
-          <div className="w-full max-w-xl mb-6 p-4">
+          <div className="w-full max-w-xl p-4">
             {isLoading ? (
               <div className="flex items-center justify-center h-96">
                 <LoadingDots />
@@ -344,6 +344,7 @@ const NewHome: NextPage = () => {
                   {showTitle && (
                     <Title className="dark:text-white">{inputValue}</Title>
                   )}
+                  {!showLegend && <div className="h-5" />}
                   {chartComponent}
                 </Card>
               )
