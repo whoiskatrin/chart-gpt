@@ -18,7 +18,7 @@ export default async function handler(
   // Query the database by email to get the number of generations left
   const { data: user, error } = await supabase
     .from('user_credits')
-    .select('user_id, location')
+    .select('user_id, location, credits')
     .single();
 
   if (error) {
