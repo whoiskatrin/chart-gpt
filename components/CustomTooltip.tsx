@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import { Tooltip as RechartsTooltip } from 'recharts';
+import { Tooltip as RechartsTooltip, TooltipProps } from 'recharts';
 
 export const Tooltip = ({
   legendColor,
   ...props
-}: { legendColor?: string } & any) => {
+}: { legendColor?: string } & TooltipProps<any, any>) => {
   console.log({ legendColor });
   return (
     <RechartsTooltip
@@ -15,7 +15,7 @@ export const Tooltip = ({
       {...props}
       content={({ active, payload, label }) => {
         return active && payload ? (
-          <div className="bg-white dark:bg-zinc-400 text-sm rounded-md border shadow-lg">
+          <div className="bg-white text-sm rounded-md border shadow-lg">
             <div className="border-b py-2 px-4">
               <p className="text-elem text-gray-700 font-medium">{label}</p>
             </div>
@@ -28,11 +28,9 @@ export const Tooltip = ({
                   <div className="flex items-center space-x-2">
                     <span
                       className={clsx(
-                        'shrink-0 h-3 w-3 border-white rounded-full border-2 shadow-md',
-                        {
-                          [`!bg-[${legendColor}]`]: legendColor,
-                        }
+                        'shrink-0 h-3 w-3 border-white rounded-full border-2 shadow-md'
                       )}
+                      style={{ backgroundColor: legendColor }}
                     />
                     <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
                       {value}

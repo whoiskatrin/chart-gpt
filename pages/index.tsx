@@ -212,7 +212,7 @@ const NewHome: NextPage = () => {
                       { value: 'pie', textValue: 'Pie Chart' },
                       { value: 'scatter', textValue: 'Scatter Chart' },
                       { value: 'radar', textValue: 'Radar Chart' },
-                      { value: 'radial-bar', textValue: 'Radial Bar Chart' },
+                      { value: 'radialbar', textValue: 'Radial Bar Chart' },
                       { value: 'treemap', textValue: 'Treemap' },
                       { value: 'funnel', textValue: 'Funnel Chart' },
                     ]}

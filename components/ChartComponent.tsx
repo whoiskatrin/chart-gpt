@@ -60,86 +60,77 @@ interface ChartProps {
   showLegend?: boolean;
 }
 
-const colors = [
-  '#FF6384',
-  '#36A2EB',
-  '#FFCE56',
-  '#4BC0C0',
-  '#9966FF',
-  '#FF9F40',
-  '#E7E9ED',
-  '#FFA1B5',
-  '#52B0F5',
-  '#FFDA7D',
-  '#66C2A5',
-  '#AB63FA',
-  '#FFB74D',
-  '#A9A9A9',
-  '#8DD3C7',
-  '#FDB462',
-  '#FB8072',
-  '#80B1D3',
-  '#BEBADA',
-  '#FCCDE5',
-  '#BC80BD',
-  '#CCEBC5',
-  '#FFED6F',
-  '#1696D2',
-  '#D2E3F3',
-  '#F76F8E',
-  '#5C940D',
-  '#FF5A5F',
-  '#7BCCC4',
-  '#BA68C8',
-  '#8E0152',
-];
+const Colors = {
+  blue: '#3b82f6',
+  sky: '#0ea5e9',
+  cyan: '#06b6d4',
+  teal: '#14b8a6',
+  emerald: '#10b981',
+  green: '#22c55e',
+  lime: '#84cc16',
+  yellow: '#eab308',
+  amber: '#f59e0b',
+  orange: '#f97316',
+  red: '#ef4444',
+  rose: '#f43f5e',
+  pink: '#ec4899',
+  fuchsia: '#d946ef',
+  purple: '#a855f7',
+  violet: '#8b5cf6',
+  indigo: '#6366f1',
+  neutral: '#737373',
+  stone: '#78716c',
+  gray: '#6b7280',
+  slate: '#64748b',
+  zinc: '#71717a',
+};
 
 export const getTremorColor: (color: Color) => string = (color: Color) => {
   switch (color) {
     case 'blue':
-      return '#3b82f6';
+      return Colors.blue;
     case 'sky':
-      return '#0ea5e9';
+      return Colors.sky;
     case 'cyan':
-      return '#06b6d4';
+      return Colors.cyan;
     case 'teal':
-      return '#14b8a6';
+      return Colors.teal;
     case 'emerald':
-      return '#10b981';
+      return Colors.emerald;
     case 'green':
-      return '#22c55e';
+      return Colors.green;
     case 'lime':
-      return '#84cc16';
+      return Colors.lime;
     case 'yellow':
-      return '#eab308';
+      return Colors.yellow;
     case 'amber':
-      return '#f59e0b';
+      return Colors.amber;
     case 'orange':
-      return '#f97316';
+      return Colors.orange;
     case 'red':
-      return '#ef4444';
+      return Colors.red;
     case 'rose':
-      return '#f43f5e';
+      return Colors.rose;
     case 'pink':
-      return '#ec4899';
+      return Colors.pink;
     case 'fuchsia':
-      return '#d946ef';
+      return Colors.fuchsia;
     case 'purple':
-      return '#a855f7';
+      return Colors.purple;
     case 'violet':
-      return '#8b5cf6';
+      return Colors.violet;
     case 'indigo':
-      return '#6366f1';
+      return Colors.indigo;
     case 'neutral':
-      return '#737373';
+      return Colors.neutral;
     case 'stone':
-      return '#78716c';
+      return Colors.stone;
     case 'gray':
-      return '#6b7280';
+      return Colors.gray;
     case 'slate':
-      return '#64748b';
+      return Colors.slate;
     case 'zinc':
-      return '#71717a';
+      return Colors.zinc;
   }
 };
 
@@ -151,6 +142,11 @@ export const Chart: React.FC<ChartProps> = ({
   showLegend = true,
 }) => {
   const value = data.length > 0 ? Object.keys(data[0])[1] : 'value';
+
+  const dataFormatter = (number: number) => {
+    return Intl.NumberFormat('us').format(number).toString();
+  };
+
   const renderChart = () => {
     chartType = chartType.toLowerCase();
     switch (chartType) {
@@ -163,6 +159,7 @@ export const Chart: React.FC<ChartProps> = ({
             categories={[value]}
             colors={[color || 'blue', 'cyan']}
             showLegend={showLegend}
+            valueFormatter={dataFormatter}
           />
         );
       case 'bar':
@@ -174,6 +171,7 @@ export const Chart: React.FC<ChartProps> = ({
             categories={[value]}
             colors={[color || 'blue']}
             showLegend={showLegend}
+            valueFormatter={dataFormatter}
           />
         );
       case 'line':
@@ -185,62 +183,110 @@ export const Chart: React.FC<ChartProps> = ({
             categories={[value]}
             colors={[color || 'blue']}
             showLegend={showLegend}
+            valueFormatter={dataFormatter}
           />
         );
       case 'composed':
         return (
-          <ComposedChart width={500} height={300} data={data}>
-            <CartesianGrid strokeDasharray="3 3" horizontal vertical={false} />
-            <XAxis
-              dataKey="name"
-              tickLine={false}
-              axisLine={false}
-              interval="preserveStartEnd"
-              tick={{ transform: 'translate(0, 6)' }}
-              style={{
-                fontSize: '12px',
-                fontFamily: 'Inter; Helvetica',
-              }}
-              padding={{ left: 10, right: 10 }}
-              minTickGap={5}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              type="number"
-              tick={{ transform: 'translate(-3, 0)' }}
-              style={{
-                fontSize: '12px',
-                fontFamily: 'Inter; Helvetica',
-              }}
-            />
-            <Tooltip legendColor={getTremorColor(color || 'blue')} />
-            {showLegend && <Legend categories={[value]} />}
-            <Line
-              type="linear"
-              dataKey={value}
-              stroke={getTremorColor(color || 'blue')}
-              dot={false}
-              strokeWidth={2}
-            />
-            <Bar
-              dataKey="value"
-              name="value"
-              type="linear"
-              fill={getTremorColor(color || 'blue')}
-            />
-          </ComposedChart>
+          <>
+            {showLegend && (
+              <div className="flex justify-end">
+                <Legend
+                  categories={[value]}
+                  colors={[color || 'blue', color || 'blue']}
+                  className="mb-5"
+                />
+              </div>
+            )}
+            <ComposedChart width={500} height={260} data={data}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal
+                vertical={false}
+              />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                axisLine={false}
+                interval="preserveStartEnd"
+                tick={{ transform: 'translate(0, 6)' }}
+                style={{
+                  fontSize: '12px',
+                  fontFamily: 'Inter; Helvetica',
+                }}
+                padding={{ left: 10, right: 10 }}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                type="number"
+                tick={{ transform: 'translate(-3, 0)' }}
+                style={{
+                  fontSize: '12px',
+                  fontFamily: 'Inter; Helvetica',
+                }}
+              />
+              <Tooltip legendColor={getTremorColor(color || 'blue')} />
+              <Line
+                type="linear"
+                dataKey={value}
+                stroke={getTremorColor(color || 'blue')}
+                dot={false}
+                strokeWidth={2}
+              />
+              <Bar
+                dataKey="value"
+                name="value"
+                type="linear"
+                fill={getTremorColor(color || 'blue')}
+              />
+            </ComposedChart>
+          </>
         );
       case 'scatter':
         return (
-          <ScatterChart width={500} height={300} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            {showLegend && <Legend categories={[value]} />}
-            <Scatter dataKey={value} fill="#3B82F6" />
-          </ScatterChart>
+          <>
+            {showLegend && (
+              <div className="flex justify-end">
+                <Legend
+                  categories={[value]}
+                  colors={[color || 'blue', color || 'blue']}
+                  className="mb-5"
+                />
+              </div>
+            )}
+            <ScatterChart width={500} height={260} data={data}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal
+                vertical={false}
+              />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                axisLine={false}
+                interval="preserveStartEnd"
+                tick={{ transform: 'translate(0, 6)' }}
+                style={{
+                  fontSize: '12px',
+                  fontFamily: 'Inter; Helvetica',
+                }}
+                padding={{ left: 10, right: 10 }}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                type="number"
+                tick={{ transform: 'translate(-3, 0)' }}
+                style={{
+                  fontSize: '12px',
+                  fontFamily: 'Inter; Helvetica',
+                }}
+              />
+              <Tooltip legendColor={getTremorColor(color || 'blue')} />
+              <Scatter dataKey={value} fill={getTremorColor(color || 'blue')} />
+            </ScatterChart>
+          </>
         );
       case 'pie':
         return (
@@ -250,7 +296,7 @@ export const Chart: React.FC<ChartProps> = ({
             category={value}
             index="name"
             colors={[
-              (color as unknown as Color) || 'cyan',
+              (color as Color) || 'cyan',
               'violet',
               'rose',
               'amber',
@@ -260,71 +306,118 @@ export const Chart: React.FC<ChartProps> = ({
             ]}
             // No actual legend for pie chart, but this will toggle the central text
             showLabel={showLegend}
+            valueFormatter={dataFormatter}
           />
         );
       case 'radar':
         return (
-          <RadarChart
-            cx={300}
-            cy={250}
-            outerRadius={150}
-            width={600}
-            height={500}
-            data={data}
-          >
-            <PolarGrid />
-            <PolarAngleAxis dataKey="name" />
-            <PolarRadiusAxis />
-            <Tooltip />
-            {showLegend && <Legend categories={[value]} />}
-            <Radar
-              dataKey="value"
-              stroke="#3B82F6"
-              fill="#3B82F6"
-              fillOpacity={0.6}
-            />
-          </RadarChart>
+          <>
+            {showLegend && (
+              <div className="flex justify-end">
+                <Legend
+                  categories={[value]}
+                  colors={[color || 'blue', color || 'blue']}
+                  className="mb-5"
+                />
+              </div>
+            )}
+            <RadarChart
+              cx={300}
+              cy={250}
+              outerRadius={150}
+              width={600}
+              height={500}
+              data={data}
+            >
+              <PolarGrid />
+              <PolarAngleAxis dataKey="name" />
+              <PolarRadiusAxis />
+              <Tooltip legendColor={getTremorColor(color || 'blue')} />
+              <Radar
+                dataKey="value"
+                stroke={getTremorColor(color || 'blue')}
+                fill={getTremorColor(color || 'blue')}
+                fillOpacity={0.6}
+              />
+            </RadarChart>
+          </>
         );
       case 'radialbar':
         return (
-          <RadialBarChart
-            width={500}
-            height={300}
-            cx={150}
-            cy={150}
-            innerRadius={20}
-            outerRadius={140}
-            barSize={10}
-            data={data}
-          >
-            <RadialBar
-              angleAxisId={15}
-              label={{ position: 'insideStart', fill: '#fff' }}
-              dataKey="value"
-            />
-            {showLegend && <Legend categories={[value]} />}
-          </RadialBarChart>
+          <>
+            {showLegend && (
+              <div className="flex justify-end">
+                <Legend
+                  categories={[value]}
+                  colors={[color || 'blue', color || 'blue']}
+                  className="mb-5"
+                />
+              </div>
+            )}
+            <RadialBarChart
+              width={500}
+              height={300}
+              cx={150}
+              cy={150}
+              innerRadius={20}
+              outerRadius={140}
+              barSize={10}
+              data={data}
+            >
+              <RadialBar
+                angleAxisId={15}
+                label={{
+                  position: 'insideStart',
+                  fill: getTremorColor(color || 'blue'),
+                }}
+                dataKey="value"
+              />
+              <Tooltip legendColor={getTremorColor(color || 'blue')} />
+            </RadialBarChart>
+          </>
         );
       case 'treemap':
         return (
-          <Treemap
-            width={500}
-            height={300}
-            data={data}
-            dataKey="value"
-            stroke="#fff"
-            fill="#3B82F6"
-            content={<CustomCell colors={colors} />}
-          >
-            <Tooltip />
-          </Treemap>
+          <>
+            {showLegend && (
+              <div className="flex justify-end">
+                <Legend
+                  categories={[value]}
+                  colors={[color || 'blue', color || 'blue']}
+                  className="mb-5"
+                />
+              </div>
+            )}
+            <Treemap
+              width={500}
+              height={260}
+              data={data}
+              dataKey="value"
+              stroke="#fff"
+              fill={getTremorColor(color || 'blue')}
+              content={<CustomCell colors={Object.values(Colors)} />}
+            >
+              <Tooltip legendColor={getTremorColor(color || 'blue')} />
+            </Treemap>
+          </>
         );
       case 'funnel':
         return (
-          <FunnelChart width={500} height={300} data={data}>
-            <Tooltip />
-            <Funnel dataKey="value" color="#3B82F6" />
-          </FunnelChart>
+          <>
+            {showLegend && (
+              <div className="flex justify-end">
+                <Legend
+                  categories={[value]}
+                  colors={[color || 'blue', color || 'blue']}
+                  className="mb-5"
+                />
+              </div>
+            )}
+            <FunnelChart width={500} height={300} data={data}>
+              <Tooltip legendColor={getTremorColor(color || 'blue')} />
+              <Funnel dataKey="value" color={getTremorColor(color || 'blue')} />
+            </FunnelChart>
+          </>
         );
       default:
         return <p>Unsupported chart type.</p>;
