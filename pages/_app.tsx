@@ -2,19 +2,14 @@ import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from 'next-themes';
 import { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
+import { SessionProvider } from 'next-auth/react';
+import { AuthProvider } from '../context/AuthContext';
 import { DefaultLayout } from '../components/templates/Layout';
 import '../styles/globals.css';
-import { createClient } from '@supabase/supabase-js';
-import { SessionProvider } from 'next-auth/react';
-
-const supabaseUrl = process.env.SUPABASE_URL ?? '';
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? '';
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <AuthProvider>
       <ThemeProvider
         attribute="class"
         enableSystem={true}
@@ -26,7 +21,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         <Toaster position="bottom-center" />
       </ThemeProvider>
       <Analytics />
-    </SessionProvider>
+    </AuthProvider>
   );
 }
 

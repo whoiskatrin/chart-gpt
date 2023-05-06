@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from './auth/[...nextauth]';
-import { supabase } from '../../pages/_app';
+import { supabase } from '../../lib/supabase';
 import requestIp from 'request-ip';
 
 export default async function handler(

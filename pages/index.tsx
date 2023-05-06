@@ -146,8 +146,6 @@ const NewHome: NextPage = () => {
     downloadjs(dataURL, 'chart.png', 'image/png');
   };
 
-  console.log({ chartData });
-
   return (
     <Grid
       numCols={1}
