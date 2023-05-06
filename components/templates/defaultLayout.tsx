@@ -2,7 +2,7 @@ import { Button } from '@tremor/react';
 import Link from 'next/link';
 import { FC, PropsWithChildren } from 'react';
 import Github from '../GitHub';
-import ThemeButton from '../ThemeButton';
+import ThemeButton from '../molecules/ThemeButton';
 
 const Logo = () => (
   <svg

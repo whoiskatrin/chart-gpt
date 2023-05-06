@@ -8,6 +8,7 @@
     height: 100%;
     margin: 0;
   }
+
   .dot-grid-gradient-light {
     background-image: radial-gradient(
       circle at 1px 1px,

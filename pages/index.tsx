@@ -13,6 +13,7 @@ import {
   Callout,
   Card,
   Col,
+  Color,
   Divider,
   Grid,
   Subtitle,
@@ -21,13 +22,14 @@ import {
 } from '@tremor/react';
 import axios from 'axios';
 import downloadjs from 'downloadjs';
+import { AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import { NextPage } from 'next';
 import { useCallback, useMemo, useState } from 'react';
 import Chart from '../components/ChartComponent';
 import LoadingDots from '../components/LoadingDots';
 import { SegmentedControl } from '../components/atoms/SegmentedControl';
-import { Select } from '../components/atoms/Select';
+import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
 
@@ -71,10 +73,18 @@ const NewHome: NextPage = () => {
   const [shouldRenderChart, setShouldRenderChart] = useState(false);
   const [showTitle, setShowTitle] = useState(true);
   const [showLegend, setShowLegend] = useState(true);
+  const [chartColor, setChartColor] = useState<Color>('blue');
 
   const chartComponent = useMemo(() => {
-    return <Chart data={chartData} chartType={chartType} />;
-  }, [chartData, chartType]);
+    return (
+      <Chart
+        data={chartData}
+        chartType={chartType}
+        color={[chartColor as Color]}
+        showLegend={showLegend}
+      />
+    );
+  }, [chartData, chartType, chartColor, showLegend]);
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -168,45 +178,48 @@ const NewHome: NextPage = () => {
           <Button
             type="button"
             variant="light"
-            className="w-full outline-none focus:outline-none"
+            className="w-full outline-none focus:outline-none ring-0 focus:ring-0"
             icon={showAdvanced ? ChevronUpIcon : ChevronDownIcon}
             onClick={() => setShowAdvanced(!showAdvanced)}
           >
             Advanced
           </Button>
-          {showAdvanced && (
-            <div className="space-y-4">
-              <SegmentedControl
-                items={[
-                  {
-                    children: 'Chart',
-                    icon: ChartBarIcon,
-                  },
-                  { children: 'PowerPoint', icon: PresentationChartLineIcon },
-                ]}
-                fullWidth
-              />
-              <div>
-                <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
-                <Select
-                  name="chart-type"
-                  defaultValue="bar"
+
+          <AnimatePresence initial={false}>
+            {showAdvanced && (
+              <div className="space-y-4">
+                <SegmentedControl
                   items={[
-                    { value: 'bar', textValue: 'Bar Chart' },
-                    { value: 'area', textValue: 'Area Chart' },
-                    { value: 'line', textValue: 'Line Chart' },
-                    { value: 'composed', textValue: 'Composed Chart' },
-                    { value: 'pie', textValue: 'Pie Chart' },
-                    { value: 'scatter', textValue: 'Scatter Chart' },
-                    { value: 'radar', textValue: 'Radar Chart' },
-                    { value: 'radial-bar', textValue: 'Radial Bar Chart' },
-                    { value: 'treemap', textValue: 'Treemap' },
-                    { value: 'funnel', textValue: 'Funnel Chart' },
+                    {
+                      children: 'Chart',
+                      icon: ChartBarIcon,
+                    },
+                    { children: 'PowerPoint', icon: PresentationChartLineIcon },
                   ]}
+                  fullWidth
                 />
+                <div>
+                  <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
+                  <Select
+                    name="chart-type"
+                    defaultValue="bar"
+                    items={[
+                      { value: 'bar', textValue: 'Bar Chart' },
+                      { value: 'area', textValue: 'Area Chart' },
+                      { value: 'line', textValue: 'Line Chart' },
+                      { value: 'composed', textValue: 'Composed Chart' },
+                      { value: 'pie', textValue: 'Pie Chart' },
+                      { value: 'scatter', textValue: 'Scatter Chart' },
+                      { value: 'radar', textValue: 'Radar Chart' },
+                      { value: 'radial-bar', textValue: 'Radial Bar Chart' },
+                      { value: 'treemap', textValue: 'Treemap' },
+                      { value: 'funnel', textValue: 'Funnel Chart' },
+                    ]}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </AnimatePresence>
 
           <div className="py-2">
             <Divider className="h-px dark:bg-zinc-800" />
@@ -221,8 +234,10 @@ const NewHome: NextPage = () => {
               Color
             </label>
             <Select
-              defaultValue="blue"
+              value={chartColor as Color}
+              onValueChange={value => setChartColor(value as Color)}
               leftIcon={SwatchIcon}
+              leftIconColor={chartColor as IconColor}
               items={[
                 { value: 'blue', textValue: 'Blue' },
                 { value: 'purple', textValue: 'Purple' },

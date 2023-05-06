@@ -1,4 +1,10 @@
-import { AreaChart, BarChart, DonutChart, LineChart } from '@tremor/react';
+import {
+  AreaChart,
+  BarChart,
+  DonutChart,
+  Legend,
+  LineChart,
+} from '@tremor/react';
 import React from 'react';
 import {
   Bar,
@@ -6,7 +12,6 @@ import {
   ComposedChart,
   Funnel,
   FunnelChart,
-  Legend,
   Line,
   PolarAngleAxis,
   PolarGrid,
@@ -25,9 +30,34 @@ import {
 import { CustomCell } from './CustomCell';
 import { Tooltip } from './CustomTooltip';
 
+export type Color =
+  | 'blue'
+  | 'rose'
+  | 'slate'
+  | 'gray'
+  | 'zinc'
+  | 'neutral'
+  | 'stone'
+  | 'red'
+  | 'orange'
+  | 'amber'
+  | 'yellow'
+  | 'lime'
+  | 'green'
+  | 'emerald'
+  | 'teal'
+  | 'cyan'
+  | 'sky'
+  | 'indigo'
+  | 'violet'
+  | 'purple'
+  | 'fuchsia'
+  | 'pink';
 interface ChartProps {
   data: any;
   chartType: string;
+  color?: Color[];
+  showLegend?: boolean;
 }
 
 const colors = [
@@ -64,45 +94,13 @@ const colors = [
   '#8E0152',
 ];
 
-function mixColors(colors: string[], randomFactor = 0.1): string {
-  // Convert hex color values to RGB
-  const rgbColors = colors.map(color => {
-    const r = parseInt(color.substring(1, 3), 16);
-    const g = parseInt(color.substring(3, 5), 16);
-    const b = parseInt(color.substring(5, 7), 16);
-    return [r, g, b];
-  });
-
-  const avgColor = rgbColors
-    .reduce(
-      (acc, val) => {
-        return [acc[0] + val[0], acc[1] + val[1], acc[2] + val[2]];
-      },
-      [0, 0, 0]
-    )
-    .map(val => Math.round(val / rgbColors.length));
-
-  const randomizedColor = avgColor.map(val => {
-    const randomVal =
-      val + Math.floor((Math.random() * 2 - 1) * randomFactor * val);
-    return Math.max(0, Math.min(255, randomVal));
-  });
-
-  const hexColor =
-    '#' +
-    randomizedColor
-      .map(val => {
-        const hexVal = val.toString(16);
-        return hexVal.length === 1 ? '0' + hexVal : hexVal;
-      })
-      .join('');
-
-  return hexColor;
-}
-
 //TODO: dynamic keys instead of default value
-export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
-  const color = data.length > 0 ? data[0]['color'] : mixColors(colors);
+export const Chart: React.FC<ChartProps> = ({
+  data,
+  chartType,
+  color,
+  showLegend = true,
+}) => {
   const value = data.length > 0 ? Object.keys(data[0])[1] : 'value';
   const renderChart = () => {
     chartType = chartType.toLowerCase();
@@ -114,7 +112,8 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             data={data}
             index="name"
             categories={[value]}
-            colors={['indigo', 'cyan']}
+            colors={color || ['blue', 'cyan']}
+            showLegend={showLegend}
           />
         );
       case 'bar':
@@ -124,7 +123,8 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             data={data}
             index="name"
             categories={[value]}
-            colors={['blue']}
+            colors={color || ['blue']}
+            showLegend={showLegend}
           />
         );
       case 'line':
@@ -134,7 +134,8 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             data={data}
             index="name"
             categories={[value]}
-            colors={['blue']}
+            colors={color || ['blue']}
+            showLegend={showLegend}
           />
         );
       case 'composed':
@@ -144,7 +145,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Legend />
+            {showLegend && <Legend categories={[value]} />}
             <Line type="monotone" dataKey={value} stroke="#8884d8" />
             <Bar dataKey="value" fill="#413ea0" />
           </ComposedChart>
@@ -156,7 +157,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Legend />
+            {showLegend && <Legend categories={[value]} />}
             <Scatter dataKey={value} fill="#8884d8" />
           </ScatterChart>
         );
@@ -167,7 +168,11 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             data={data}
             category={value}
             index="name"
-            colors={['slate', 'violet', 'indigo', 'rose', 'cyan', 'amber']}
+            colors={
+              color || ['blue', 'purple', 'yellow', 'green', 'pink', 'cyan']
+            }
+            // No actual legend for pie chart, but this will toggle the central text
+            showLabel={showLegend}
           />
         );
       case 'radar':
@@ -184,7 +189,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
             <PolarAngleAxis dataKey="name" />
             <PolarRadiusAxis />
             <Tooltip />
-            <Legend />
+            {showLegend && <Legend categories={[value]} />}
             <Radar
               dataKey="value"
               stroke="#8884d8"
@@ -210,14 +215,7 @@ export const Chart: React.FC<ChartProps> = ({ data, chartType }) => {
               label={{ position: 'insideStart', fill: '#fff' }}
               dataKey="value"
             />
-            <Legend
-              iconSize={10}
-              width={120}
-              height={140}
-              layout="vertical"
-              verticalAlign="middle"
-              align="right"
-            />
+            {showLegend && <Legend categories={[value]} />}
           </RadialBarChart>
         );
       case 'treemap':

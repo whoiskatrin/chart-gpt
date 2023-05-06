@@ -122,6 +122,30 @@ const SelectSeparator = forwardRef<
   );
 });
 
+export type IconColor =
+  | 'blue'
+  | 'rose'
+  | 'slate'
+  | 'gray'
+  | 'zinc'
+  | 'neutral'
+  | 'stone'
+  | 'red'
+  | 'orange'
+  | 'amber'
+  | 'yellow'
+  | 'lime'
+  | 'green'
+  | 'emerald'
+  | 'teal'
+  | 'cyan'
+  | 'sky'
+  | 'indigo'
+  | 'violet'
+  | 'purple'
+  | 'fuchsia'
+  | 'pink';
+
 export type SelectProps = {
   label?: LabelProps;
   size?: SelectSize;
@@ -133,6 +157,7 @@ export type SelectProps = {
   wrapperClassName?: string;
   className?: string;
   contentClassName?: string;
+  leftIconColor?: IconColor;
   items?: SelectItemProps[];
 } & Omit<RadixSelectProps, 'dir' | 'disabled' | 'required'> &
   Omit<SelectTriggerProps, 'asChild'> &
@@ -181,6 +206,7 @@ export const Select = forwardRef<
       wrapperClassName,
       className,
       contentClassName,
+      leftIconColor,
       ...props
     },
     forwardedRef
@@ -224,10 +250,10 @@ export const Select = forwardRef<
             {leftIcon && (
               <IconPrimitive
                 className={clsx(
-                  'text-zinc-700/[75%] pointer-events-none absolute left-2'
+                  'text-zinc-700/[75%] pointer-events-none absolute left-1.5'
                 )}
               >
-                <Icon icon={leftIcon} size="md" />
+                <Icon icon={leftIcon} size="md" color={leftIconColor} />
               </IconPrimitive>
             )}
             <span className="truncate">
