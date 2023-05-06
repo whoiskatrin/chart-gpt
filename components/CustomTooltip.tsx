@@ -1,6 +1,11 @@
+import clsx from 'clsx';
 import { Tooltip as RechartsTooltip } from 'recharts';
 
-export const Tooltip = (props: any) => {
+export const Tooltip = ({
+  legendColor,
+  ...props
+}: { legendColor?: string } & any) => {
+  console.log({ legendColor });
   return (
     <RechartsTooltip
       wrapperStyle={{ outline: 'none' }}
@@ -21,7 +26,14 @@ export const Tooltip = (props: any) => {
                   className="flex items-center justify-between space-x-8"
                 >
                   <div className="flex items-center space-x-2">
-                    <span className="shrink-0 h-3 w-3 border-white rounded-full border-2 shadow-md bg-[#36A2EB]" />
+                    <span
+                      className={clsx(
+                        'shrink-0 h-3 w-3 border-white rounded-full border-2 shadow-md',
+                        {
+                          [`!bg-[${legendColor}]`]: legendColor,
+                        }
+                      )}
+                    />
                     <p className="font-medium tabular-nums text-right whitespace-nowrap text-gray-700">
                       {value}
                     </p>

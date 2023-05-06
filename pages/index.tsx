@@ -67,7 +67,7 @@ const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [chartType, setChartType] = useState('');
+  const [chartType, setChartType] = useState('bar');
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(false);
   const [shouldRenderChart, setShouldRenderChart] = useState(false);
@@ -80,7 +80,7 @@ const NewHome: NextPage = () => {
       <Chart
         data={chartData}
         chartType={chartType}
-        color={[chartColor as Color]}
+        color={chartColor as Color}
         showLegend={showLegend}
       />
     );
@@ -202,7 +202,8 @@ const NewHome: NextPage = () => {
                   <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
                   <Select
                     name="chart-type"
-                    defaultValue="bar"
+                    value={chartType}
+                    onValueChange={setChartType}
                     items={[
                       { value: 'bar', textValue: 'Bar Chart' },
                       { value: 'area', textValue: 'Area Chart' },
