@@ -283,10 +283,10 @@ const NewHome: NextPage = () => {
         <Button
           type="submit"
           form="generate-chart"
-          className="w-full"
+          className="w-full cursor-pointer py-2 px-4 rounded-full blue-button-w-gradient-border [text-shadow:0_0_1px_rgba(0,0,0,0.25)] shadow-2xl items-center justify-center false"
           icon={PencilSquareIcon}
         >
-          Draw Chart
+          Draw
         </Button>
       </aside>
 

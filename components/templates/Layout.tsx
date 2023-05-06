@@ -2,6 +2,7 @@ import { Button } from '@tremor/react';
 import Link from 'next/link';
 import { FC, PropsWithChildren } from 'react';
 import Github from '../GitHub';
+import SignIn from '../SignIn';
 import ThemeButton from '../molecules/ThemeButton';
 
 const Logo = () => (
@@ -60,8 +61,8 @@ const Logo = () => (
 
 export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <main className="h-[calc(100vh-48px)]">
-      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:border-zinc-800">
+    <main className="h-[calc(100vh-48px)] bg-black">
+      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:bg-black">
         <Link href="/">
           <Logo />
         </Link>
@@ -79,6 +80,21 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
               className="dark:hover:bg-zinc-500/20 dark:text-zinc-100"
             >
               Star on GitHub
+            </Button>
+          </a>
+
+          <Link href="/buy-credits" className="flex mt-3 text-sm">
+            <div>Buy Credits</div>
+          </Link>
+
+          <a className="rounded-full text-gray-500 dark:text-gray-400">
+            <Button
+              size="xs"
+              color="zinc"
+              variant="secondary"
+              className="dark:text-zinc-100 width:auto borded-0"
+            >
+              <SignIn />
             </Button>
           </a>
           <ThemeButton />
