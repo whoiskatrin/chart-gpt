@@ -2,7 +2,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from 'next-themes';
 import { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
-import { DefaultLayout } from '../components/templates/DefaultLayout';
+import { DefaultLayout } from '../components/templates/Layout';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
