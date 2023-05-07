@@ -1,5 +1,5 @@
 import { useState, FC } from 'react';
-import { supabase } from '../pages/_app';
+import { supabase } from '../lib/supabase';
 import { getStripe } from '../lib/stripe';
 import {
   Elements,
@@ -39,7 +39,6 @@ const CheckoutForm: FC = () => {
       setError(error.message || 'An error occurred');
       setProcessing(false);
     } else {
-      // Call your backend to create the charge and update the user_credits table
       const response = await fetch('/api/charge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,7 +46,6 @@ const CheckoutForm: FC = () => {
       });
 
       if (response.ok) {
-        // Update user_credits in the frontend, e.g., using a context provider or local state
       } else {
         setError('Payment failed');
       }
