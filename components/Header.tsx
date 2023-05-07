@@ -3,7 +3,6 @@ import Github from './GitHub';
 import { useTheme } from 'next-themes';
 import React from 'react';
 import SignIn from './SignIn';
-import { supabase } from '../pages/_app';
 
 export const Header = () => {
   const { resolvedTheme } = useTheme();
