@@ -4,6 +4,7 @@ import { FC, PropsWithChildren } from 'react';
 import Github from '../GitHub';
 import SignIn from '../SignIn';
 import ThemeButton from '../molecules/ThemeButton';
+import { useAuth } from '../../context/AuthContext';
 
 const Logo = () => (
   <svg
@@ -60,6 +61,7 @@ const Logo = () => (
 );
 
 export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
+  const { user, session } = useAuth();
   return (
     <main className="h-[calc(100vh-48px)] dark:bg-black">
       <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:bg-black">
@@ -84,12 +86,14 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
             </Button>
           </a>
 
-          <Link
-            href="/buy-credits"
-            className="flex mt-3 rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100"
-          >
-            <div>Buy Credits</div>
-          </Link>
+          {user && (
+            <Link
+              href="/buy-credits"
+              className="flex mt-3 rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100"
+            >
+              <div>Buy Credits</div>
+            </Link>
+          )}
 
           <a className="rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100">
             <SignIn />
