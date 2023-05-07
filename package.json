@@ -31,6 +31,7 @@
     "aws-sdk": "^2.1359.0",
     "camelcase": "^7.0.1",
     "clsx": "^1.2.1",
+    "eslint-config-next": "^13.4.1",
     "eventsource-parser": "^0.0.5",
     "execa": "^7.1.1",
     "express-rate-limit": "^6.7.0",
