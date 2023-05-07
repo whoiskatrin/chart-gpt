@@ -8,7 +8,6 @@ export default async function handler(
 ) {
   // Check if user is logged in
   const session = await getSession({ req });
-  console.log('Session:', session);
 
   if (!session || !session.user) {
     console.log('User not logged in');
