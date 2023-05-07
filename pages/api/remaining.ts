@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from './auth/[...nextauth]';
+import { options } from './auth/[...nextauth]';
 import { supabase } from '../../lib/supabase';
 import requestIp from 'request-ip';
 
@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // Check if user is logged in
-  const session = await getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, options);
   if (!session || !session.user) {
     console.log('User not logged in');
     return res.status(401).json('Login to upload.');
