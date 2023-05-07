@@ -13,7 +13,7 @@ module.exports = {
     return config;
   },
   env: {
-    GOOGLE_CLIENT_ID: 'your-google-client-id',
-    GOOGLE_CLIENT_SECRET: 'your-google-client-secret',
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   },
 };

@@ -1,10 +1,10 @@
 import Script from 'next/script';
 import Head from 'next/head';
 import useSWR from 'swr';
-import { useAuth } from '../context/AuthContext';
+import { useSession } from 'next-auth/react';
 
 export default function Pricing() {
-  const { user, session } = useAuth();
+  const { data: session } = useSession();
 
   const fetcher = (url: string) => fetch(url).then(res => res.json());
   const { data } = useSWR('/api/remaining', fetcher);
@@ -34,13 +34,13 @@ export default function Pricing() {
         </p>
       </main>
       <div className="w-full bg-white dark:bg-black border-1 border-black">
-        {user && (
+        {session && (
           // @ts-ignore
           <stripe-pricing-table
             pricing-table-id="prctbl_1N4kyFKeboA3fgq8N81kqV9E"
             publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
-            client-reference-id={user.email}
-            customer-email={user.email}
+            client-reference-id={session.user?.email}
+            customer-email={session.user?.email}
             colorBackground="red"
           />
         )}

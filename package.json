@@ -15,6 +15,7 @@
     "@headlessui/react": "^1.7.7",
     "@headlessui/tailwindcss": "^0.1.2",
     "@heroicons/react": "^2.0.17",
+    "@next-auth/supabase-adapter": "^0.2.1",
     "@nivo/core": "^0.81.0",
     "@nivo/line": "^0.81.0",
     "@radix-ui/react-select": "^1.2.1",

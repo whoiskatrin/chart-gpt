@@ -1,30 +1,21 @@
-import { useAuth } from '../context/AuthContext';
-import { supabase } from '../lib/supabase';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 const SignIn = () => {
-  const { user } = useAuth();
+  const { data: session } = useSession();
+  console.log(session);
 
   async function handleSignIn() {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-
-    if (error) {
-      console.error('Error signing in:', error.message);
-    }
+    signIn('google');
   }
 
   async function handleSignOut() {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error('Error signing out:', error.message);
-    }
+    signOut();
   }
 
-  if (user) {
+  if (session) {
     return (
       <>
-        Signed in as {user.user_metadata.full_name} <br />
+        Signed in as {session.user?.name} <br />
         <button onClick={() => handleSignOut()}>Sign out</button>
       </>
     );
