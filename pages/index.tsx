@@ -1,47 +1,97 @@
-import { Callout, Card, Title } from "@tremor/react";
-import axios from "axios";
-import downloadjs from "downloadjs";
-import html2canvas from "html2canvas";
-import Head from "next/head";
-import React, { useMemo, useState } from "react";
-import { Chart } from "../components/ChartComponent";
-import { Header } from "../components/Header";
-import InfoSection from "../components/InfoSection";
-import LoadingDots from "../components/LoadingDots";
-import { useTheme } from "next-themes";
-import ThemeButton from "../components/ThemeButton";
+import {
+  ArrowDownTrayIcon,
+  ArrowPathIcon,
+  ChartBarIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PencilSquareIcon,
+  PresentationChartLineIcon,
+  SwatchIcon,
+} from '@heroicons/react/24/outline';
+import {
+  Button,
+  Callout,
+  Card,
+  Col,
+  Color,
+  Divider,
+  Grid,
+  Subtitle,
+  Text,
+  Title,
+} from '@tremor/react';
+import axios from 'axios';
+import downloadjs from 'downloadjs';
+import { AnimatePresence } from 'framer-motion';
+import html2canvas from 'html2canvas';
+import { NextPage } from 'next';
+import { useCallback, useMemo, useState } from 'react';
+import Chart from '../components/ChartComponent';
+import LoadingDots from '../components/LoadingDots';
+import { SegmentedControl } from '../components/atoms/SegmentedControl';
+import { IconColor, Select } from '../components/atoms/Select';
+import { TextArea } from '../components/atoms/TextArea';
+import { Toggle } from '../components/atoms/Toggle';
+
+const SectionHeader = ({
+  stepNumber,
+  title,
+}: {
+  stepNumber: number;
+  title: string;
+}) => {
+  return (
+    <div className="flex items-center">
+      <div className="bg-blue-100 dark:bg-blue-500/20 text-blue-500 font-semi-bold font-mono mr-2 h-6 w-6 rounded-full flex items-center justify-center">
+        {stepNumber}
+      </div>
+      <Subtitle className="text-gray-700 dark:text-gray-300">{title}</Subtitle>
+    </div>
+  );
+};
 
 const CHART_TYPES = [
-  "area",
-  "bar",
-  "line",
-  "composed",
-  "scatter",
-  "pie",
-  "radar",
-  "radialbar",
-  "treemap",
-  "funnel",
+  'area',
+  'bar',
+  'line',
+  'composed',
+  'scatter',
+  'pie',
+  'radar',
+  'radialbar',
+  'treemap',
+  'funnel',
 ];
 
-const HomePage = () => {
-  const [inputValue, setInputValue] = useState("");
+const NewHome: NextPage = () => {
+  const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [chartType, setChartType] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [chartType, setChartType] = useState('bar');
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(false);
   const [shouldRenderChart, setShouldRenderChart] = useState(false);
-
-  const { resolvedTheme } = useTheme();
-  const svgFillColor = resolvedTheme === "dark" ? "#D8D8D8" : "black";
-  const btnBgColor =
-    resolvedTheme === "dark"
-      ? "dark-button-w-gradient-border"
-      : "light-button-w-gradient-border";
+  const [showTitle, setShowTitle] = useState(true);
+  const [showLegend, setShowLegend] = useState(true);
+  const [chartColor, setChartColor] = useState<Color>('blue');
 
   const chartComponent = useMemo(() => {
-    return <Chart data={chartData} chartType={chartType} />;
-  }, [chartData, chartType]);
+    return (
+      <Chart
+        data={chartData}
+        chartType={chartType}
+        color={chartColor as Color}
+        showLegend={showLegend}
+      />
+    );
+  }, [chartData, chartType, chartColor, showLegend]);
+
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInputValue(event.target.value);
+    },
+    []
+  );
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -50,7 +100,7 @@ const HomePage = () => {
     setIsLoading(true);
 
     try {
-      const chartTypeResponse = await axios.post("/api/get-type", {
+      const chartTypeResponse = await axios.post('/api/get-type', {
         inputData: inputValue,
       });
 
@@ -62,7 +112,7 @@ const HomePage = () => {
       const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
 [{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n Provide JSON data only. `;
 
-      const chartDataResponse = await axios.post("/api/parse-graph", {
+      const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
       });
 
@@ -72,7 +122,7 @@ const HomePage = () => {
         parsedData = JSON.parse(chartDataResponse.data);
       } catch (error) {
         setError(true);
-        console.error("Failed to parse chart data:", error);
+        console.error('Failed to parse chart data:', error);
       }
 
       setChartData(parsedData);
@@ -80,125 +130,231 @@ const HomePage = () => {
       setShouldRenderChart(true);
     } catch (error) {
       setError(true);
-      console.error("Failed to generate graph data:", error);
+      console.error('Failed to generate graph data:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(event.target.value);
-  };
-
-  const handleCaptureClick = async (selector: string) => {
+  const handleDownloadClick = async (selector: string) => {
     const element = document.querySelector<HTMLElement>(selector);
     if (!element) {
       return;
     }
     const canvas = await html2canvas(element);
-    const dataURL = canvas.toDataURL("image/png");
-    downloadjs(dataURL, "chart.png", "image/png");
+    const dataURL = canvas.toDataURL('image/png');
+    downloadjs(dataURL, 'chart.png', 'image/png');
   };
 
+  console.log({ chartData });
+
   return (
-    <div className="flex flex-col px-4 items-center justify-center bg-white text-black dark:text-white dark:bg-black overflow-y-hidden">
-      <Header />
-      <Head>
-        <title>AI tool to convert text to a beautiful chart</title>
-      </Head>
-      <ThemeButton className="absolute top-2.5 right-2.5 text-gray-500 dark:text-gray-400 focus:outline-none hover:scale-125 transition" />
-      <div className="w-full max-w-xl mb-6 space-6 bg-white text-black dark:text-white dark:bg-black">
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-xl mb-1 bg-white text-black dark:text-white dark:bg-black rounded-lg"
-        >
-          <div className="flex flex-col items-center justify-center rounded-lg">
-            <label
-              htmlFor="textInput"
-              className="block font-sans font-semibold bg-white text-black dark:text-white dark:bg-black flex flex-row py-2 px-4"
-            >
-              <img
-                src="/stars.svg"
-                className="p-1"
-                style={{
-                  filter: resolvedTheme === "dark" ? "invert(0)" : "invert(1)",
-                  fill: resolvedTheme === "dark" ? "white" : "black",
-                }}
-              />
-              What would you like to visualise?
-            </label>
-            <textarea
-              id="input"
-              rows={3}
-              placeholder=""
-              className="bg-custom-gray-bg text-black dark:text-white dark:bg-zinc-800  appearance-none font-inter mt-8  dark:border-white/20 shadow-sm flex flex-col items-center justify-center rounded-lg w-full max-w-md py-2 px-3 leading-tight focus:outline-none focus:shadow-outline text-left min-h-[120px] max-h-[200px]"
-              value={inputValue}
-              required
-              autoFocus
-              onChange={handleInputChange}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
-                  handleSubmit(event);
-                }
-              }}
-            />
-            <button
-              type="submit"
-              className="cursor-pointer font-inter font-semibold border-white/20 py-2 px-5 mt-5 mb-5 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center"
-            >
-              <div className="relative text-sm font-semibold font-inter text-white text-center inline-block mx-auto">
-                Make things happen
-                <div className="text-blue-300">⌘+⏎</div>
+    <Grid
+      numCols={1}
+      numColsSm={2}
+      numColsLg={3}
+      className="gap-y-4 lg:gap-x-4 h-full"
+    >
+      <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2 order-last lg:order-first">
+        <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
+          <SectionHeader
+            stepNumber={1}
+            title="What would you like to visualize?"
+          />
+          <TextArea
+            id="input"
+            name="prompt"
+            placeholder="Show me a bar chart with COVID-19 cases in London in March 2020..."
+            value={inputValue}
+            required
+            autoFocus
+            onChange={handleInputChange}
+            onKeyDown={event => {
+              if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+                handleSubmit(event);
+              }
+            }}
+          />
+          <Button
+            type="button"
+            variant="light"
+            className="w-full outline-none focus:outline-none ring-0 focus:ring-0"
+            icon={showAdvanced ? ChevronUpIcon : ChevronDownIcon}
+            onClick={() => setShowAdvanced(!showAdvanced)}
+          >
+            Advanced
+          </Button>
+
+          <AnimatePresence initial={false}>
+            {showAdvanced && (
+              <div className="space-y-4">
+                <SegmentedControl
+                  items={[
+                    {
+                      children: 'Chart',
+                      icon: ChartBarIcon,
+                    },
+                    { children: 'PowerPoint', icon: PresentationChartLineIcon },
+                  ]}
+                  fullWidth
+                />
+                <div>
+                  <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
+                  <Select
+                    name="chart-type"
+                    value={chartType}
+                    onValueChange={setChartType}
+                    items={[
+                      { value: 'bar', textValue: 'Bar Chart' },
+                      { value: 'area', textValue: 'Area Chart' },
+                      { value: 'line', textValue: 'Line Chart' },
+                      { value: 'composed', textValue: 'Composed Chart' },
+                      { value: 'pie', textValue: 'Pie Chart' },
+                      { value: 'scatter', textValue: 'Scatter Chart' },
+                      { value: 'radar', textValue: 'Radar Chart' },
+                      { value: 'radialbar', textValue: 'Radial Bar Chart' },
+                      { value: 'treemap', textValue: 'Treemap' },
+                      { value: 'funnel', textValue: 'Funnel Chart' },
+                    ]}
+                  />
+                </div>
               </div>
-            </button>
+            )}
+          </AnimatePresence>
+
+          <div className="py-2">
+            <Divider className="h-px dark:bg-zinc-800" />
+          </div>
+
+          <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
+          <div>
+            <label
+              htmlFor="title"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	mb-3"
+            >
+              Color
+            </label>
+            <Select
+              value={chartColor as Color}
+              onValueChange={value => setChartColor(value as Color)}
+              leftIcon={SwatchIcon}
+              leftIconColor={chartColor as IconColor}
+              items={[
+                { value: 'blue', textValue: 'Blue' },
+                { value: 'purple', textValue: 'Purple' },
+                { value: 'green', textValue: 'Green' },
+                { value: 'pink', textValue: 'Pink' },
+                { value: 'yellow', textValue: 'Yellow' },
+              ]}
+            />
+          </div>
+
+          <div className="flex justify-between w-full">
+            <label
+              htmlFor="title"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	"
+            >
+              Show chart Title
+            </label>
+            <Toggle
+              id="title"
+              size="sm"
+              label="Show chart Title"
+              checked={showTitle}
+              setChecked={setShowTitle}
+            />
+          </div>
+          <div className="flex justify-between w-full">
+            <label
+              htmlFor="legend"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	"
+            >
+              Show chart Legend
+            </label>
+            <Toggle
+              id="legend"
+              size="sm"
+              label="Show chart Legend"
+              checked={showLegend}
+              setChecked={setShowLegend}
+            />
           </div>
         </form>
-      </div>
-      {error ? (
-        <Callout
-          className="mb-6"
-          title="Ooops! Could not generate"
-          color="rose"
+        <Button
+          type="submit"
+          form="generate-chart"
+          className="w-full"
+          icon={PencilSquareIcon}
         >
-          Try again later or restructure your request.
-        </Callout>
-      ) : (
-        <div className="w-full max-w-xl mb-6 p-4">
-          {isLoading ? (
-            <div className="flex items-center justify-center h-96">
-              <LoadingDots />
-            </div>
-          ) : (
-            shouldRenderChart && (
-              <>
-                <Card className="bg-white dark:bg-zinc-300">
-                  <Title>{inputValue}</Title>
-                  {chartComponent}
-                </Card>
-                <div className="flex flex-col items-center justify-center p-4">
-                  <button
-                    type="button"
-                    className="cursor-pointer font-inter font-semibold py-2 px-4 mt-10 rounded-full blue-button-w-gradient-border text-white text-shadow-0_0_1px_rgba(0,0,0,0.25) shadow-2xl flex flex-row items-center justify-center"
-                    onClick={() => handleCaptureClick(".recharts-wrapper")}
-                  >
-                    Download
-                  </button>
-                </div>
-              </>
-            )
+          Draw Chart
+        </Button>
+      </aside>
+
+      <Col
+        numColSpan={1}
+        numColSpanSm={2}
+        numColSpanMd={2}
+        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-800 dark:bg-zinc-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
+      >
+        <div className="flex absolute top-4 right-4 space-x-4">
+          {(chartData == undefined || chartData?.length > 0) && (
+            <Button
+              variant="light"
+              color="gray"
+              icon={ArrowPathIcon}
+              className="dark:text-zinc-100 dark:hover:text-zinc-300 outline-none"
+              type="submit"
+              form="generate-chart"
+            >
+              Retry
+            </Button>
+          )}
+          {shouldRenderChart && (
+            <Button
+              size="xs"
+              color="gray"
+              icon={ArrowDownTrayIcon}
+              className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
+              onClick={() => handleDownloadClick('#chart-card')}
+            >
+              Download
+            </Button>
           )}
         </div>
-      )}
-      <h1 className="text-4xl mb-6 xl:text-4xl font-extrabold text-center xl:text-left text-black dark:text-white">
-        Get a new chart in a few steps
-      </h1>
-      <InfoSection />
-      <footer className="text-center font-sans text-black dark:text-white text-ml mb-10">
-        Made with ❤️ using React, Next.js, Recharts, Tremor, OpenAI and Tailwind
-        CSS
-      </footer>
-    </div>
+
+        {error ? (
+          <Callout
+            className="mb-6"
+            title="Ooops! Could not generate"
+            color="rose"
+          >
+            Try again later or restructure your request.
+          </Callout>
+        ) : (
+          <div className="w-full max-w-xl p-4">
+            {isLoading ? (
+              <div className="flex items-center justify-center h-96">
+                <LoadingDots />
+              </div>
+            ) : (
+              shouldRenderChart && (
+                <Card
+                  id="chart-card"
+                  className="bg-white dark:bg-black dark:ring-zinc-800"
+                >
+                  {showTitle && (
+                    <Title className="dark:text-white">{inputValue}</Title>
+                  )}
+                  {!showLegend && <div className="h-5" />}
+                  {chartComponent}
+                </Card>
+              )
+            )}
+          </div>
+        )}
+      </Col>
+    </Grid>
   );
 };
 
-export default HomePage;
+export default NewHome;
