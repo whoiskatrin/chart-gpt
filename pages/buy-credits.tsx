@@ -1,4 +1,3 @@
-import { useUser } from '@supabase/auth-helpers-react';
 import Script from 'next/script';
 import Head from 'next/head';
 import useSWR from 'swr';
@@ -42,6 +41,7 @@ export default function Pricing() {
             publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
             client-reference-id={user.email}
             customer-email={user.email}
+            colorBackground="red"
           />
         )}
       </div>
