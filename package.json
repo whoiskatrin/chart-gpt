@@ -74,6 +74,7 @@
     "swr": "^2.1.5",
     "tremor": "^0.0.1",
     "util": "^0.12.5",
+    "uuid": "^9.0.0",
     "victory": "^36.6.8"
   },
   "devDependencies": {
