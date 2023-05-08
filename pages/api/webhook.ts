@@ -68,7 +68,7 @@ const webhookHandler = async (
 
       // @ts-ignore
       switch (charge.amount) {
-        case 100:
+        case 500:
           creditAmount = 20;
           break;
         case 2000:
