@@ -66,6 +66,8 @@ const webhookHandler = async (
       console.log(userEmail);
       let creditAmount = 0;
 
+      console.log(charge.amount);
+
       // @ts-ignore
       switch (charge.amount) {
         case 500:
@@ -84,7 +86,7 @@ const webhookHandler = async (
 
       console.log('Credits: ' + creditAmount);
 
-      const row_id = getUserIdByEmail(userEmail);
+      const row_id = await getUserIdByEmail(userEmail);
       console.log(row_id);
       // Update user_credits in users table after purchase
       addUserCredits(row_id, creditAmount);
