@@ -26,10 +26,10 @@ export async function decreaseUserCredits(row_id: any) {
   return data;
 }
 
-export async function addUserCredits(row_id: any, credits: any) {
+export async function addUserCredits(row_id: any, credit_amount: any) {
   const { data, error } = await supabase.rpc('add_credits', {
     row_id,
-    credits,
+    credit_amount,
   });
 
   if (error) {
