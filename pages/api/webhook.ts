@@ -64,31 +64,29 @@ const webhookHandler = async (
 
       const userEmail = charge.billing_details.email;
       console.log(userEmail);
-      let creditAmount = 0;
-
-      console.log('Charge: ' + charge.amount);
+      let credit_amount = 0;
 
       // @ts-ignore
       switch (charge.amount) {
         case 500:
-          creditAmount = 20;
+          credit_amount = 20;
           break;
         case 2000:
-          creditAmount = 100;
+          credit_amount = 100;
           break;
         case 3500:
-          creditAmount = 250;
+          credit_amount = 250;
           break;
         case 8000:
-          creditAmount = 750;
+          credit_amount = 750;
           break;
       }
 
-      console.log('Credits: ' + creditAmount);
+      console.log('Credits: ' + credit_amount);
 
       const row_id = await getUserIdByEmail(userEmail);
       // Update user_credits in users table after purchase
-      await addUserCredits(row_id, creditAmount);
+      await addUserCredits(row_id, credit_amount);
 
       const createdAt = new Date(charge.created * 1000).toISOString();
       // Insert purchase record in Supabase
@@ -96,7 +94,7 @@ const webhookHandler = async (
         {
           id: uuidv4(),
           user_id: row_id,
-          credit_amount: creditAmount,
+          credit_amount: credit_amount,
           created_at: createdAt,
           status: charge.status,
         },
