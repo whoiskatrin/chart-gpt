@@ -63,7 +63,7 @@ const webhookHandler = async (
       console.log(`💵 Charge id: ${charge.id}`);
 
       const userEmail = charge.billing_details.email;
-      console.log(userEmail);
+      // credit_amount follows SQL naming convention in this case to comply with Supabase Stored Procedures
       let credit_amount = 0;
 
       // @ts-ignore
@@ -81,8 +81,6 @@ const webhookHandler = async (
           credit_amount = 750;
           break;
       }
-
-      console.log('Credits: ' + credit_amount);
 
       const row_id = await getUserIdByEmail(userEmail);
       // Update user_credits in users table after purchase

@@ -43,6 +43,7 @@ export default async function handler(
   const { email, prompt } = req.body;
 
   try {
+    // row_id follows SQL naming convention in this case to comply with Supabase Stored Procedures
     const row_id = await getUserIdByEmail(email);
     const credits = await getUserCredits(row_id);
     console.log('credits: ' + credits);
