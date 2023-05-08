@@ -66,7 +66,7 @@ const webhookHandler = async (
       let creditAmount = 0;
 
       // @ts-ignore
-      switch (paymentIntent.amount_subtotal) {
+      switch (charge.amount) {
         case 100:
           creditAmount = 20;
           break;
