@@ -72,11 +72,6 @@ const handler = async (
           status: paymentIntent.status,
         },
       ]);
-
-      await supabase
-        .from('users')
-        .update({ credits: { increment: creditAmount } })
-        .eq('email', userEmail);
     } else if (event.type === 'payment_intent.payment_failed') {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
       console.log(
