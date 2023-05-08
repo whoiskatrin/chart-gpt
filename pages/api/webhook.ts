@@ -82,7 +82,10 @@ const webhookHandler = async (
           break;
       }
 
+      console.log('Credits: ' + creditAmount);
+
       const row_id = getUserIdByEmail(userEmail);
+      console.log(row_id);
       // Update user_credits in users table after purchase
       addUserCredits(row_id, creditAmount);
 
