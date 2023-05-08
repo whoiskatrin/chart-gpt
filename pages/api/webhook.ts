@@ -32,7 +32,7 @@ const handler = async (
     console.log('✅ Success:', event.id);
 
     if (
-      event.type === 'payment_intent.succeeded' ||
+      event.type === 'charge.succeeded' ||
       event.type === 'checkout.session.completed'
     ) {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
