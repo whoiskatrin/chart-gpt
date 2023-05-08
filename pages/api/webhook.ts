@@ -63,6 +63,7 @@ const webhookHandler = async (
       console.log(`💵 Charge id: ${charge.id}`);
 
       const userEmail = charge.billing_details.email;
+      console.log(userEmail);
       let creditAmount = 0;
 
       // @ts-ignore
