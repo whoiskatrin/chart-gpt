@@ -34,7 +34,7 @@ export default function Pricing() {
         </p>
       </main>
       <div className="w-full bg-white dark:bg-black border-1 border-black">
-        {session && (
+        {session && ( // TODO: very unfortunate styling here, fix maybe?
           // @ts-ignore
           <stripe-pricing-table
             pricing-table-id="prctbl_1N4kyFKeboA3fgq8N81kqV9E"

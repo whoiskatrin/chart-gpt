@@ -32,6 +32,7 @@ import { SegmentedControl } from '../components/atoms/SegmentedControl';
 import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
+import { getSession, useSession } from 'next-auth/react';
 
 const SectionHeader = ({
   stepNumber,
@@ -104,6 +105,8 @@ const NewHome: NextPage = () => {
         inputData: inputValue,
       });
 
+      const session = await getSession();
+
       if (!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase()))
         return setError(true);
 
@@ -114,6 +117,7 @@ const NewHome: NextPage = () => {
 
       const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
+        email: session?.user?.email,
       });
 
       let parsedData;
@@ -326,7 +330,7 @@ const NewHome: NextPage = () => {
             title="Ooops! Could not generate"
             color="rose"
           >
-            Try again later or restructure your request.
+            Check your credits balance or restructure your request.
           </Callout>
         ) : (
           <div className="w-full max-w-xl p-4">

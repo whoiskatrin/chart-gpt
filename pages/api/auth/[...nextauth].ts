@@ -1,7 +1,6 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { supabase } from '../../../lib/supabase';
-import { SupabaseAdapter } from '@next-auth/supabase-adapter';
 import { v4 as uuidv4 } from 'uuid';
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
@@ -68,12 +67,15 @@ export const options: NextAuthOptions = {
         .from('users')
         .select()
         .eq('email', user?.email);
-      let obj = {
-        ...session,
-        data,
-        error,
-      };
-      return obj;
+
+      if (data && data.length > 0) {
+        session.user = {
+          ...user,
+          ...data[0],
+        };
+      }
+
+      return session;
     },
   },
 };
