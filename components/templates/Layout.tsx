@@ -2,7 +2,9 @@ import { Button } from '@tremor/react';
 import Link from 'next/link';
 import { FC, PropsWithChildren } from 'react';
 import Github from '../GitHub';
+import SignIn from '../SignIn';
 import ThemeButton from '../molecules/ThemeButton';
+import { useSession } from 'next-auth/react';
 
 const Logo = () => (
   <svg
@@ -59,27 +61,42 @@ const Logo = () => (
 );
 
 export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
+  const { data: session } = useSession();
   return (
-    <main className="h-[calc(100vh-48px)]">
-      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:border-zinc-800">
+    <main className="h-[calc(100vh-48px)] dark:bg-black">
+      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:bg-black">
         <Link href="/">
           <Logo />
         </Link>
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 pt-1 rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100">
           <a
             href="https://github.com/whoiskatrin/chart-gpt"
             rel="noopener noreferrer"
             target="_blank"
+            className="pt-1"
           >
             <Button
               size="xs"
               color="zinc"
               variant="secondary"
               icon={Github}
-              className="dark:hover:bg-zinc-500/20 dark:text-zinc-100"
+              className="dark:hover:bg-zinc-500/20 dark:text-zinc-100 text-black"
             >
               Star on GitHub
             </Button>
+          </a>
+
+          {session && (
+            <Link
+              href="/buy-credits"
+              className="flex mt-3 rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100"
+            >
+              <div>Buy Credits</div>
+            </Link>
+          )}
+
+          <a className="rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100">
+            <SignIn />
           </a>
           <ThemeButton />
         </div>
