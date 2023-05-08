@@ -53,15 +53,16 @@ const webhookHandler = async (
 
     console.log('✅ Success:', event.id);
 
-    if (
-      event.type === 'payment_intent.succeeded' ||
-      event.type === 'checkout.session.completed'
-    ) {
+    if (event.type === 'payment_intent.payment_failed') {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      console.log(`💰 PaymentIntent: ${JSON.stringify(paymentIntent)}`);
+      console.log(
+        `❌ Payment failed: ${paymentIntent.last_payment_error?.message}`
+      );
+    } else if (event.type === 'charge.succeeded') {
+      const charge = event.data.object as Stripe.Charge;
+      console.log(`💵 Charge id: ${charge.id}`);
 
-      // @ts-ignore
-      const userEmail = paymentIntent.billing_details.email;
+      const userEmail = charge.billing_details.email;
       let creditAmount = 0;
 
       // @ts-ignore
@@ -90,18 +91,10 @@ const webhookHandler = async (
           id: uuidv4(),
           user_id: row_id,
           credit_amount: creditAmount,
-          created_at: paymentIntent.created,
-          status: paymentIntent.status,
+          created_at: charge.created,
+          status: charge.status,
         },
       ]);
-    } else if (event.type === 'payment_intent.payment_failed') {
-      const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      console.log(
-        `❌ Payment failed: ${paymentIntent.last_payment_error?.message}`
-      );
-    } else if (event.type === 'charge.succeeded') {
-      const charge = event.data.object as Stripe.Charge;
-      console.log(`💵 Charge id: ${charge.id}`);
     } else {
       console.warn(`🤷‍♀️ Unhandled event type: ${event.type}`);
     }
