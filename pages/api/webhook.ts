@@ -87,7 +87,6 @@ const webhookHandler = async (
       await addUserCredits(row_id, credit_amount);
 
       const createdAt = new Date(charge.created * 1000).toISOString();
-      // Insert purchase record in Supabase
       await supabase.from('purchases').insert([
         {
           id: uuidv4(),
