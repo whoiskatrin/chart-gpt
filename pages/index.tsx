@@ -32,6 +32,7 @@ import { SegmentedControl } from '../components/atoms/SegmentedControl';
 import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
+import { getSession, useSession } from 'next-auth/react';
 
 const SectionHeader = ({
   stepNumber,
@@ -104,6 +105,8 @@ const NewHome: NextPage = () => {
         inputData: inputValue,
       });
 
+      const session = await getSession();
+
       if (!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase()))
         return setError(true);
 
@@ -114,6 +117,7 @@ const NewHome: NextPage = () => {
 
       const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
+        email: session?.user?.email,
       });
 
       let parsedData;
@@ -145,8 +149,6 @@ const NewHome: NextPage = () => {
     const dataURL = canvas.toDataURL('image/png');
     downloadjs(dataURL, 'chart.png', 'image/png');
   };
-
-  console.log({ chartData });
 
   return (
     <Grid
@@ -283,10 +285,10 @@ const NewHome: NextPage = () => {
         <Button
           type="submit"
           form="generate-chart"
-          className="w-full"
+          className="w-full cursor-pointer py-2 px-4 rounded-full blue-button-w-gradient-border [text-shadow:0_0_1px_rgba(0,0,0,0.25)] shadow-2xl items-center justify-center false"
           icon={PencilSquareIcon}
         >
-          Draw Chart
+          Draw
         </Button>
       </aside>
 
@@ -328,7 +330,7 @@ const NewHome: NextPage = () => {
             title="Ooops! Could not generate"
             color="rose"
           >
-            Try again later or restructure your request.
+            Check your credits balance or restructure your request.
           </Callout>
         ) : (
           <div className="w-full max-w-xl p-4">

@@ -4,10 +4,12 @@ import { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 import { DefaultLayout } from '../components/templates/Layout';
 import '../styles/globals.css';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
-    <>
+    <SessionProvider session={pageProps.session}>
       <ThemeProvider
         attribute="class"
         enableSystem={true}
@@ -19,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Toaster position="bottom-center" />
       </ThemeProvider>
       <Analytics />
-    </>
+    </SessionProvider>
   );
 }
 
