@@ -1,39 +1,32 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
-import { buffer } from 'micro';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { addUserCredits, getUserIdByEmail } from '../../utils/helper';
 import { supabase } from '../../lib/supabase';
-import { getUserIdByEmail, addUserCredits } from '../../utils/helper';
 import { v4 as uuidv4 } from 'uuid';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2022-11-15',
-});
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> => {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
+    apiVersion: '2022-11-15',
+  });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+  const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET ?? '';
 
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET ?? '';
-
-export const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const reqBuffer = await buffer(req);
-    const payload = reqBuffer.toString();
-    const signature = req.headers['stripe-signature']!;
+    const sig = req.headers['stripe-signature']!;
 
-    let event;
+    let event: Stripe.Event;
 
-    // Verify if event came from stripe
     try {
-      event = stripe.webhooks.constructEvent(
-        payload,
-        signature,
-        endpointSecret
-      );
+      const body = await buffer(req);
+      event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
     } catch (err: any) {
-      return res.status(400).send(`Webhook Error: ${err.message}`);
+      // On error, log and return the error message
+      console.log(`❌ Error message: ${err.message}`);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
     }
 
     console.log('✅ Success:', event.id);
@@ -51,7 +44,7 @@ export const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
 
       // @ts-ignore
       switch (paymentIntent.amount_subtotal) {
-        case 500:
+        case 100:
           creditAmount = 20;
           break;
         case 2000:
@@ -103,4 +96,26 @@ export const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default webhook;
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+const buffer = (req: NextApiRequest) => {
+  return new Promise<Buffer>((resolve, reject) => {
+    const chunks: Buffer[] = [];
+
+    req.on('data', (chunk: Buffer) => {
+      chunks.push(chunk);
+    });
+
+    req.on('end', () => {
+      resolve(Buffer.concat(chunks));
+    });
+
+    req.on('error', reject);
+  });
+};
+
+export default handler;
