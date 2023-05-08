@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { buffer } from 'micro';
 import Cors from 'micro-cors';
 import { supabase } from '../../lib/supabase';
+import { getUserIdByEmail, addUserCredits } from '../../utils/helper';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2022-11-15',
@@ -70,17 +71,18 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           break;
       }
 
-      // Update user_credits in Supabase
-      await supabase
-        .from('purchases')
-        .update({ credits: { increment: creditAmount } })
-        .eq('email', userEmail);
+      const row_id = getUserIdByEmail(userEmail);
+      // Update user_credits in users table after purchase
+      addUserCredits(row_id, creditAmount);
 
       // Insert purchase record in Supabase
       await supabase.from('purchases').insert([
         {
-          creditAmount: creditAmount,
-          userEmail: userEmail,
+          id: uuidv4(),
+          user_id: row_id,
+          credit_amount: creditAmount,
+          created_at: paymentIntent.created,
+          status: paymentIntent.status,
         },
       ]);
 
@@ -108,3 +110,6 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default cors(webhookHandler as any);
+function uuidv4(): any {
+  throw new Error('Function not implemented.');
+}

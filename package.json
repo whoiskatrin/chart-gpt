@@ -35,6 +35,7 @@
     "eslint-config-next": "^13.4.1",
     "eventsource-parser": "^0.0.5",
     "execa": "^7.1.1",
+    "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
     "figmagic": "^4.5.8",
     "file-saver": "^2.0.5",

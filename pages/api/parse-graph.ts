@@ -1,5 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { supabase } from '../../lib/supabase';
+import {
+  getUserIdByEmail,
+  getUserCredits,
+  decreaseUserCredits,
+} from '../../utils/helper';
 
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
@@ -26,46 +30,6 @@ async function fetchOpenAIData(prompt: any) {
   }
 
   return await response.json();
-}
-
-async function getUserCredits(row_id: any) {
-  const { data, error } = await supabase
-    .from('users')
-    .select('credits')
-    .eq('id', row_id)
-    .single();
-
-  if (error) {
-    throw new Error('Error fetching user credits');
-  }
-
-  return data.credits;
-}
-
-async function getUserIdByEmail(email: any) {
-  const { data, error } = await supabase
-    .from('users')
-    .select('id')
-    .eq('email', email)
-    .single();
-
-  if (error) {
-    throw new Error('Error fetching user ID');
-  }
-
-  return data.id;
-}
-
-async function decreaseUserCredits(row_id: any) {
-  const { data, error } = await supabase.rpc('decrease_credits', {
-    row_id,
-  });
-
-  if (error) {
-    throw new Error('Error updating user credits');
-  }
-
-  return data;
 }
 
 export default async function handler(
