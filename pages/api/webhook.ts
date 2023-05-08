@@ -66,7 +66,7 @@ const webhookHandler = async (
       console.log(userEmail);
       let creditAmount = 0;
 
-      console.log(charge.amount);
+      console.log('Charge: ' + charge.amount);
 
       // @ts-ignore
       switch (charge.amount) {
@@ -92,15 +92,15 @@ const webhookHandler = async (
       addUserCredits(row_id, creditAmount);
 
       // Insert purchase record in Supabase
-      // await supabase.from('purchases').insert([
-      //   {
-      //     id: uuidv4(),
-      //     user_id: row_id,
-      //     credit_amount: creditAmount,
-      //     created_at: charge.created,
-      //     status: charge.status,
-      //   },
-      // ]);
+      await supabase.from('purchases').insert([
+        {
+          id: uuidv4(),
+          user_id: row_id,
+          credit_amount: creditAmount,
+          created_at: charge.created,
+          status: charge.status,
+        },
+      ]);
     } else {
       console.warn(`🤷‍♀️ Unhandled event type: ${event.type}`);
     }
