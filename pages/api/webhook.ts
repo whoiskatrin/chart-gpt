@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import { buffer } from 'micro';
-import Cors from 'micro-cors';
 import { supabase } from '../../lib/supabase';
 import { getUserIdByEmail, addUserCredits } from '../../utils/helper';
+import { v4 as uuidv4 } from 'uuid';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2022-11-15',
@@ -15,31 +15,25 @@ export const config = {
   },
 };
 
-const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET || '';
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET ?? '';
 
-const cors = Cors({
-  allowMethods: ['POST', 'HEAD'],
-});
-
-const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+export const webhook = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const buf = await buffer(req);
-    const sig = req.headers['stripe-signature']!;
+    const reqBuffer = await buffer(req);
+    const payload = reqBuffer.toString();
+    const signature = req.headers['stripe-signature']!;
 
-    let event: Stripe.Event;
+    let event;
 
+    // Verify if event came from stripe
     try {
       event = stripe.webhooks.constructEvent(
-        buf.toString(),
-        sig,
-        webhookSecret
+        payload,
+        signature,
+        endpointSecret
       );
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      if (err! instanceof Error) console.log(err);
-      console.log(`❌ Error message: ${errorMessage}`);
-      res.status(400).send(`Webhook Error: ${errorMessage}`);
-      return;
+    } catch (err: any) {
+      return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
     console.log('✅ Success:', event.id);
@@ -109,7 +103,4 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default cors(webhookHandler as any);
-function uuidv4(): any {
-  throw new Error('Function not implemented.');
-}
+export default webhook;
