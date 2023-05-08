@@ -87,9 +87,8 @@ const webhookHandler = async (
       console.log('Credits: ' + creditAmount);
 
       const row_id = await getUserIdByEmail(userEmail);
-      console.log(row_id);
       // Update user_credits in users table after purchase
-      addUserCredits(row_id, creditAmount);
+      await addUserCredits(row_id, creditAmount);
 
       const createdAt = new Date(charge.created * 1000).toISOString();
       // Insert purchase record in Supabase
