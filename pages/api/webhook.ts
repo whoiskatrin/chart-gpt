@@ -61,7 +61,7 @@ const webhookHandler = async (
       console.log(`💰 PaymentIntent: ${JSON.stringify(paymentIntent)}`);
 
       // @ts-ignore
-      const userEmail = paymentIntent.customer_details.email;
+      const userEmail = paymentIntent.billing_details.email;
       let creditAmount = 0;
 
       // @ts-ignore
@@ -84,16 +84,16 @@ const webhookHandler = async (
       // Update user_credits in users table after purchase
       addUserCredits(row_id, creditAmount);
 
-      // // Insert purchase record in Supabase
-      // await supabase.from('purchases').insert([
-      //   {
-      //     id: uuidv4(),
-      //     user_id: row_id,
-      //     credit_amount: creditAmount,
-      //     created_at: paymentIntent.created,
-      //     status: paymentIntent.status,
-      //   },
-      // ]);
+      // Insert purchase record in Supabase
+      await supabase.from('purchases').insert([
+        {
+          id: uuidv4(),
+          user_id: row_id,
+          credit_amount: creditAmount,
+          created_at: paymentIntent.created,
+          status: paymentIntent.status,
+        },
+      ]);
     } else if (event.type === 'payment_intent.payment_failed') {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
       console.log(

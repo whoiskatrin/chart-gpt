@@ -39,7 +39,6 @@ export default function Pricing() {
           <stripe-pricing-table
             pricing-table-id="prctbl_1N4kyFKeboA3fgq8N81kqV9E"
             publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
-            client-reference-id={session.user?.email}
             customer-email={session.user?.email}
             colorBackground="red"
           />
