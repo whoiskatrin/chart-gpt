@@ -1,10 +1,10 @@
 import { Button } from '@tremor/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { FC, PropsWithChildren } from 'react';
 import Github from '../GitHub';
 import SignIn from '../SignIn';
 import ThemeButton from '../molecules/ThemeButton';
-import { useSession } from 'next-auth/react';
 
 const Logo = () => (
   <svg
@@ -64,7 +64,7 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
   const { data: session } = useSession();
   return (
     <main className="h-[calc(100vh-48px)] dark:bg-black">
-      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:bg-black">
+      <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:border-zinc-800">
         <Link href="/">
           <Logo />
         </Link>
@@ -73,14 +73,13 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
             href="https://github.com/whoiskatrin/chart-gpt"
             rel="noopener noreferrer"
             target="_blank"
-            className="pt-1"
           >
             <Button
               size="xs"
               color="zinc"
               variant="secondary"
               icon={Github}
-              className="dark:hover:bg-zinc-500/20 dark:text-zinc-100 text-black"
+              className="dark:hover:bg-zinc-500/25 dark:text-zinc-100 rounded-full flex items-center justify-center text-sm font-medium px-4 py-1 text-black"
             >
               Star on GitHub
             </Button>
@@ -89,15 +88,20 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
           {session && (
             <Link
               href="/buy-credits"
-              className="flex mt-3 rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100"
+              className="flex rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100"
             >
-              <div>Buy Credits</div>
+              <Button
+                size="xs"
+                color="zinc"
+                variant="primary"
+                className="rounded-full flex items-center justify-center text-sm font-medium px-4 py-1"
+              >
+                Buy Credits
+              </Button>
             </Link>
           )}
 
-          <a className="rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100">
-            <SignIn />
-          </a>
+          <SignIn />
           <ThemeButton />
         </div>
       </nav>
