@@ -1,7 +1,7 @@
-import Script from 'next/script';
-import Head from 'next/head';
-import useSWR from 'swr';
 import { useSession } from 'next-auth/react';
+import Head from 'next/head';
+import Script from 'next/script';
+import useSWR from 'swr';
 
 export default function Pricing() {
   const { data: session } = useSession();
@@ -35,12 +35,10 @@ export default function Pricing() {
       </main>
       <div className="w-full bg-white dark:bg-black border-1 border-black">
         {session && ( // TODO: very unfortunate styling here, fix maybe?
-          // @ts-ignore
           <stripe-pricing-table
             pricing-table-id="prctbl_1N4kyFKeboA3fgq8N81kqV9E"
             publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
             customer-email={session.user?.email}
-            colorBackground="red"
           />
         )}
       </div>
