@@ -36,7 +36,6 @@ export default async function handler(
     }
 
     const data = await response.json();
-    console.log("Data: " + data);
     const graphData =
       data.choices && data.choices.length > 0
         ? data.choices[0].message.content.trim()
@@ -45,6 +44,7 @@ export default async function handler(
       throw new Error("Failed to generate graph data");
     }
     const stringifiedData = graphData.replace(/'/g, '"');
+    console.log("Data: " + stringifiedData);
     res.status(200).json(stringifiedData);
   } catch (error) {
     console.error(error);
