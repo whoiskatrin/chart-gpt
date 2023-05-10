@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { supabase } from '../../../lib/supabase';
 import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '../../../lib/supabase';
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error('Missing Google OAuth credentials');
@@ -21,7 +21,7 @@ export const options: NextAuthOptions = {
         .from('users')
         .select('*')
         .eq('email', user.email)
-        .single();
+        .limit(1);
 
       if (existingUserError) {
         console.error('Error checking for existing user:', existingUserError);
@@ -29,8 +29,8 @@ export const options: NextAuthOptions = {
       }
 
       // If the user doesn't exist, save them to the database
-      if (!existingUser) {
-        const { data, error } = await supabase.from('users').insert([
+      if (existingUser.length === 0) {
+        const { data: newUser, error } = await supabase.from('users').insert([
           {
             id: uuidv4(),
             email: user.email,
@@ -46,11 +46,11 @@ export const options: NextAuthOptions = {
 
       // If the user exists, you can either update their information or skip the insert operation
       // For example, you can update their name if it has changed:
-      else if (existingUser.name !== user.name) {
+      else if (existingUser[0].name !== user.name) {
         const { data, error } = await supabase
           .from('users')
           .update({ name: user.name })
-          .eq('id', existingUser.id);
+          .eq('id', existingUser[0].id);
 
         if (error) {
           console.error('Error updating user name:', error);
