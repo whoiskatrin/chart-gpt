@@ -12,6 +12,7 @@ export default async function handler(
   }
 
   const { prompt } = req.body;
+  console.log("Prompt: " + prompt);
   try {
     const response = await fetch(OPENAI_API_URL, {
       method: "POST",
@@ -35,6 +36,7 @@ export default async function handler(
     }
 
     const data = await response.json();
+    console.log("Data: " + data);
     const graphData =
       data.choices && data.choices.length > 0
         ? data.choices[0].message.content.trim()
