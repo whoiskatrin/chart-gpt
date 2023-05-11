@@ -1,5 +1,4 @@
 import { Button } from '@tremor/react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { FC, PropsWithChildren } from 'react';
 import Github from '../GitHub';
@@ -61,14 +60,13 @@ const Logo = () => (
 );
 
 export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
-  const { data: session } = useSession();
   return (
     <main className="h-[calc(100vh-48px)] dark:bg-black">
       <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:border-zinc-800">
-        <Link href="/">
-          <Logo />
-        </Link>
-        <div className="flex space-x-4 pt-1 rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100">
+        <div className="flex items-center space-x-4">
+          <Link href="/">
+            <Logo />
+          </Link>
           <a
             href="https://github.com/whoiskatrin/chart-gpt"
             rel="noopener noreferrer"
@@ -84,25 +82,11 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
               Star on GitHub
             </Button>
           </a>
+        </div>
 
-          {session && (
-            <Link
-              href="/buy-credits"
-              className="flex rounded-full font-sans font-semibold text-gray-900 dark:text-gray-100"
-            >
-              <Button
-                size="xs"
-                color="zinc"
-                variant="primary"
-                className="rounded-full flex items-center justify-center text-sm font-medium px-4 py-1"
-              >
-                Buy Credits
-              </Button>
-            </Link>
-          )}
-
-          <SignIn />
+        <div className="flex space-x-2">
           <ThemeButton />
+          <SignIn />
         </div>
       </nav>
       <div className="font-normal p-8 h-full">{children}</div>

@@ -27,7 +27,7 @@ export default function ThemeButton({ className }: { className?: string }) {
         variant="light"
         color={currentTheme === 'dark' ? 'yellow' : 'blue'}
         icon={currentTheme === 'dark' ? SunIcon : MoonIcon}
-        className="dark:bg-yellow-500/20 dark:text-yellow-500 text-blue-500"
+        className="dark:bg-yellow-500/20 dark:text-yellow-500 text-blue-500 rounded-full"
       />
     </button>
   );
