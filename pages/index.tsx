@@ -33,6 +33,7 @@ import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
 import { getSession, useSession } from 'next-auth/react';
+import React from 'react';
 
 const SectionHeader = ({
   stepNumber,
@@ -117,7 +118,7 @@ const NewHome: NextPage = () => {
 
       const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
-        email: session?.user?.email,
+        session: session,
       });
 
       let parsedData;

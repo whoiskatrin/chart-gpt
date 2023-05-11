@@ -4,6 +4,7 @@ import {
   getUserCredits,
   decreaseUserCredits,
 } from '../../utils/helper';
+import cookie from 'cookie';
 
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
@@ -40,8 +41,36 @@ export default async function handler(
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, prompt } = req.body;
+  const { prompt, session } = req.body;
+  const email = session?.user?.email;
 
+  if (!session) {
+    const cookies = cookie.parse(req.headers.cookie || '');
+
+    if (cookies.chart_generations) {
+      const chartGenerations = parseInt(cookies.chart_generations, 10);
+
+      if (chartGenerations >= 3) {
+        return res.status(403).json({
+          error: 'You have reached the limit of 3 free chart generations.',
+        });
+      } else {
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize(
+            'chart_generations',
+            (chartGenerations + 1).toString(),
+            { path: '/' }
+          )
+        );
+      }
+    } else {
+      res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('chart_generations', '1', { path: '/' })
+      );
+    }
+  }
   try {
     // row_id follows SQL naming convention in this case to comply with Supabase Stored Procedures
     const row_id = await getUserIdByEmail(email);
