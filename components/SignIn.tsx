@@ -58,16 +58,16 @@ const SignIn = () => {
               Signed in as {session.user?.name}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleSignOut()}>
-              <ArrowRightOnRectangleIcon className="mr-2 h-4 w-4" />
-              <span>Sign out</span>
-            </DropdownMenuItem>
             <Link href="/buy-credits">
               <DropdownMenuItem>
                 <CreditCardIcon className="mr-2 h-4 w-4" />
                 <span>Buy credits</span>
               </DropdownMenuItem>
             </Link>
+            <DropdownMenuItem onClick={() => handleSignOut()}>
+              <ArrowRightOnRectangleIcon className="mr-2 h-4 w-4" />
+              <span>Sign out</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </>
