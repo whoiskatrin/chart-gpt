@@ -28,7 +28,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={clsx(
-      'flex cursor-default select-none items-center rounded-md px-2 py-1.5 text-sm outline-none focus:bg-white dark:focus:bg-zinc-900 data-[state=open]:bg-white dark:data-[state=open]:bg-zinc-900',
+      'flex cursor-pointer select-none items-center rounded-md px-2 py-1.5 text-sm outline-none focus:bg-white dark:focus:bg-zinc-900 data-[state=open]:bg-white dark:data-[state=open]:bg-zinc-900',
       inset && 'pl-8',
       className
     )}
@@ -84,7 +84,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={clsx(
-      'relative flex cursor-default select-none items-center rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:text-zinc-700 dark:focus:text-zinc-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center rounded-md px-2 py-1.5 text-sm outline-none transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:text-zinc-700 dark:focus:text-zinc-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       inset && 'pl-8',
       className
     )}
@@ -100,7 +100,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={clsx(
-      'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:text-zinc-700 dark:focus:text-zinc-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:text-zinc-700 dark:focus:text-zinc-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className
     )}
     checked={checked}
@@ -124,7 +124,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     className={clsx(
-      'relative flex cursor-default select-none items-center rounded-md py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:text-zinc-700 dark:focus:text-zinc-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center rounded-md py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:text-zinc-700 dark:focus:text-zinc-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className
     )}
     {...props}

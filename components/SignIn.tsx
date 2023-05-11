@@ -1,4 +1,8 @@
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowRightOnRectangleIcon,
+  ChevronDownIcon,
+  CreditCardIcon,
+} from '@heroicons/react/24/outline';
 import { Button } from '@tremor/react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -55,10 +59,14 @@ const SignIn = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleSignOut()}>
-              Sign out
+              <ArrowRightOnRectangleIcon className="mr-2 h-4 w-4" />
+              <span>Sign out</span>
             </DropdownMenuItem>
             <Link href="/buy-credits">
-              <DropdownMenuItem>Buy credits</DropdownMenuItem>
+              <DropdownMenuItem>
+                <CreditCardIcon className="mr-2 h-4 w-4" />
+                <span>Buy credits</span>
+              </DropdownMenuItem>
             </Link>
           </DropdownMenuContent>
         </DropdownMenu>
