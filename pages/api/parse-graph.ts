@@ -42,7 +42,6 @@ export default async function handler(
   }
 
   const { prompt, session } = req.body;
-  const email = session?.user?.email;
 
   if (!session) {
     const cookies = cookie.parse(req.headers.cookie || '');
@@ -70,7 +69,24 @@ export default async function handler(
         cookie.serialize('chart_generations', '1', { path: '/' })
       );
     }
+
+    // Generate the chart for non-authenticated users
+    const jsonData = await fetchOpenAIData(prompt);
+    const graphData =
+      jsonData.choices && jsonData.choices.length > 0
+        ? jsonData.choices[0].message.content.trim()
+        : null;
+
+    if (!graphData) {
+      throw new Error('Failed to generate graph data');
+    }
+
+    const stringifiedData = graphData.replace(/'/g, '"');
+    return res.status(200).json(stringifiedData);
   }
+
+  const email = session.user.email;
+
   try {
     // row_id follows SQL naming convention in this case to comply with Supabase Stored Procedures
     const row_id = await getUserIdByEmail(email);
