@@ -80,6 +80,7 @@
     "victory": "^36.6.8"
   },
   "devDependencies": {
+    "@types/cookie": "^0.5.1",
     "@types/downloadjs": "^1.4.3",
     "@types/file-saver": "^2.0.5",
     "@types/micro-cors": "^0.1.3",
