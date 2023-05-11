@@ -156,7 +156,7 @@ const NewHome: NextPage = () => {
       numCols={1}
       numColsSm={2}
       numColsLg={3}
-      className="gap-y-4 lg:gap-x-4 h-full"
+      className="gap-y-4 lg:gap-x-4 h-full "
     >
       <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2 order-last lg:order-first">
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
@@ -226,7 +226,7 @@ const NewHome: NextPage = () => {
           </AnimatePresence>
 
           <div className="py-2">
-            <Divider className="h-px dark:bg-zinc-800" />
+            <Divider className="h-px dark:bg-black" />
           </div>
 
           <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
@@ -297,7 +297,7 @@ const NewHome: NextPage = () => {
         numColSpan={1}
         numColSpanSm={2}
         numColSpanMd={2}
-        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-800 dark:bg-zinc-900 h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
+        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-black dark:bg-black h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
       >
         <div className="flex absolute top-4 right-4 space-x-4">
           {(chartData == undefined || chartData?.length > 0) && (
@@ -341,10 +341,7 @@ const NewHome: NextPage = () => {
               </div>
             ) : (
               shouldRenderChart && (
-                <Card
-                  id="chart-card"
-                  className="bg-white dark:bg-black dark:ring-zinc-800"
-                >
+                <Card id="chart-card" className="bg-white dark:bg-black">
                   {showTitle && (
                     <Title className="dark:text-white">{inputValue}</Title>
                   )}

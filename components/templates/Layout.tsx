@@ -89,7 +89,9 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
           <SignIn />
         </div>
       </nav>
-      <div className="font-normal p-8 h-full">{children}</div>
+      <div className="font-normal p-8 h-full bg-white dark:bg-black">
+        {children}
+      </div>
     </main>
   );
 };
