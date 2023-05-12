@@ -25,15 +25,14 @@ import downloadjs from 'downloadjs';
 import { AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import { NextPage } from 'next';
-import { useCallback, useMemo, useState } from 'react';
+import { getSession } from 'next-auth/react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Chart from '../components/ChartComponent';
 import LoadingDots from '../components/LoadingDots';
 import { SegmentedControl } from '../components/atoms/SegmentedControl';
 import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
-import { getSession, useSession } from 'next-auth/react';
-import React from 'react';
 
 const SectionHeader = ({
   stepNumber,
@@ -286,7 +285,7 @@ const NewHome: NextPage = () => {
         <Button
           type="submit"
           form="generate-chart"
-          className="w-full cursor-pointer py-2 px-4 rounded-full blue-button-w-gradient-border [text-shadow:0_0_1px_rgba(0,0,0,0.25)] shadow-2xl items-center justify-center false"
+          className="w-full cursor-pointer py-2 px-4 mt-4 rounded-full blue-button-w-gradient-border [text-shadow:0_0_1px_rgba(0,0,0,0.25)] shadow-2xl items-center justify-center false"
           icon={PencilSquareIcon}
         >
           Draw
@@ -297,7 +296,7 @@ const NewHome: NextPage = () => {
         numColSpan={1}
         numColSpanSm={2}
         numColSpanMd={2}
-        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-black dark:bg-black h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
+        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
       >
         <div className="flex absolute top-4 right-4 space-x-4">
           {(chartData == undefined || chartData?.length > 0) && (
