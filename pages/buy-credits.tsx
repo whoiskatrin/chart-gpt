@@ -1,3 +1,4 @@
+import { Card } from '@tremor/react';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Script from 'next/script';
@@ -32,15 +33,38 @@ export default function Pricing() {
           . Purchase more below.
         </p>
       </main>
-      <div className="w-full bg-white dark:bg-black border-1 border-black">
-        {session && ( // TODO: very unfortunate styling here, fix maybe?
-          <stripe-pricing-table
-            pricing-table-id="prctbl_1N4kyFKeboA3fgq8N81kqV9E"
-            publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
-            customer-email={session.user?.email}
-          />
-        )}
-      </div>
+      {session && (
+        <div className="flex space-x-4">
+          <Card>
+            <p>20 credits</p>
+            <stripe-buy-button
+              buy-button-id="buy_btn_1N6w8TKeboA3fgq8VYrf8GXN"
+              publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
+            />
+          </Card>
+          <Card>
+            <p>100 credits</p>
+            <stripe-buy-button
+              buy-button-id="buy_btn_1N6wCmKeboA3fgq8zdo6zR7k"
+              publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
+            />
+          </Card>
+          <Card>
+            <p>250 credits</p>
+            <stripe-buy-button
+              buy-button-id="buy_btn_1N6wEtKeboA3fgq8TYlPDGEd"
+              publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
+            />
+          </Card>
+          <Card>
+            <p>750 credits</p>
+            <stripe-buy-button
+              buy-button-id="buy_btn_1N6wFsKeboA3fgq8yI28HkJv"
+              publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
+            />
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

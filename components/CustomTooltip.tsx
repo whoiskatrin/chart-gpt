@@ -5,7 +5,6 @@ export const Tooltip = ({
   legendColor,
   ...props
 }: { legendColor?: string } & TooltipProps<any, any>) => {
-  console.log({ legendColor });
   return (
     <RechartsTooltip
       wrapperStyle={{ outline: 'none' }}

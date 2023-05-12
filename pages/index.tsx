@@ -76,6 +76,7 @@ const NewHome: NextPage = () => {
   const [showTitle, setShowTitle] = useState(true);
   const [showLegend, setShowLegend] = useState(true);
   const [chartColor, setChartColor] = useState<Color>('blue');
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const chartComponent = useMemo(() => {
     return (
@@ -105,6 +106,8 @@ const NewHome: NextPage = () => {
       const chartTypeResponse = await axios.post('/api/get-type', {
         inputData: inputValue,
       });
+
+      console.log({ res: chartTypeResponse.data });
 
       const session = await getSession();
 
@@ -191,6 +194,8 @@ const NewHome: NextPage = () => {
           {showAdvanced && (
             <div className="space-y-4">
               <SegmentedControl
+                selectedIndex={selectedIndex}
+                setSelectedIndex={setSelectedIndex}
                 items={[
                   {
                     children: 'Chart',
@@ -364,6 +369,16 @@ const NewHome: NextPage = () => {
           </Callout>
         ) : (
           <div className="w-full max-w-xl p-4">
+            {!isLoading && !shouldRenderChart && (
+              <div className="text-center">
+                Some ideas to try:
+                <ul>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </div>
+            )}
             {isLoading ? (
               <div className="flex items-center justify-center h-96">
                 <LoadingDots />

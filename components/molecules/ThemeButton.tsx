@@ -24,10 +24,10 @@ export default function ThemeButton({ className }: { className?: string }) {
       className={className}
     >
       <Icon
-        variant="light"
+        variant="simple"
         color={currentTheme === 'dark' ? 'yellow' : 'blue'}
         icon={currentTheme === 'dark' ? SunIcon : MoonIcon}
-        className="dark:bg-yellow-500/20 dark:text-yellow-500 text-blue-500 rounded-full"
+        className="dark:text-yellow-500 text-blue-500 rounded-full"
       />
     </button>
   );
