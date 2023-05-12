@@ -16,7 +16,13 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 
-const SignIn = () => {
+const SignIn = ({
+  creditsRemaining,
+  creditsLoading,
+}: {
+  creditsRemaining?: number;
+  creditsLoading?: boolean;
+}) => {
   const { data: session } = useSession();
 
   async function handleSignIn() {
@@ -30,6 +36,16 @@ const SignIn = () => {
   if (session) {
     return (
       <>
+        {!creditsLoading && (creditsRemaining || 0) < 2 && (
+          <Link href="/buy-credits">
+            <Button
+              size="xs"
+              className="rounded-full font-sans flex items-center justify-center text-sm font-medium px-4 py-1 blue-button-w-gradient-border"
+            >
+              Buy credits
+            </Button>
+          </Link>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Button
@@ -38,7 +54,7 @@ const SignIn = () => {
               icon={ChevronDownIcon}
               size="xs"
               iconPosition="right"
-              className="border-0 rounded-full flex items-center justify-center text-sm font-medium px-4 py-1 dark:hover:bg-zinc-500/25 dark:text-zinc-100"
+              className="border-0 rounded-full flex items-center justify-center text-sm font-medium px-2 py-1 dark:hover:bg-zinc-500/25 dark:text-zinc-100"
             >
               {session.user?.image ? (
                 <Image

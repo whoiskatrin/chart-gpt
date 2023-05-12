@@ -22,12 +22,13 @@ import {
 } from '@tremor/react';
 import axios from 'axios';
 import downloadjs from 'downloadjs';
-import { AnimatePresence } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import { NextPage } from 'next';
 import { getSession } from 'next-auth/react';
+import Link from 'next/link';
 import React, { useCallback, useMemo, useState } from 'react';
 import Chart from '../components/ChartComponent';
+import Github from '../components/GitHub';
 import LoadingDots from '../components/LoadingDots';
 import { SegmentedControl } from '../components/atoms/SegmentedControl';
 import { IconColor, Select } from '../components/atoms/Select';
@@ -187,42 +188,40 @@ const NewHome: NextPage = () => {
             Advanced
           </Button>
 
-          <AnimatePresence initial={false}>
-            {showAdvanced && (
-              <div className="space-y-4">
-                <SegmentedControl
+          {showAdvanced && (
+            <div className="space-y-4">
+              <SegmentedControl
+                items={[
+                  {
+                    children: 'Chart',
+                    icon: ChartBarIcon,
+                  },
+                  { children: 'PowerPoint', icon: PresentationChartLineIcon },
+                ]}
+                fullWidth
+              />
+              <div>
+                <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
+                <Select
+                  name="chart-type"
+                  value={chartType}
+                  onValueChange={setChartType}
                   items={[
-                    {
-                      children: 'Chart',
-                      icon: ChartBarIcon,
-                    },
-                    { children: 'PowerPoint', icon: PresentationChartLineIcon },
+                    { value: 'bar', textValue: 'Bar Chart' },
+                    { value: 'area', textValue: 'Area Chart' },
+                    { value: 'line', textValue: 'Line Chart' },
+                    { value: 'composed', textValue: 'Composed Chart' },
+                    { value: 'pie', textValue: 'Pie Chart' },
+                    { value: 'scatter', textValue: 'Scatter Chart' },
+                    { value: 'radar', textValue: 'Radar Chart' },
+                    { value: 'radialbar', textValue: 'Radial Bar Chart' },
+                    { value: 'treemap', textValue: 'Treemap' },
+                    { value: 'funnel', textValue: 'Funnel Chart' },
                   ]}
-                  fullWidth
                 />
-                <div>
-                  <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
-                  <Select
-                    name="chart-type"
-                    value={chartType}
-                    onValueChange={setChartType}
-                    items={[
-                      { value: 'bar', textValue: 'Bar Chart' },
-                      { value: 'area', textValue: 'Area Chart' },
-                      { value: 'line', textValue: 'Line Chart' },
-                      { value: 'composed', textValue: 'Composed Chart' },
-                      { value: 'pie', textValue: 'Pie Chart' },
-                      { value: 'scatter', textValue: 'Scatter Chart' },
-                      { value: 'radar', textValue: 'Radar Chart' },
-                      { value: 'radialbar', textValue: 'Radial Bar Chart' },
-                      { value: 'treemap', textValue: 'Treemap' },
-                      { value: 'funnel', textValue: 'Funnel Chart' },
-                    ]}
-                  />
-                </div>
               </div>
-            )}
-          </AnimatePresence>
+            </div>
+          )}
 
           <div className="py-2">
             <Divider className="h-px dark:bg-black" />
@@ -285,7 +284,7 @@ const NewHome: NextPage = () => {
         <Button
           type="submit"
           form="generate-chart"
-          className="w-full cursor-pointer py-2 px-4 mt-4 rounded-full blue-button-w-gradient-border [text-shadow:0_0_1px_rgba(0,0,0,0.25)] shadow-2xl items-center justify-center false"
+          className="w-full cursor-pointer py-2 px-4 mt-4 mb-4 lg:mb-0 rounded-full blue-button-w-gradient-border [text-shadow:0_0_1px_rgba(0,0,0,0.25)] shadow-2xl items-center justify-center false"
           icon={PencilSquareIcon}
         >
           Draw
@@ -296,8 +295,25 @@ const NewHome: NextPage = () => {
         numColSpan={1}
         numColSpanSm={2}
         numColSpanMd={2}
-        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
+        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative min-h-[300px]"
       >
+        <div className="flex absolute top-4 left-4">
+          <a
+            href="https://github.com/whoiskatrin/chart-gpt"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <Button
+              size="xs"
+              color="zinc"
+              variant="secondary"
+              icon={Github}
+              className="dark:hover:bg-zinc-500/25 dark:text-zinc-100 rounded-full flex items-center justify-center text-sm font-medium px-4 py-1 text-black bg-white dark:bg-black"
+            >
+              Star on GitHub
+            </Button>
+          </a>
+        </div>
         <div className="flex absolute top-4 right-4 space-x-4">
           {(chartData == undefined || chartData?.length > 0) && (
             <Button
@@ -326,11 +342,25 @@ const NewHome: NextPage = () => {
 
         {error ? (
           <Callout
-            className="mb-6"
-            title="Ooops! Could not generate"
+            className="my-6"
+            title="Something went wrong! Common issues:"
             color="rose"
           >
-            Check your credits balance or restructure your request.
+            <ul className="list-disc list-inside">
+              <li>
+                Quota issues, make sure you have enough
+                <Link
+                  href="/buy-credits"
+                  className="hover:text-red-500 underline decoration-dotted underline-offset-2 mx-1"
+                >
+                  Credits
+                </Link>
+              </li>
+              <li>Try modifying the prompt, make it as clear as possible </li>
+              <li>
+                Make sure you are using the correct format for your chart type
+              </li>
+            </ul>
           </Callout>
         ) : (
           <div className="w-full max-w-xl p-4">

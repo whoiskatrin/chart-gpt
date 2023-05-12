@@ -1,7 +1,6 @@
-import { Button } from '@tremor/react';
 import Link from 'next/link';
 import { FC, PropsWithChildren } from 'react';
-import Github from '../GitHub';
+import useSWR from 'swr';
 import SignIn from '../SignIn';
 import ThemeButton from '../molecules/ThemeButton';
 
@@ -60,36 +59,24 @@ const Logo = () => (
 );
 
 export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
+  const fetcher = (url: string) => fetch(url).then(res => res.json());
+  const { data: credits, isLoading } = useSWR('/api/remaining', fetcher);
   return (
-    <main className="h-[calc(100vh-48px)] dark:bg-black">
+    <main className="h-[calc(100vh-48px)]">
       <nav className="w-full flex items-center justify-between h-12 px-4 border-b border-zinc-200 dark:border-zinc-800">
-        <div className="flex items-center space-x-4">
-          <Link href="/">
-            <Logo />
-          </Link>
-          <a
-            href="https://github.com/whoiskatrin/chart-gpt"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <Button
-              size="xs"
-              color="zinc"
-              variant="secondary"
-              icon={Github}
-              className="dark:hover:bg-zinc-500/25 dark:text-zinc-100 rounded-full flex items-center justify-center text-sm font-medium px-4 py-1 text-black"
-            >
-              Star on GitHub
-            </Button>
-          </a>
-        </div>
+        <Link href="/">
+          <Logo />
+        </Link>
 
         <div className="flex space-x-2">
           <ThemeButton />
-          <SignIn />
+          <SignIn
+            creditsRemaining={credits?.remainingGenerations}
+            creditsLoading={isLoading}
+          />
         </div>
       </nav>
-      <div className="font-normal p-8 h-full bg-white dark:bg-black">
+      <div className="font-normal p-8 h-full bg-white dark:bg-black overflow-y-auto">
         {children}
       </div>
     </main>

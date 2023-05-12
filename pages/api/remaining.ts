@@ -11,7 +11,7 @@ export default async function handler(
 
   if (!session || !session.user) {
     console.log('User not logged in');
-    return res.status(401).json('Please, login.');
+    return res.status(401).json({ error: 'Please, login.' });
   }
 
   const { data: user, error } = await supabase
@@ -22,7 +22,7 @@ export default async function handler(
 
   if (error) {
     console.error('Error fetching user:', error.message);
-    return res.status(500).json('Error fetching user data.');
+    return res.status(500).json({ error: 'Error fetching user data.' });
   }
 
   return res.status(200).json({ remainingGenerations: user?.credits });

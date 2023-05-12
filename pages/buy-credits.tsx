@@ -10,25 +10,24 @@ export default function Pricing() {
   const { data } = useSWR('/api/remaining', fetcher);
 
   return (
-    <div className="flex mx-auto max-w-7xl overflow-visible flex-col items-center justify-center py-2 min-h-screen">
+    <div className="flex mx-auto max-w-7xl overflow-visible flex-col items-center justify-center">
       <Head>
         <title>Buy ChartGPT Credits</title>
       </Head>
       <Script src="https://js.stripe.com/v3/pricing-table.js" />
       <Script src="https://cdn.paritydeals.com/banner.js" />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mb-0 mb-8">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <p className="mt-2 text-4xl font-bold tracking-tight text-black dark:text-white sm:text-5xl">
-              Buy ChartGPT Credits
-            </p>
-          </div>
-        </div>
+      <Script async src="https://js.stripe.com/v3/buy-button.js" />
+      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4">
+        <h1 className="mx-auto max-w-4xl text-center mt-2 text-4xl font-bold tracking-tight text-black dark:text-white sm:text-5xl">
+          Buy ChartGPT Credits
+        </h1>
         <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-black dark:text-white mb-10">
           You currently have{' '}
           <span className="font-semibold text-black dark:text-white">
             {data?.remainingGenerations}{' '}
-            {data?.remainingGenerations > 1 ? 'credits' : 'credit'}
+            {data?.remainingGenerations > 1 || data?.remainingGenerations === 0
+              ? 'credits'
+              : 'credit'}
           </span>
           . Purchase more below.
         </p>
@@ -42,7 +41,6 @@ export default function Pricing() {
           />
         )}
       </div>
-      <script async src="https://js.stripe.com/v3/buy-button.js"></script>
     </div>
   );
 }
