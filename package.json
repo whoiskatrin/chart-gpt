@@ -20,6 +20,7 @@
     "@nivo/line": "^0.81.0",
     "@radix-ui/react-dropdown-menu": "^2.0.4",
     "@radix-ui/react-select": "^1.2.1",
+    "@radix-ui/react-slider": "^1.1.1",
     "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.52.1",
     "@supabase/auth-helpers-react": "^0.3.1",

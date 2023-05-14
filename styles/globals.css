@@ -9,6 +9,17 @@
     margin: 0;
   }
 
+  /* Code for Firefox */
+  ::-moz-selection {
+    color: #3b82f6;
+    background: rgb(59 130 246 / 20%);
+  }
+
+  ::selection {
+    color: #3b82f6;
+    background: rgb(59 130 246 / 20%);
+  }
+
   .dot-grid-gradient-light {
     background-image: radial-gradient(
       circle at 1px 1px,
