@@ -382,7 +382,7 @@ const NewHome: NextPage = () => {
                 </ul>
               </div>
             )}
-            {true ? (
+            {isLoading ? (
               <div className="flex items-center justify-center h-96">
                 <LoadingDots />
               </div>
