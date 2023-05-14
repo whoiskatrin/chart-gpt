@@ -1,19 +1,13 @@
-import React from "react";
+import { Ripples } from '@uiball/loaders';
 
 const LoadingDots = () => {
   return (
-    <>
-      <div className="flex items-center justify-center w-screen h-screen">
-        <button className="flex items-center py-2 px-5 mt-5 mb-5 rounded-full bg-blue-600 text-white font-bold">
-          <div className="flex items-center justify-center m-[10px]">
-            <div className="h-3 w-3 border-t-transparent border-solid animate-spin rounded-full border-white border-4"></div>
-            <div className="ml-2 font-sans font-semibold">
-              hang on, finding our artistic inspiration{" "}
-            </div>
-          </div>
-        </button>
-      </div>
-    </>
+    <div className="flex items-center justify-center mx-auto">
+      <Ripples size={45} speed={2} color={'#3b82f6'} />
+      <span className="ml-2 text-zinc-900 dark:text-zinc-100">
+        Hang on, finding our artistic inspiration
+      </span>
+    </div>
   );
 };
 

@@ -370,22 +370,28 @@ const NewHome: NextPage = () => {
         ) : (
           <div className="w-full max-w-xl p-4">
             {!isLoading && !shouldRenderChart && (
-              <div className="text-center">
+              <div className="text-left">
                 Some ideas to try:
-                <ul>
-                  <li></li>
+                <ul className="list-disc list-inside">
+                  <li>
+                    Top 3 market leaders in the sneaker industry by millions in
+                    market share
+                  </li>
                   <li></li>
                   <li></li>
                 </ul>
               </div>
             )}
-            {isLoading ? (
+            {true ? (
               <div className="flex items-center justify-center h-96">
                 <LoadingDots />
               </div>
             ) : (
               shouldRenderChart && (
-                <Card id="chart-card" className="bg-white dark:bg-black">
+                <Card
+                  id="chart-card"
+                  className="bg-white dark:bg-black dark:ring-zinc-800"
+                >
                   {showTitle && (
                     <Title className="dark:text-white">{inputValue}</Title>
                   )}
