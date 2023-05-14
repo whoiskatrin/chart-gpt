@@ -3,6 +3,7 @@ import { Card, Icon, Metric, Subtitle, Title } from '@tremor/react';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Script from 'next/script';
+import { useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { Slider } from '../components/ui/slider';
 
@@ -13,17 +14,57 @@ const BuyButtons = [
   {
     numberOfCredits: 20,
     'buy-button-id': 'buy_btn_1N6w8TKeboA3fgq8VYrf8GXN',
+    cost: 5,
   },
-  { numberOfCredits: 100, 'buy-button-id': 'buy_btn_1N6wCmKeboA3fgq8zdo6zR7k' },
-  { numberOfCredits: 250, 'buy-button-id': 'buy_btn_1N6wEtKeboA3fgq8TYlPDGEd' },
-  { numberOfCredits: 750, 'buy-button-id': 'buy_btn_1N6wFsKeboA3fgq8yI28HkJv' },
+  {
+    numberOfCredits: 100,
+    'buy-button-id': 'buy_btn_1N6wCmKeboA3fgq8zdo6zR7k',
+    cost: 20,
+  },
+  {
+    numberOfCredits: 250,
+    'buy-button-id': 'buy_btn_1N6wEtKeboA3fgq8TYlPDGEd',
+    cost: 35,
+  },
+  {
+    numberOfCredits: 750,
+    'buy-button-id': 'buy_btn_1N6wFsKeboA3fgq8yI28HkJv',
+    cost: 80,
+  },
 ];
 
 export default function Pricing() {
   const { data: session } = useSession();
+  const [credits, setCredits] = useState([100]);
 
   const fetcher = (url: string) => fetch(url).then(res => res.json());
   const { data } = useSWR('/api/remaining', fetcher);
+
+  const buyButton = useMemo(
+    () =>
+      credits[0] <= 20 ? (
+        <stripe-buy-button
+          buy-button-id={BuyButtons[0]['buy-button-id']}
+          publishable-key={StripePublishableKey}
+        />
+      ) : credits[0] <= 100 ? (
+        <stripe-buy-button
+          buy-button-id={BuyButtons[1]['buy-button-id']}
+          publishable-key={StripePublishableKey}
+        />
+      ) : credits[0] <= 250 ? (
+        <stripe-buy-button
+          buy-button-id={BuyButtons[2]['buy-button-id']}
+          publishable-key={StripePublishableKey}
+        />
+      ) : credits[0] <= 750 ? (
+        <stripe-buy-button
+          buy-button-id={BuyButtons[3]['buy-button-id']}
+          publishable-key={StripePublishableKey}
+        />
+      ) : null,
+    [credits]
+  );
 
   return (
     <div className="flex mx-auto max-w-7xl overflow-visible flex-col items-center justify-center">
@@ -53,9 +94,19 @@ export default function Pricing() {
       </Title>
       <div>
         <div className="flex items-baseline space-x-2">
-          <Metric className="dark:text-zinc-100">20 credits</Metric>
+          <Metric className="dark:text-zinc-100">{credits} credits</Metric>
           <Subtitle className="dark:text-zinc-400">
-            20 chart generations
+            $
+            {credits[0] <= 20
+              ? BuyButtons[0]['cost']
+              : credits[0] <= 100
+              ? BuyButtons[1]['cost']
+              : credits[0] <= 250
+              ? BuyButtons[2]['cost']
+              : credits[0] <= 750
+              ? BuyButtons[3]['cost']
+              : null}{' '}
+            one time
           </Subtitle>
         </div>
         <Slider
@@ -64,14 +115,11 @@ export default function Pricing() {
           max={750}
           step={10}
           className="max-w-[288px] my-6"
+          value={credits}
+          onValueChange={setCredits}
         />
         {/* TODO: Handle the scenario of logged out, need to prompt to sign in */}
-        {session && (
-          <stripe-buy-button
-            buy-button-id="buy_btn_1N6w8TKeboA3fgq8VYrf8GXN"
-            publishable-key="pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA"
-          />
-        )}
+        {session && buyButton}
       </div>
 
       <Card className="max-w-[400px] dark:bg-black dark:ring-zinc-800 mt-16">
