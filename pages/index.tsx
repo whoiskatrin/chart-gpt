@@ -369,7 +369,7 @@ const NewHome: NextPage = () => {
           </Callout>
         ) : (
           <div className="w-full max-w-xl p-4">
-            {!isLoading && !shouldRenderChart && (
+            {!isLoading && !shouldRenderChart && selectedIndex !== 1 ? (
               <div className="text-left">
                 Some ideas to try:
                 <ul className="list-disc list-inside">
@@ -381,7 +381,16 @@ const NewHome: NextPage = () => {
                   <li></li>
                 </ul>
               </div>
+            ) : (
+              !isLoading &&
+              !shouldRenderChart &&
+              selectedIndex === 1 && (
+                <div className="text-center">
+                  PowerPoint exports coming soon!
+                </div>
+              )
             )}
+
             {isLoading ? (
               <div className="flex items-center justify-center h-96">
                 <LoadingDots />
