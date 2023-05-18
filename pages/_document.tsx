@@ -10,8 +10,11 @@ export default function Document() {
 
         <title>ChartGPT</title>
         <meta property="og:title" content="ChartGPT" />
-        <meta property="og:image" content="/chartgpt-og.png" />
-        <meta property="og:url" content="https://chartgpt.dev" />
+        <meta
+          property="og:image"
+          content="https://www.chartgpt.dev/chartgpt-og.png"
+        />
+        <meta property="og:url" content="https://www.chartgpt.dev" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="en_GB" />
         <meta
@@ -30,7 +33,10 @@ export default function Document() {
           name="twitter:description"
           content="A tool that converts text into beautiful charts"
         />
-        <meta name="twitter:image" content="/chartgpt-og.png" />
+        <meta
+          name="twitter:image"
+          content="https://www.chartgpt.dev/chartgpt-og.png"
+        />
       </Head>
 
       <link
