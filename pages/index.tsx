@@ -378,8 +378,14 @@ const NewHome: NextPage = () => {
                     Top 3 market leaders in the sneaker industry by millions in
                     market share
                   </li>
-                  <li></li>
-                  <li></li>
+                  <li>
+                    Distribution of renewable energy sources in the United
+                    States by percentage
+                  </li>
+                  <li>
+                    Average annual rainfall in major cities around the world in
+                    cm
+                  </li>
                 </ul>
               </div>
             ) : (
