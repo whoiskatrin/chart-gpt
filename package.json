@@ -1,7 +1,17 @@
 {
-  "name": "nextjs",
+  "name": "chartgpt",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Kate Reznykova",
+    "twitter": "@whoiskatrin"
+  },
+  "contributors": [
+    {
+      "name": "Makenna Smutz",
+      "twitter": "@KenzSmutz"
+    }
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -16,8 +26,6 @@
     "@headlessui/tailwindcss": "^0.1.2",
     "@heroicons/react": "^2.0.17",
     "@next-auth/supabase-adapter": "^0.2.1",
-    "@nivo/core": "^0.81.0",
-    "@nivo/line": "^0.81.0",
     "@radix-ui/react-dropdown-menu": "^2.0.4",
     "@radix-ui/react-select": "^1.2.1",
     "@radix-ui/react-slider": "^1.1.1",
@@ -26,12 +34,10 @@
     "@supabase/auth-helpers-react": "^0.3.1",
     "@supabase/supabase-js": "^2.21.0",
     "@tailwindcss/forms": "^0.5.3",
-    "@tldraw/tldraw": "^1.29.2",
     "@tremor/react": "^2.4.0",
     "@uiball/loaders": "^1.2.6",
     "@vercel/analytics": "^0.1.11",
     "ajv": "^8.12.0",
-    "apexcharts": "^3.39.0",
     "aws-sdk": "^2.1359.0",
     "camelcase": "^7.0.1",
     "class-variance-authority": "^0.6.0",
@@ -41,7 +47,6 @@
     "execa": "^7.1.1",
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
-    "figmagic": "^4.5.8",
     "file-saver": "^2.0.5",
     "framer-motion": "^10.12.7",
     "fs": "^0.0.1-security",

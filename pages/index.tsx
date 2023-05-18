@@ -274,7 +274,7 @@ const NewHome: NextPage = () => {
           <div className="flex justify-between w-full">
             <label
               htmlFor="legend"
-              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none	"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none"
             >
               Show chart Legend
             </label>
@@ -371,18 +371,18 @@ const NewHome: NextPage = () => {
         ) : (
           <div className="w-full max-w-xl p-4">
             {!isLoading && !shouldRenderChart && selectedIndex !== 1 ? (
-              <div className="text-left">
+              <div className="text-left font-medium text-sm">
                 Some ideas to try:
                 <ul className="list-disc list-inside">
-                  <li>
+                  <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
                     Top 3 market leaders in the sneaker industry by millions in
                     market share
                   </li>
-                  <li>
+                  <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
                     Distribution of renewable energy sources in the United
                     States by percentage
                   </li>
-                  <li>
+                  <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
                     Average annual rainfall in major cities around the world in
                     cm
                   </li>
