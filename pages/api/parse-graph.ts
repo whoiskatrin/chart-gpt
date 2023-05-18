@@ -1,121 +1,53 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import {
-  getUserIdByEmail,
-  getUserCredits,
-  decreaseUserCredits,
-} from '../../utils/helper';
-import cookie from 'cookie';
+import { NextApiRequest, NextApiResponse } from "next";
 
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
-
-async function fetchOpenAIData(prompt: any) {
-  const response = await fetch(OPENAI_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.5,
-      max_tokens: 1000,
-      n: 1,
-      model: 'gpt-3.5-turbo',
-      frequency_penalty: 0.5,
-      presence_penalty: 0.5,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error('OpenAI API request failed');
-  }
-
-  return await response.json();
-}
+const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
-) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+): Promise<void> {
+  if (req.method !== "POST") {
+    res.status(405).json({ error: "Method not allowed" });
+    return;
   }
 
-  const { prompt, session } = req.body;
-
-  if (!session) {
-    const cookies = cookie.parse(req.headers.cookie || '');
-
-    if (cookies.chart_generations) {
-      const chartGenerations = parseInt(cookies.chart_generations, 10);
-
-      if (chartGenerations >= 3) {
-        return res.status(403).json({
-          error: 'You have reached the limit of 3 free chart generations.',
-        });
-      } else {
-        res.setHeader(
-          'Set-Cookie',
-          cookie.serialize(
-            'chart_generations',
-            (chartGenerations + 1).toString(),
-            { path: '/' }
-          )
-        );
-      }
-    } else {
-      res.setHeader(
-        'Set-Cookie',
-        cookie.serialize('chart_generations', '1', { path: '/' })
-      );
-    }
-
-    // Generate the chart for non-authenticated users
-    const jsonData = await fetchOpenAIData(prompt);
-    const graphData =
-      jsonData.choices && jsonData.choices.length > 0
-        ? jsonData.choices[0].message.content.trim()
-        : null;
-
-    if (!graphData) {
-      throw new Error('Failed to generate graph data');
-    }
-
-    const stringifiedData = graphData.replace(/'/g, '"');
-    return res.status(200).json(stringifiedData);
-  }
-
-  const email = session.user.email;
-
+  const { prompt } = req.body;
+  console.log("Prompt: " + prompt);
   try {
-    // row_id follows SQL naming convention in this case to comply with Supabase Stored Procedures
-    const row_id = await getUserIdByEmail(email);
-    const credits = await getUserCredits(row_id);
-    console.log('credits: ' + credits);
+    const response = await fetch(OPENAI_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.5,
+        max_tokens: 1000,
+        n: 1,
+        model: "gpt-3.5-turbo",
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
+      }),
+    });
 
-    if (credits <= 0) {
-      return res
-        .status(403)
-        .json({ error: "You don't have enough credits to generate a chart" });
+    if (!response.ok) {
+      throw new Error("OpenAI API request failed");
     }
 
-    const jsonData = await fetchOpenAIData(prompt);
+    const data = await response.json();
     const graphData =
-      jsonData.choices && jsonData.choices.length > 0
-        ? jsonData.choices[0].message.content.trim()
+      data.choices && data.choices.length > 0
+        ? data.choices[0].message.content.trim()
         : null;
-
     if (!graphData) {
-      throw new Error('Failed to generate graph data');
+      throw new Error("Failed to generate graph data");
     }
-
     const stringifiedData = graphData.replace(/'/g, '"');
-
-    await decreaseUserCredits(row_id);
-
-    return res.status(200).json(stringifiedData);
+    console.log("Data: " + stringifiedData);
+    res.status(200).json(stringifiedData);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Failed to process the input' });
+    res.status(500).json({ error: "Failed to process the input" });
   }
 }
