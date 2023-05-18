@@ -8,28 +8,27 @@ import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Slider } from '../components/ui/slider';
 
-const StripePublishableKey =
-  'pk_live_51N4hjKKeboA3fgq8Ha08TqSvG1srWppQol3plyCk6T54RdqHRbRWqEuUUEiaf3a6fZnwdg7n8MtfRlBpH4yJPCEV00EhvjJViA';
+const StripePublishableKey = 'pk_live_H2uqC2vnrj0pndUTpBzN8fNp00p8rKqkRL';
 
 const BuyButtons = [
   {
     numberOfCredits: 20,
-    'buy-button-id': 'buy_btn_1N6w8TKeboA3fgq8VYrf8GXN',
+    'buy-button-id': 'buy_btn_1N9Bt4HyROTSbUdIU2QexjRG',
     cost: 5,
   },
   {
     numberOfCredits: 100,
-    'buy-button-id': 'buy_btn_1N6wCmKeboA3fgq8zdo6zR7k',
+    'buy-button-id': 'buy_btn_1N9BvTHyROTSbUdIRr8dK4TQ',
     cost: 20,
   },
   {
     numberOfCredits: 250,
-    'buy-button-id': 'buy_btn_1N6wEtKeboA3fgq8TYlPDGEd',
+    'buy-button-id': 'buy_btn_1N9BwRHyROTSbUdIVxG5VI64',
     cost: 35,
   },
   {
     numberOfCredits: 750,
-    'buy-button-id': 'buy_btn_1N6wFsKeboA3fgq8yI28HkJv',
+    'buy-button-id': 'buy_btn_1N9BxFHyROTSbUdI1Ozu2umg',
     cost: 80,
   },
 ];
