@@ -21,8 +21,9 @@ import {
   Title,
 } from '@tremor/react';
 import axios from 'axios';
-import downloadjs from 'downloadjs';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
+
+import download from 'downloadjs';
 import { NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -149,9 +150,9 @@ const NewHome: NextPage = () => {
     if (!element) {
       return;
     }
-    const canvas = await html2canvas(element);
-    const dataURL = canvas.toDataURL('image/png');
-    downloadjs(dataURL, 'chart.png', 'image/png');
+    toPng(element).then(function (dataUrl) {
+      download(dataUrl, 'chart.png');
+    });
   };
 
   return (
@@ -300,7 +301,7 @@ const NewHome: NextPage = () => {
         numColSpan={1}
         numColSpanSm={2}
         numColSpanMd={2}
-        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative min-h-[300px]"
+        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
       >
         <div className="flex absolute top-4 left-4">
           <a
