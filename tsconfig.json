@@ -20,7 +20,8 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/api/translate.js",
-    "pages/api/check-fake-stars.ts"
+    "pages/api/check-fake-stars.ts",
+    "types/stripe.d.ts"
   ],
   "exclude": ["node_modules"]
 }

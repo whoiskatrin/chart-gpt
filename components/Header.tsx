@@ -1,30 +1,35 @@
-import Link from "next/link";
-import Github from "./GitHub";
-import { useTheme } from "next-themes";
-import React from "react";
+import Link from 'next/link';
+import Github from './GitHub';
+import { useTheme } from 'next-themes';
+import React from 'react';
+import SignIn from './SignIn';
 
 export const Header = () => {
   const { resolvedTheme } = useTheme();
-  const svgFillColor = resolvedTheme === "dark" ? "#D8D8D8" : "black";
+  const svgFillColor = resolvedTheme === 'dark' ? '#D8D8D8' : 'black';
   const btnBgColor =
-    resolvedTheme === "dark"
-      ? "dark-button-w-gradient-border"
-      : "light-button-w-gradient-border";
+    resolvedTheme === 'dark'
+      ? 'dark-button-w-gradient-border'
+      : 'light-button-w-gradient-border';
 
   return (
-    <header className="flex flex-col sm:flex-row sm:justify-betweenw-full max-w-5xl mb-6 gap-6 pt-4 pb-8 px-2 mt-3 border-b pb-7 sm:px-4 px-2 border-gray-200 gap-2">
+    <header className="flex flex-col sm:flex-row sm:justify-betweenw-full mb-6 gap-6 pt-4 pb-8 px-2 mt-10 border-b sm:px-4 px-2 border-gray-200">
       <Link href="/" className="flex flex-col">
         <h1 className="font-inter font-bold sm:text-xl flex items-center bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text bg-gradient-to-r from-sky-400 via-violet-600 to-rose-500 bg-clip-text text-transparent">
           <img
             src="https://www.svgrepo.com/show/572/lasso.svg"
             width="24"
             height="24"
-            className="mr-2 filter brightness-0"
+            className="mr-2"
+            style={{
+              filter: resolvedTheme === 'dark' ? 'invert(1)' : 'invert(0)',
+              fill: resolvedTheme === 'dark' ? 'white' : 'black',
+            }}
           />
           ChartGPT
         </h1>
-        <p className="font-inter font-bold text-gray-700">
-          A tool that converts text into beautiful charts
+        <p className="font-sans font-bold bg-white text-black dark:text-white dark:bg-black">
+          A tool that converts text queries into beautiful charts using AI
         </p>
       </Link>
       <div className="flex items-center gap-3 pt-4">
@@ -60,6 +65,19 @@ export const Header = () => {
                 fill={svgFillColor}
               />
             </svg>
+          </div>
+        </a>
+        <a
+          className="rounded-full text-gray-500 dark:text-gray-400"
+          href="https://github.com/whoiskatrin/chart-gpt"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <div
+            className={`flex items-center justify-center space-x-2 py-2 px-6 rounded-full ${btnBgColor} text-black dark:text-[#D8D8D8] text-sm font-medium`}
+          >
+            <SignIn />
+            <p>Star on GitHub</p>
           </div>
         </a>
       </div>

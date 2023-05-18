@@ -3,70 +3,86 @@
 @tailwind utilities;
 
 @layer components {
-	.blue-button-w-gradient-border {
-		--blue500: theme(colors.blue.500);
-		--blue700: theme(colors.blue.700);
-		--blue800: theme(colors.blue.800);
-		background: linear-gradient(
-					to bottom right,
-					var(--blue500),
-					var(--blue700)
-				)
-				padding-box,
-			linear-gradient(to bottom, var(--blue500), var(--blue800))
-				border-box;
-		border: 1px solid transparent;
-	}
-	.light-button-w-gradient-border {
-		--gray50: theme(colors.gray.50);
-		background: linear-gradient(to bottom, var(--gray50), var(--gray50))
-				padding-box,
-			linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.27))
-				border-box;
-		border: 1px solid transparent;
-	}
-	.dark-button-w-gradient-border {
-		--gray50: theme(backgroundColor.custom-dark-gray);
-		background: linear-gradient(to bottom, var(--gray50), var(--gray50))
-				padding-box,
-			linear-gradient(
-					to bottom,
-					rgba(255, 255, 255, 0.2),
-					rgba(255, 255, 255, 0.1)
-				)
-				border-box;
-		border: 1px solid transparent;
-	}
-	.container-w-gradient-border {
-		background: linear-gradient(to bottom, white, white) padding-box,
-			linear-gradient(to bottom, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.19))
-				border-box;
-		border: 1px solid transparent;
-	}
-	.dark-container-w-gradient-border {
-		--background: theme(backgroundColor.custom-gray);
-		background: linear-gradient(
-					to bottom,
-					var(--background),
-					var(--background)
-				)
-				padding-box,
-			linear-gradient(
-					to bottom,
-					rgba(255, 255, 255, 0.1),
-					rgba(0, 0, 0, 0.1)
-				)
-				border-box;
-		border: 1px solid transparent;
-	}
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+  }
+
+  /* Code for Firefox */
+  ::-moz-selection {
+    color: #3b82f6;
+    background: rgb(59 130 246 / 20%);
+  }
+
+  ::selection {
+    color: #3b82f6;
+    background: rgb(59 130 246 / 20%);
+  }
+
+  .dot-grid-gradient-light {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgb(209 213 219) 1px,
+      transparent 0
+    );
+    background-size: 24px 24px;
+  }
+  .dot-grid-gradient-dark {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgb(55 65 81) 1px,
+      transparent 0
+    );
+    background-size: 24px 24px;
+  }
+  .blue-button-w-gradient-border {
+    --blue500: theme(colors.blue.500);
+    --blue700: theme(colors.blue.700);
+    --blue800: theme(colors.blue.800);
+    background: linear-gradient(to bottom right, var(--blue500), var(--blue700))
+        padding-box,
+      linear-gradient(to bottom, var(--blue500), var(--blue800)) border-box;
+    border: 1px solid transparent;
+  }
+  .light-button-w-gradient-border {
+    --gray50: theme(colors.gray.50);
+    background: linear-gradient(to bottom, var(--gray50), var(--gray50))
+        padding-box,
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.27))
+        border-box;
+    border: 1px solid transparent;
+  }
+  .dark-button-w-gradient-border {
+    --gray50: theme(backgroundColor.custom-dark-gray);
+    background: linear-gradient(to bottom, var(--gray50), var(--gray50))
+        padding-box,
+      linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.2),
+          rgba(255, 255, 255, 0.1)
+        )
+        border-box;
+    border: 1px solid transparent;
+  }
+  .container-w-gradient-border {
+    background: linear-gradient(to bottom, white, white) padding-box,
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.19))
+        border-box;
+    border: 1px solid transparent;
+  }
+  .dark-container-w-gradient-border {
+    --background: theme(backgroundColor.custom-gray);
+    background: linear-gradient(to bottom, var(--background), var(--background))
+        padding-box,
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1))
+        border-box;
+    border: 1px solid transparent;
+  }
 }
 
 .squiggly {
-	stroke: blue;
-	stroke-width: 2px;
-	fill: none;
+  stroke: blue;
+  stroke-width: 2px;
+  fill: none;
 }
-
-/* .info-container {
-	max-width: 50rem;
-} */
