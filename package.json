@@ -34,7 +34,7 @@
     "@supabase/auth-helpers-react": "^0.3.1",
     "@supabase/supabase-js": "^2.21.0",
     "@tailwindcss/forms": "^0.5.3",
-    "@tremor/react": "^2.4.0",
+    "@tremor/react": "^2.7.0",
     "@uiball/loaders": "^1.2.6",
     "@vercel/analytics": "^0.1.11",
     "ajv": "^8.12.0",
