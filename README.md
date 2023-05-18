@@ -1,7 +1,7 @@
 # Chart-GPT - text to beautiful charts within seconds
 
 <div align="center">
-    <img src="https://github.com/whoiskatrin/chart-gpt/blob/public/chartgpt-og.png" width="600" />
+    <img src="https://raw.githubusercontent.com/whoiskatrin/chart-gpt/main/public/chartgpt-og.png" width="600" />
 </div>
 
 ## Getting Started
