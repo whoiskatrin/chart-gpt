@@ -59,7 +59,7 @@ export const SegmentedControlList = ({
   return (
     <Tab.List
       className={clsx(
-        'bg-zinc-100 dark:bg-zinc-800 flex h-10 appearance-none items-center overflow-scroll rounded-lg p-1',
+        'bg-zinc-100 dark:bg-zinc-800 flex h-10 appearance-none items-center overflow-auto rounded-lg p-1',
         {
           'max-w-fit': !fullWidth,
         },
