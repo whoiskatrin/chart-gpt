@@ -1,9 +1,10 @@
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { Card, Icon, Metric, Subtitle, Title } from '@tremor/react';
+import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Script from 'next/script';
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Slider } from '../components/ui/slider';
 
@@ -36,35 +37,43 @@ const BuyButtons = [
 export default function Pricing() {
   const { data: session } = useSession();
   const [credits, setCredits] = useState([100]);
+  const [button, setButton] = useState<JSX.Element | null>(
+    <stripe-buy-button
+      buy-button-id={BuyButtons[1]['buy-button-id']}
+      publishable-key={StripePublishableKey}
+    />
+  );
+
+  useEffect(
+    () =>
+      setButton(
+        credits[0] <= 20 ? (
+          <stripe-buy-button
+            buy-button-id={BuyButtons[0]['buy-button-id']}
+            publishable-key={StripePublishableKey}
+          />
+        ) : credits[0] <= 100 ? (
+          <stripe-buy-button
+            buy-button-id={BuyButtons[1]['buy-button-id']}
+            publishable-key={StripePublishableKey}
+          />
+        ) : credits[0] <= 250 ? (
+          <stripe-buy-button
+            buy-button-id={BuyButtons[2]['buy-button-id']}
+            publishable-key={StripePublishableKey}
+          />
+        ) : credits[0] <= 750 ? (
+          <stripe-buy-button
+            buy-button-id={BuyButtons[3]['buy-button-id']}
+            publishable-key={StripePublishableKey}
+          />
+        ) : null
+      ),
+    [credits]
+  );
 
   const fetcher = (url: string) => fetch(url).then(res => res.json());
   const { data } = useSWR('/api/remaining', fetcher);
-
-  const buyButton = useMemo(
-    () =>
-      credits[0] <= 20 ? (
-        <stripe-buy-button
-          buy-button-id={BuyButtons[0]['buy-button-id']}
-          publishable-key={StripePublishableKey}
-        />
-      ) : credits[0] <= 100 ? (
-        <stripe-buy-button
-          buy-button-id={BuyButtons[1]['buy-button-id']}
-          publishable-key={StripePublishableKey}
-        />
-      ) : credits[0] <= 250 ? (
-        <stripe-buy-button
-          buy-button-id={BuyButtons[2]['buy-button-id']}
-          publishable-key={StripePublishableKey}
-        />
-      ) : credits[0] <= 750 ? (
-        <stripe-buy-button
-          buy-button-id={BuyButtons[3]['buy-button-id']}
-          publishable-key={StripePublishableKey}
-        />
-      ) : null,
-    [credits]
-  );
 
   return (
     <div className="flex mx-auto max-w-7xl overflow-visible flex-col items-center justify-center">
@@ -119,7 +128,46 @@ export default function Pricing() {
           onValueChange={setCredits}
         />
         {/* TODO: Handle the scenario of logged out, need to prompt to sign in */}
-        {session && buyButton}
+        {session && (
+          <>
+            <div className={clsx({ hidden: !(credits[0] <= 20) })}>
+              <stripe-buy-button
+                buy-button-id={BuyButtons[0]['buy-button-id']}
+                publishable-key={StripePublishableKey}
+              />
+            </div>
+            <div
+              className={clsx({
+                hidden: !(credits[0] > 20 && credits[0] <= 100),
+              })}
+            >
+              <stripe-buy-button
+                buy-button-id={BuyButtons[1]['buy-button-id']}
+                publishable-key={StripePublishableKey}
+              />
+            </div>
+            <div
+              className={clsx({
+                hidden: !(credits[0] > 100 && credits[0] <= 250),
+              })}
+            >
+              <stripe-buy-button
+                buy-button-id={BuyButtons[2]['buy-button-id']}
+                publishable-key={StripePublishableKey}
+              />
+            </div>
+            <div
+              className={clsx({
+                hidden: !(credits[0] > 250 && credits[0] <= 750),
+              })}
+            >
+              <stripe-buy-button
+                buy-button-id={BuyButtons[3]['buy-button-id']}
+                publishable-key={StripePublishableKey}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       <Card className="max-w-[400px] dark:bg-black dark:ring-zinc-800 mt-16">
