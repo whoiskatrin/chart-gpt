@@ -320,31 +320,6 @@ const NewHome: NextPage = () => {
             </Button>
           </a>
         </div>
-        <div className="flex absolute top-4 right-4 space-x-4">
-          {(chartData == undefined || chartData?.length > 0) && (
-            <Button
-              variant="light"
-              color="gray"
-              icon={ArrowPathIcon}
-              className="dark:text-zinc-100 dark:hover:text-zinc-300 outline-none"
-              type="submit"
-              form="generate-chart"
-            >
-              Retry
-            </Button>
-          )}
-          {shouldRenderChart && (
-            <Button
-              size="xs"
-              color="gray"
-              icon={ArrowDownTrayIcon}
-              className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
-              onClick={() => handleDownloadClick('#chart-card')}
-            >
-              Download
-            </Button>
-          )}
-        </div>
 
         {error ? (
           <Callout
@@ -418,6 +393,31 @@ const NewHome: NextPage = () => {
             )}
           </div>
         )}
+        <div className="flex absolute bottom-4 right-4 space-x-4">
+          {(chartData == undefined || chartData?.length > 0) && (
+            <Button
+              variant="light"
+              color="gray"
+              icon={ArrowPathIcon}
+              className="dark:text-zinc-100 dark:hover:text-zinc-300 outline-none"
+              type="submit"
+              form="generate-chart"
+            >
+              Retry
+            </Button>
+          )}
+          {shouldRenderChart && (
+            <Button
+              size="xs"
+              color="gray"
+              icon={ArrowDownTrayIcon}
+              className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
+              onClick={() => handleDownloadClick('#chart-card')}
+            >
+              Download
+            </Button>
+          )}
+        </div>
       </Col>
     </Grid>
   );
