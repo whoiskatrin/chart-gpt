@@ -1,7 +1,7 @@
-# Chart-GPT - text to beautiful charts within seconds
+# RoadmapGPT
 
 <div align="center">
-    <img src="https://raw.githubusercontent.com/whoiskatrin/chart-gpt/main/public/chartgpt-og.png" width="600" />
+    <img src="https://github.com/mrna0/chart-gpt/assets/4294069/45e26e29-a25d-49bd-a37d-30e3385e1dba" width="600" />
 </div>
 
 ## Getting Started
