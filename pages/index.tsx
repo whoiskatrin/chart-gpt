@@ -78,12 +78,11 @@ const NewHome: NextPage = () => {
         inputData: inputValue,
       });
 
-      console.log({ res: chartTypeResponse.data });
-
+      console.log(chartTypeResponse.data);
 
       let parsedData;
       try {
-        parsedData = JSON.parse(chartTypeResponse.data);
+        parsedData = JSON.parse(chartTypeResponse.data.trimEnd('.'));
       } catch (error) {
         setError(true);
         console.error('Failed to parse chart data:', error);

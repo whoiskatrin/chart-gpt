@@ -8,8 +8,7 @@ export default async function handler(
 ): Promise<void> {
   try {
     const { inputData } = req.body;
-    const prompt = `Create a roadmap list from beginner to professional at least in-order 10 maintitles  for I wrote within quotation marks. "${inputData}". Provide the list as valid JSON format. Show the main items of the list as property names in the format [{mainTitle: "", subheadings: ""}]
-`;
+    const prompt = `Create a roadmap list from beginner to professional at least in-order 10 maintitles for I wrote within quotation marks. "${inputData}". Provide the list as valid JSON format. Show the main items of the list as property names in the format [{"mainTitle": "", "subheadings": [""]}] Make sure the format use double quotes and property names are string literals. Give JSON result in one line. No \\n or \\t. Provide JSON data only`;
 
     const response = await fetch(OPENAI_API_URL, {
       method: "POST",
