@@ -393,7 +393,7 @@ const NewHome: NextPage = () => {
             )}
           </div>
         )}
-        <div className="flex absolute bottom-4 right-4 space-x-4">
+       {!isLoading && !error && <div className="flex absolute bottom-4 right-4 space-x-4">
           {(chartData == undefined || chartData?.length > 0) && (
             <Button
               variant="light"
@@ -417,7 +417,7 @@ const NewHome: NextPage = () => {
               Download
             </Button>
           )}
-        </div>
+        </div>}
       </Col>
     </Grid>
   );
