@@ -1,8 +1,19 @@
 import React from 'react';
-import { Cell } from 'recharts';
 
 export const CustomCell = ({ ...props }) => {
-  const { root, depth, x, y, width, height, index, payload, colors, rank, name } = props;
+  const {
+    root,
+    depth,
+    x,
+    y,
+    width,
+    height,
+    index,
+    payload,
+    colors,
+    rank,
+    name,
+  } = props;
   return (
     <g>
       <rect
@@ -11,14 +22,23 @@ export const CustomCell = ({ ...props }) => {
         width={width}
         height={height}
         style={{
-          fill: depth < 2 ? colors[Math.floor((index / root.children.length) * 6)] : '#ffffff00',
+          fill:
+            depth < 2
+              ? colors[Math.floor((index / root.children.length) * 6)]
+              : '#ffffff00',
           stroke: '#fff',
           strokeWidth: 2 / (depth + 1e-10),
           strokeOpacity: 1 / (depth + 1e-10),
         }}
       />
       {depth === 1 ? (
-        <text x={x + width / 2} y={y + height / 2 + 7} textAnchor="middle" fill="#fff" fontSize={14}>
+        <text
+          x={x + width / 2}
+          y={y + height / 2 + 7}
+          textAnchor="middle"
+          fill="#fff"
+          fontSize={14}
+        >
           {name}
         </text>
       ) : null}
