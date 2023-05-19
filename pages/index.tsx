@@ -116,7 +116,7 @@ const NewHome: NextPage = () => {
       numColsLg={3}
       className="gap-y-4 lg:gap-x-4 h-full "
     >
-      <aside className="shrink-0 w-full flex flex-col  lg:col-span-1 col-span-12">
+      <aside className="shrink-0 w-full flex flex-col lg:col-span-1 col-span-12">
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
           <SectionHeader
             stepNumber={1}
