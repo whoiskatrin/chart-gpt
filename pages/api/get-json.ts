@@ -8,7 +8,7 @@ export default async function handler(
 ): Promise<void> {
   try {
     const { inputData } = req.body;
-    const prompt = `The following are the possible chart types supported by the code provided: area, bar, line, composed, scatter, pie, radar, radialBar, treemap, and funnel. Given the user input: ${inputData}, identify the chart type the user wants to display. Return just one word
+    const prompt = `Create a roadmap list from beginner to professional at least in-order 10 maintitles  for I wrote within quotation marks. "${inputData}". Provide the list as valid JSON format. Show the main items of the list as property names in the format [{mainTitle: "", subheadings: ""}]
 `;
 
     const response = await fetch(OPENAI_API_URL, {
@@ -20,7 +20,7 @@ export default async function handler(
       body: JSON.stringify({
         messages: [{ role: "user", content: prompt }],
         temperature: 0.5,
-        max_tokens: 10,
+        max_tokens: 2048,
         n: 1,
         model: "gpt-3.5-turbo",
         frequency_penalty: 0.5,
