@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+const OPENAI_API_URL = 'https://api.openai.withlogging.com/v1/chat/completions';
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,17 +12,18 @@ export default async function handler(
 `;
 
     const response = await fetch(OPENAI_API_URL, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        'X-Api-Key': `Bearer ${process.env.REPORT_KEY}`,
       },
       body: JSON.stringify({
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: 'user', content: prompt }],
         temperature: 0.5,
         max_tokens: 10,
         n: 1,
-        model: "gpt-3.5-turbo",
+        model: 'gpt-3.5-turbo',
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
       }),
@@ -35,6 +36,6 @@ export default async function handler(
     res.status(200).json(chartType);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send('Internal Server Error');
   }
 }
