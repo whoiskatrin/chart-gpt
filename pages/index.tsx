@@ -23,7 +23,6 @@ import {
 import axios from 'axios';
 import { toPng } from 'html-to-image';
 
-import va from '@vercel/analytics';
 import download from 'downloadjs';
 import { NextPage } from 'next';
 import { getSession } from 'next-auth/react';
@@ -100,9 +99,6 @@ const NewHome: NextPage = () => {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-
-    // @ts-ignore
-    va.track('Generate chart');
 
     setError(false);
     setIsLoading(true);
