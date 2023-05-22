@@ -4,6 +4,7 @@ import {
   CreditCardIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@tremor/react';
+import va from '@vercel/analytics';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,10 +27,14 @@ const SignIn = ({
   const { data: session } = useSession();
 
   async function handleSignIn() {
+    // @ts-ignore
+    va.track('Sign in');
     signIn('google');
   }
 
   async function handleSignOut() {
+    // @ts-ignore
+    va.track('Sign out');
     signOut();
   }
 
