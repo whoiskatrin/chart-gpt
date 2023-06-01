@@ -1,6 +1,5 @@
+import Bard, { askAI } from 'bard-ai';
 import { NextApiRequest, NextApiResponse } from 'next';
-
-const OPENAI_API_URL = 'https://api.openai.withlogging.com/v1/chat/completions';
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,40 +12,27 @@ export default async function handler(
 
   const { prompt } = req.body;
   console.log('Prompt: ' + prompt);
+
   try {
-    const response = await fetch(OPENAI_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        'X-Api-Key': `Bearer ${process.env.REPORT_KEY}`,
-      },
-      body: JSON.stringify({
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.5,
-        max_tokens: 1000,
-        n: 1,
-        model: 'gpt-3.5-turbo',
-        frequency_penalty: 0.5,
-        presence_penalty: 0.5,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('OpenAI API request failed');
+    // Initialize the Bard with the cookie key
+    const BARD_KEY = process.env.BARD_KEY;
+    if (typeof BARD_KEY === 'undefined') {
+      // Handle the error, for example by logging it and exiting
+      console.error('BARD_KEY is not set');
+      process.exit(1);
+    } else {
+      await Bard.init(BARD_KEY);
     }
 
-    const data = await response.json();
-    const graphData =
-      data.choices && data.choices.length > 0
-        ? data.choices[0].message.content.trim()
-        : null;
-    if (!graphData) {
-      throw new Error('Failed to generate graph data');
+    // Use askAI function to get the response from Bard AI
+    const outputData = await askAI(prompt);
+    console.log(outputData);
+
+    if (!outputData) {
+      throw new Error('Failed to generate output data');
     }
-    const stringifiedData = graphData.replace(/'/g, '"');
-    console.log('Data: ' + stringifiedData);
-    res.status(200).json(stringifiedData);
+
+    res.status(200).json(outputData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to process the input' });

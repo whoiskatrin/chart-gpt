@@ -39,6 +39,7 @@
     "@vercel/analytics": "^0.1.11",
     "ajv": "^8.12.0",
     "aws-sdk": "^2.1359.0",
+    "bard-ai": "^1.2.0",
     "camelcase": "^7.0.1",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",

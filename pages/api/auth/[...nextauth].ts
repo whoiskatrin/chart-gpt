@@ -61,7 +61,6 @@ export const options: NextAuthOptions = {
       return true;
     },
     async session({ session }) {
-      console.log('SESSION', session);
       let { user } = session;
       const { data } = await supabase
         .from('users')

@@ -80,7 +80,7 @@ export const Chart: React.FC<ChartProps> = ({
       case 'area':
         return (
           <AreaChart
-            className="h-[300px]"
+            className="h-[350px]"
             data={data}
             index="name"
             categories={[value]}
@@ -92,13 +92,14 @@ export const Chart: React.FC<ChartProps> = ({
       case 'bar':
         return (
           <BarChart
-            className="h-[300px]"
+            className="h-[350px]"
             data={data}
             index="name"
             categories={[value]}
             colors={[color || 'blue']}
             showLegend={showLegend}
             valueFormatter={dataFormatter}
+            layout={'vertical'}
           />
         );
       case 'line':

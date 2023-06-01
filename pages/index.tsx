@@ -78,6 +78,7 @@ const NewHome: NextPage = () => {
   const [showLegend, setShowLegend] = useState(true);
   const [chartColor, setChartColor] = useState<Color>('blue');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [dataSource, setDataSource] = useState('Statista');
 
   const chartComponent = useMemo(() => {
     return (
@@ -117,24 +118,27 @@ const NewHome: NextPage = () => {
 
       setChartType(chartTypeResponse.data);
 
-      const libraryPrompt = `Generate a valid JSON in which each element is an object. Strictly using this FORMAT and naming:
-[{ "name": "a", "value": 12, "color": "#4285F4" }] for Recharts API. Make sure field name always stays named name. Instead of naming value field value in JSON, name it based on user metric.\n Make sure the format use double quotes and property names are string literals. \n\n${inputValue}\n Provide JSON data only. `;
+      const libraryPrompt = `Find data about ${inputValue} and you have to include data source where you get this data from, do not include data source in JSON, but add as text below`;
 
       const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
         session: session,
       });
 
-      let parsedData;
+      // Extract JSON from outputData
+      const parsedJSON = await axios.post('/api/get-json', {
+        inputData: chartDataResponse.data,
+        chart: chartType,
+      });
 
-      try {
-        parsedData = JSON.parse(chartDataResponse.data);
-      } catch (error) {
-        setError(true);
-        console.error('Failed to parse chart data:', error);
-      }
+      // Extract JSON from outputData
+      const dataSource = await axios.post('/api/get-source', {
+        inputData: chartDataResponse.data,
+      });
 
-      setChartData(parsedData);
+      console.log('JSON:' + parsedJSON.data);
+      setDataSource(dataSource.data);
+      setChartData(parsedJSON.data);
       setChartType(chartTypeResponse.data);
       setShouldRenderChart(true);
     } catch (error) {
@@ -344,7 +348,7 @@ const NewHome: NextPage = () => {
             </ul>
           </Callout>
         ) : (
-          <div className="w-full max-w-xl p-4">
+          <div className="w-full max-w-full p-4">
             {!isLoading && !shouldRenderChart && selectedIndex !== 1 ? (
               <div className="text-left font-medium text-sm">
                 Some ideas to try:
@@ -381,13 +385,14 @@ const NewHome: NextPage = () => {
               shouldRenderChart && (
                 <Card
                   id="chart-card"
-                  className="bg-white dark:bg-black dark:ring-zinc-800"
+                  className="bg-white dark:bg-black dark:ring-zinc-800 w-full"
                 >
                   {showTitle && (
                     <Title className="dark:text-white">{inputValue}</Title>
                   )}
                   {!showLegend && <div className="h-5" />}
                   {chartComponent}
+                  <Title className="dark:text-white">{dataSource}</Title>
                 </Card>
               )
             )}
