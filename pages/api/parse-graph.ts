@@ -31,7 +31,8 @@ export default async function handler(
     if (!outputData) {
       throw new Error('Failed to generate output data');
     }
-
+    if (outputData.includes('AI-model') || outputData.includes('programmed'))
+      res.status(500).json({ error: 'Failed to process the input' });
     res.status(200).json(outputData);
   } catch (error) {
     console.error(error);

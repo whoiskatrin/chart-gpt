@@ -100,6 +100,7 @@ export const Chart: React.FC<ChartProps> = ({
             showLegend={showLegend}
             valueFormatter={dataFormatter}
             layout={'vertical'}
+            yAxisWidth={100}
           />
         );
       case 'line':

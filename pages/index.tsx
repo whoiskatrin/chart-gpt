@@ -125,13 +125,13 @@ const NewHome: NextPage = () => {
         session: session,
       });
 
-      // Extract JSON from outputData
+      // Extract JSON from the initial data
       const parsedJSON = await axios.post('/api/get-json', {
         inputData: chartDataResponse.data,
         chart: chartType,
       });
 
-      // Extract JSON from outputData
+      // Extract data source from the text
       const dataSource = await axios.post('/api/get-source', {
         inputData: chartDataResponse.data,
       });
@@ -344,6 +344,9 @@ const NewHome: NextPage = () => {
               <li>Try modifying the prompt, make it as clear as possible </li>
               <li>
                 Make sure you are using the correct format for your chart type
+              </li>
+              <li>
+                AI model could be hallucinating, in this case please, try again
               </li>
             </ul>
           </Callout>

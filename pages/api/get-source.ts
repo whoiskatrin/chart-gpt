@@ -8,7 +8,7 @@ export default async function handler(
 ): Promise<void> {
   try {
     const { inputData } = req.body;
-    const prompt = `Try to understand the text and extract data source url or data source name depends on what's available from ${inputData}, if URL is available, then URL is always better. Don't add any additional words.`;
+    const prompt = `Find the data source in this text ${inputData} and extract it. Don't add any additional word except Data Source: in front of the result, just list a full source name or all of them if there are a few.`;
 
     const response = await fetch(OPENAI_API_URL, {
       method: 'POST',
@@ -31,6 +31,7 @@ export default async function handler(
     const data = await response.json();
 
     const source = data.choices[0].message.content.trim();
+    console.log('SOURCE:' + data.data);
 
     res.status(200).send(source);
   } catch (error) {
