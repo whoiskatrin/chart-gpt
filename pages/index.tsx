@@ -346,7 +346,7 @@ const NewHome: NextPage = () => {
                 Make sure you are using the correct format for your chart type
               </li>
               <li>
-                AI model could be hallucinating, in this case please, try again
+                AI model could be hallucinating, in this case, please, try again
               </li>
             </ul>
           </Callout>
