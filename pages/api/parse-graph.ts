@@ -1,5 +1,6 @@
 import Bard, { askAI } from 'bard-ai';
 import { NextApiRequest, NextApiResponse } from 'next';
+import cookie from 'cookie';
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,8 +11,36 @@ export default async function handler(
     return;
   }
 
-  const { prompt } = req.body;
-  console.log('Prompt: ' + prompt);
+  const { prompt, session } = req.body;
+  const email = session?.user?.email;
+
+  if (!session) {
+    const cookies = cookie.parse(req.headers.cookie || '');
+
+    if (cookies.chart_generations) {
+      const chartGenerations = parseInt(cookies.chart_generations, 10);
+
+      if (chartGenerations >= 3) {
+        return res.status(403).json({
+          error: 'You have reached the limit of 3 free chart generations.',
+        });
+      } else {
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize(
+            'chart_generations',
+            (chartGenerations + 1).toString(),
+            { path: '/' }
+          )
+        );
+      }
+    } else {
+      res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('chart_generations', '1', { path: '/' })
+      );
+    }
+  }
 
   try {
     // Initialize the Bard with the cookie key
