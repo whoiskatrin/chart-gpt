@@ -2,6 +2,7 @@
 
 <div align="center">
     <img src="https://raw.githubusercontent.com/whoiskatrin/chart-gpt/main/public/chartgpt-og.png" width="600" />
+     <img src="https://github.com/whoiskatrin/chart-gpt/blob/main/update.png" width="900" />
 </div>
 
 ## Getting Started
