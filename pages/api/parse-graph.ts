@@ -1,6 +1,11 @@
 import Bard, { askAI } from 'bard-ai';
 import { NextApiRequest, NextApiResponse } from 'next';
 import cookie from 'cookie';
+import {
+  getUserIdByEmail,
+  getUserCredits,
+  decreaseUserCredits,
+} from '../../utils/helper';
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,7 +17,7 @@ export default async function handler(
   }
 
   const { prompt, session } = req.body;
-  const email = session?.user?.email;
+  const email = session.user.email;
 
   if (!session) {
     const cookies = cookie.parse(req.headers.cookie || '');
@@ -53,6 +58,17 @@ export default async function handler(
       await Bard.init(BARD_KEY);
     }
 
+    // row_id follows SQL naming convention in this case to comply with Supabase Stored Procedures
+    const row_id = await getUserIdByEmail(email);
+    const credits = await getUserCredits(row_id);
+    console.log('credits: ' + credits);
+
+    if (credits <= 0) {
+      return res
+        .status(403)
+        .json({ error: "You don't have enough credits to generate a chart" });
+    }
+
     // Use askAI function to get the response from Bard AI
     const outputData = await askAI(prompt);
     console.log(outputData);
@@ -62,6 +78,7 @@ export default async function handler(
     }
     if (outputData.includes('AI-model') || outputData.includes('programmed'))
       res.status(500).json({ error: 'Failed to process the input' });
+    await decreaseUserCredits(row_id);
     res.status(200).json(outputData);
   } catch (error) {
     console.error(error);
