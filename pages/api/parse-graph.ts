@@ -18,11 +18,14 @@ export default async function handler(
 
   const { prompt, session } = req.body;
   const email = session.user.email;
+  // row_id follows SQL naming convention in this case to comply with Supabase Stored Procedures
+  const row_id = await getUserIdByEmail(email);
+  const credits = await getUserCredits(row_id);
 
   if (!session) {
     const cookies = cookie.parse(req.headers.cookie || '');
 
-    if (cookies.chart_generations) {
+    if (cookies.chart_generations && credits > 0) {
       const chartGenerations = parseInt(cookies.chart_generations, 10);
 
       if (chartGenerations >= 3) {
@@ -57,11 +60,6 @@ export default async function handler(
     } else {
       await Bard.init(BARD_KEY);
     }
-
-    // row_id follows SQL naming convention in this case to comply with Supabase Stored Procedures
-    const row_id = await getUserIdByEmail(email);
-    const credits = await getUserCredits(row_id);
-    console.log('credits: ' + credits);
 
     if (credits <= 0) {
       return res
