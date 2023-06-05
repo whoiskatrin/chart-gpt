@@ -5,6 +5,7 @@ import SignIn from '../SignIn';
 import ThemeButton from '../molecules/ThemeButton';
 import Balance from '../Balance';
 import { parse } from 'cookie';
+import cookie from 'cookie';
 
 const Logo = () => (
   <svg
@@ -71,9 +72,19 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      const cookies = parse(document.cookie);
+
+      if (!cookies.chart_generations) {
+        document.cookie = `chart_generations=3;path=/;max-age=${
+          60 * 60 * 24 * 7
+        };samesite=lax`;
+      }
+
       const interval = setInterval(() => {
-        const cookies = parse(document.cookie);
-        const newGenerations = parseInt(cookies.chart_generations, 10);
+        const newGenerations = parseInt(
+          parse(document.cookie).chart_generations,
+          10
+        );
         if (newGenerations !== remainingGenerations) {
           setRemainingGenerations(newGenerations);
         }
