@@ -31,6 +31,17 @@ export default async function handler(
     ? parseInt(cookies.chart_generations, 10)
     : 3; // If chartGenerations cookie doesn't exist, set it to 3
 
+  if (!cookies.chart_generations) {
+    res.setHeader(
+      'Set-Cookie',
+      cookie.serialize('chart_generations', chartGenerations.toString(), {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        sameSite: 'lax',
+      })
+    );
+  }
+
   console.log('Initial chartGenerations:', chartGenerations); // Added for debugging
 
   if (
