@@ -1,11 +1,10 @@
+import { parse } from 'cookie';
 import Link from 'next/link';
 import { FC, PropsWithChildren, useEffect, useState } from 'react';
 import useSWR from 'swr';
+import Balance from '../Balance';
 import SignIn from '../SignIn';
 import ThemeButton from '../molecules/ThemeButton';
-import Balance from '../Balance';
-import { parse } from 'cookie';
-import cookie from 'cookie';
 
 const Logo = () => (
   <svg
@@ -108,7 +107,7 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
           <Logo />
         </Link>
 
-        <div className="flex space-x-2">
+        <div className="flex items-center space-x-2">
           {creditsRemaining !== undefined && (
             <Balance
               creditsRemaining={creditsRemaining}

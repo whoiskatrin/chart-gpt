@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Badge } from './ui/badge';
 
 interface BalanceProps {
   creditsRemaining: number | null | undefined;
@@ -22,9 +23,9 @@ export const Balance: FC<BalanceProps> = ({
   }
 
   return (
-    <div className="rounded-full font-sans flex items-center justify-center text-sm font-medium px-4 py-1 bg-gradient-to-r from-blue-500 ">
-      Remaining credits: {creditsRemaining}
-    </div>
+    <Badge className="font-sans font-medium">
+      {creditsRemaining} Remaining credits
+    </Badge>
   );
 };
 
