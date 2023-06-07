@@ -6,6 +6,7 @@ import { DefaultLayout } from '../components/templates/Layout';
 import '../styles/globals.css';
 import { SessionProvider } from 'next-auth/react';
 import { Session } from 'next-auth';
+import Script from 'next/script';
 
 function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
         enableSystem={true}
         defaultTheme="system"
       >
+        <Script src="https://example.com/script.js" />
         <DefaultLayout>
           <Component {...pageProps} />
         </DefaultLayout>
