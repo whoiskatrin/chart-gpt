@@ -107,12 +107,14 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
           <Logo />
         </Link>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           {creditsRemaining !== undefined && (
-            <Balance
-              creditsRemaining={creditsRemaining}
-              creditsLoading={isLoading}
-            />
+            <Link href="/buy-credits">
+              <Balance
+                creditsRemaining={creditsRemaining}
+                creditsLoading={isLoading}
+              />
+            </Link>
           )}
           <ThemeButton />
           <SignIn />

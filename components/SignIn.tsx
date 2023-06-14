@@ -40,7 +40,7 @@ const SignIn = ({
           <Link href="/buy-credits">
             <Button
               size="xs"
-              className="rounded-full font-sans flex items-center justify-center text-sm font-medium px-4 py-1 blue-button-w-gradient-border"
+              className="rounded-full font-sans items-center justify-center text-sm font-medium px-4 py-1 blue-button-w-gradient-border hidden sm:flex"
             >
               Buy credits
             </Button>
