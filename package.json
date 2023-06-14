@@ -51,6 +51,7 @@
     "file-saver": "^2.0.5",
     "framer-motion": "^10.12.7",
     "fs": "^0.0.1-security",
+    "googlebard": "^1.0.6",
     "graphql-request": "^6.0.0",
     "html-to-image": "^1.11.11",
     "i": "^0.3.7",

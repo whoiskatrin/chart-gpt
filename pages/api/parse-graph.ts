@@ -1,4 +1,4 @@
-import Bard, { askAI } from 'bard-ai';
+import { Bard } from 'googlebard';
 import { NextApiRequest, NextApiResponse } from 'next';
 import cookie from 'cookie';
 import {
@@ -17,8 +17,8 @@ export default async function handler(
   }
 
   const { prompt, session } = req.body;
-
   let credits = null;
+  let bot = null;
   let row_id = null;
 
   if (session) {
@@ -64,15 +64,15 @@ export default async function handler(
 
   try {
     // Initialize the Bard with the cookie key
-    const BARD_KEY = process.env.BARD_KEY;
+    const BARD_KEY = '__Secure-1PSID=' + process.env.BARD_KEY;
     if (typeof BARD_KEY === 'undefined') {
       // Handle the error, for example by logging it and exiting
       console.error('BARD_KEY is not set');
       process.exit(1);
     } else {
-      await Bard.init(BARD_KEY);
+      bot = new Bard(BARD_KEY);
     }
-    const outputData = await askAI(prompt);
+    const outputData = await bot.ask(prompt);
     if (
       !outputData ||
       outputData.includes('AI-model') ||
