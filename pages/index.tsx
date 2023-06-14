@@ -351,9 +351,9 @@ const NewHome: NextPage = () => {
             </ul>
           </Callout>
         ) : (
-          <div className="w-full max-w-full p-4">
+          <div className="w-full max-w-full p-3 md:p-4">
             {!isLoading && !shouldRenderChart && selectedIndex !== 1 ? (
-              <div className="text-left font-medium text-sm">
+              <div className="text-left font-medium text-sm max-w-fit mx-auto">
                 Some ideas to try:
                 <ul className="list-disc list-inside">
                   <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
