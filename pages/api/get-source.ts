@@ -8,7 +8,7 @@ export default async function handler(
 ): Promise<void> {
   try {
     const { inputData } = req.body;
-    const prompt = `Given the following text "${inputData}", identify and extract the data source. Follow the format "Data Source: {data source}". Please provide the full source name and do not add any additional words.`;
+    const prompt = `Given the following text "${inputData}", identify and extract the data source. Follow the format "Data source: {data source}". Please provide the full source name and do not add any additional words.`;
 
     const response = await fetch(OPENAI_API_URL, {
       method: 'POST',

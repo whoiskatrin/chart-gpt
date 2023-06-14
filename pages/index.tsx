@@ -1,6 +1,7 @@
 import {
   ArrowDownTrayIcon,
   ArrowPathIcon,
+  BookmarkSquareIcon,
   ChartBarIcon,
   ChevronDownIcon,
   ChevronUpIcon,
@@ -21,9 +22,8 @@ import {
   Title,
 } from '@tremor/react';
 import axios from 'axios';
-import { toPng } from 'html-to-image';
-
 import download from 'downloadjs';
+import { toPng } from 'html-to-image';
 import { NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -391,11 +391,20 @@ const NewHome: NextPage = () => {
                   className="bg-white dark:bg-black dark:ring-zinc-800 w-full"
                 >
                   {showTitle && (
-                    <Title className="dark:text-white">{inputValue}</Title>
+                    <Title className="dark:text-white text-base sm:text-lg">
+                      {inputValue}
+                    </Title>
                   )}
                   {!showLegend && <div className="h-5" />}
                   {chartComponent}
-                  <Title className="dark:text-white">{dataSource}</Title>
+                  <Subtitle className="dark:text-white flex items-center justify-center text-xs sm:text-base">
+                    <BookmarkSquareIcon
+                      height={20}
+                      width={20}
+                      className="mr-3 shrink-0"
+                    />
+                    {dataSource}
+                  </Subtitle>
                 </Card>
               )
             )}
