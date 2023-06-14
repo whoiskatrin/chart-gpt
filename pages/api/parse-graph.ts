@@ -1,4 +1,4 @@
-import { Bard } from 'googlebard';
+import fetch from 'node-fetch';
 import { NextApiRequest, NextApiResponse } from 'next';
 import cookie from 'cookie';
 import {
@@ -6,6 +6,15 @@ import {
   getUserCredits,
   decreaseUserCredits,
 } from '../../utils/helper';
+
+interface Candidate {
+  output: string;
+  safetyRatings: Array<{ category: string; probability: string }>;
+}
+
+interface ResponseData {
+  candidates: Candidate[];
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -63,16 +72,25 @@ export default async function handler(
   }
 
   try {
-    // Initialize the Bard with the cookie key
-    const BARD_KEY = '__Secure-1PSID=' + process.env.BARD_KEY;
-    if (typeof BARD_KEY === 'undefined') {
-      // Handle the error, for example by logging it and exiting
-      console.error('BARD_KEY is not set');
-      process.exit(1);
-    } else {
-      bot = new Bard(BARD_KEY);
-    }
-    const outputData = await bot.ask(prompt);
+    // Initialize the Bard
+    const API_KEY = process.env.BARD_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=${API_KEY}`;
+    const outputData = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: { text: prompt } }),
+    })
+      .then(response => response.json())
+      .then((data: any) => {
+        if ('candidates' in data) {
+          return (data as { candidates: Candidate[] }).candidates[0].output;
+        } else {
+          throw new Error('Invalid response data');
+        }
+      });
+
     if (
       !outputData ||
       outputData.includes('AI-model') ||
