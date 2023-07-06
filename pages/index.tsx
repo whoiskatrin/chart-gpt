@@ -289,7 +289,7 @@ const NewHome: NextPage = () => {
             </Button>
           </div>
         </a>
-        <div className="bg-zinc-100 h-fit md:h-[calc(100%-100px)] rounded-md py-12 lg:py-4 px-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative">
+        <div className="bg-zinc-100 h-fit sm:h-[calc(100%-100px)] rounded-md py-12 lg:py-4 px-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative">
           <div className="flex absolute top-4 left-4">
             <a
               href="https://github.com/whoiskatrin/chart-gpt"
