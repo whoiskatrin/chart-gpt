@@ -164,7 +164,7 @@ const NewHome: NextPage = () => {
       numCols={1}
       numColsSm={2}
       numColsLg={3}
-      className="gap-y-4 lg:gap-x-4 h-full "
+      className="gap-y-2 lg:gap-x-4 h-full"
     >
       <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2 order-last lg:order-first">
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
@@ -186,58 +186,32 @@ const NewHome: NextPage = () => {
               }
             }}
           />
-          <Button
-            type="button"
-            variant="light"
-            className="w-full outline-none focus:outline-none ring-0 focus:ring-0"
-            icon={showAdvanced ? ChevronUpIcon : ChevronDownIcon}
-            onClick={() => setShowAdvanced(!showAdvanced)}
-          >
-            Advanced
-          </Button>
-
-          {showAdvanced && (
-            <div className="space-y-4">
-              <SegmentedControl
-                selectedIndex={selectedIndex}
-                setSelectedIndex={setSelectedIndex}
-                items={[
-                  {
-                    children: 'Chart',
-                    icon: ChartBarIcon,
-                  },
-                  { children: 'PowerPoint', icon: PresentationChartLineIcon },
-                ]}
-                fullWidth
-              />
-              <div>
-                <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
-                <Select
-                  name="chart-type"
-                  value={chartType}
-                  onValueChange={setChartType}
-                  items={[
-                    { value: 'bar', textValue: 'Bar Chart' },
-                    { value: 'area', textValue: 'Area Chart' },
-                    { value: 'line', textValue: 'Line Chart' },
-                    { value: 'composed', textValue: 'Composed Chart' },
-                    { value: 'pie', textValue: 'Pie Chart' },
-                    { value: 'scatter', textValue: 'Scatter Chart' },
-                    { value: 'radar', textValue: 'Radar Chart' },
-                    { value: 'radialbar', textValue: 'Radial Bar Chart' },
-                    { value: 'treemap', textValue: 'Treemap' },
-                    { value: 'funnel', textValue: 'Funnel Chart' },
-                  ]}
-                />
-              </div>
-            </div>
-          )}
 
           <div className="py-2">
             <Divider className="h-px dark:bg-black" />
           </div>
 
           <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
+          <div>
+            <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
+            <Select
+              name="chart-type"
+              value={chartType}
+              onValueChange={setChartType}
+              items={[
+                { value: 'bar', textValue: 'Bar Chart' },
+                { value: 'area', textValue: 'Area Chart' },
+                { value: 'line', textValue: 'Line Chart' },
+                { value: 'composed', textValue: 'Composed Chart' },
+                { value: 'pie', textValue: 'Pie Chart' },
+                { value: 'scatter', textValue: 'Scatter Chart' },
+                { value: 'radar', textValue: 'Radar Chart' },
+                { value: 'radialbar', textValue: 'Radial Bar Chart' },
+                { value: 'treemap', textValue: 'Treemap' },
+                { value: 'funnel', textValue: 'Funnel Chart' },
+              ]}
+            />
+          </div>
           <div>
             <label
               htmlFor="title"
@@ -301,139 +275,155 @@ const NewHome: NextPage = () => {
         </Button>
       </aside>
 
-      <Col
-        numColSpan={1}
-        numColSpanSm={2}
-        numColSpanMd={2}
-        className="bg-zinc-100 rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black h-full dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative"
-      >
-        <div className="flex absolute top-4 left-4">
-          <a
-            href="https://github.com/whoiskatrin/chart-gpt"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
+      <Col numColSpan={1} numColSpanSm={2} numColSpanMd={2} className="h-full">
+        <a
+          href="https://www.usechannel.com/?utm_source=chart-gpt&utm_medium=website-advert&utm_campaign=july-sponsorshiphttps://www.usechannel.com/?utm_source=chart-gpt&utm_medium=website-advert&utm_campaign=july-sponsorship"
+          target="_blank"
+        >
+          <div className="w-full flex flex-row sm:flex-col gap-3 items-center sm:justify-center p-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black mb-2 rounded-md">
+            <p className="sm:text-center font-medium text-sm">
+              Connect your company&apos;s database and use AI to answer your
+              business questions.
+            </p>
             <Button
-              size="xs"
-              color="zinc"
+              className="mx-auto max-h-fit"
+              color="neutral"
               variant="secondary"
-              icon={Github}
-              className="dark:hover:bg-zinc-500/25 dark:text-zinc-100 rounded-full flex items-center justify-center text-sm font-medium px-4 py-1 text-black bg-white dark:bg-black"
             >
-              Star on GitHub
+              Ask a question
             </Button>
-          </a>
-        </div>
+          </div>
+        </a>
+        <div className="bg-zinc-100 h-full rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative">
+          <div className="flex absolute top-4 left-4">
+            <a
+              href="https://github.com/whoiskatrin/chart-gpt"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Button
+                size="xs"
+                color="zinc"
+                variant="secondary"
+                icon={Github}
+                className="dark:hover:bg-zinc-500/25 dark:text-zinc-100 rounded-full flex items-center justify-center text-sm font-medium px-4 py-1 text-black bg-white dark:bg-black"
+              >
+                Star on GitHub
+              </Button>
+            </a>
+          </div>
 
-        {error ? (
-          <Callout
-            className="my-6"
-            title="Something went wrong! Common issues:"
-            color="rose"
-          >
-            <ul className="list-disc list-inside">
-              <li>
-                Quota issues, make sure you have enough
-                <Link
-                  href="/buy-credits"
-                  className="hover:text-red-500 underline decoration-dotted underline-offset-2 mx-1"
-                >
-                  Credits
-                </Link>
-              </li>
-              <li>Try modifying the prompt, make it as clear as possible </li>
-              <li>
-                Make sure you are using the correct format for your chart type
-              </li>
-              <li>
-                AI model could be hallucinating, in this case, please, try again
-              </li>
-            </ul>
-          </Callout>
-        ) : (
-          <div className="w-full max-w-full p-3 md:p-4">
-            {!isLoading && !shouldRenderChart && selectedIndex !== 1 ? (
-              <div className="text-left font-medium text-sm max-w-fit mx-auto">
-                Some ideas to try:
-                <ul className="list-disc list-inside">
-                  <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
-                    Top 3 market leaders in the sneaker industry by millions in
-                    market share
-                  </li>
-                  <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
-                    Distribution of renewable energy sources in the United
-                    States by percentage
-                  </li>
-                  <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
-                    Average annual rainfall in major cities around the world in
-                    cm
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              !isLoading &&
-              !shouldRenderChart &&
-              selectedIndex === 1 && (
-                <div className="text-center">
-                  PowerPoint exports coming soon!
+          {error ? (
+            <Callout
+              className="my-6"
+              title="Something went wrong! Common issues:"
+              color="rose"
+            >
+              <ul className="list-disc list-inside">
+                <li>
+                  Quota issues, make sure you have enough
+                  <Link
+                    href="/buy-credits"
+                    className="hover:text-red-500 underline decoration-dotted underline-offset-2 mx-1"
+                  >
+                    Credits
+                  </Link>
+                </li>
+                <li>Try modifying the prompt, make it as clear as possible </li>
+                <li>
+                  Make sure you are using the correct format for your chart type
+                </li>
+                <li>
+                  AI model could be hallucinating, in this case, please, try
+                  again
+                </li>
+              </ul>
+            </Callout>
+          ) : (
+            <div className="w-full max-w-full p-3 md:p-4">
+              {!isLoading && !shouldRenderChart && selectedIndex !== 1 ? (
+                <div className="text-left font-medium text-sm max-w-fit mx-auto">
+                  Some ideas to try:
+                  <ul className="list-disc list-inside">
+                    <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
+                      Top 3 market leaders in the sneaker industry by millions
+                      in market share
+                    </li>
+                    <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
+                      Distribution of renewable energy sources in the United
+                      States by percentage
+                    </li>
+                    <li className="text-zinc-500 dark:text-zinc-400 text-sm font-normal ">
+                      Average annual rainfall in major cities around the world
+                      in cm
+                    </li>
+                  </ul>
                 </div>
-              )
-            )}
+              ) : (
+                !isLoading &&
+                !shouldRenderChart &&
+                selectedIndex === 1 && (
+                  <div className="text-center">
+                    PowerPoint exports coming soon!
+                  </div>
+                )
+              )}
 
-            {isLoading ? (
-              <div className="flex items-center justify-center h-96">
-                <LoadingDots />
-              </div>
-            ) : (
-              shouldRenderChart && (
-                <Card
-                  id="chart-card"
-                  className="bg-white dark:bg-black dark:ring-zinc-800 w-full"
-                >
-                  {showTitle && (
-                    <Title className="dark:text-white text-base sm:text-lg">
-                      {inputValue}
-                    </Title>
-                  )}
-                  {!showLegend && <div className="h-5" />}
-                  {chartComponent}
-                  <Subtitle className="dark:text-white flex items-center justify-center text-xs sm:text-base">
-                    <BookmarkSquareIcon
-                      height={20}
-                      width={20}
-                      className="mr-3 shrink-0"
-                    />
-                    {dataSource}
-                  </Subtitle>
-                </Card>
-              )
+              {isLoading ? (
+                <div className="flex items-center justify-center h-96">
+                  <LoadingDots />
+                </div>
+              ) : (
+                shouldRenderChart && (
+                  <Card
+                    id="chart-card"
+                    className="bg-white dark:bg-black dark:ring-zinc-800 w-full"
+                  >
+                    {showTitle && (
+                      <Title className="dark:text-white text-base sm:text-lg">
+                        {inputValue}
+                      </Title>
+                    )}
+                    {!showLegend && <div className="h-5" />}
+                    {chartComponent}
+                    <Subtitle className="dark:text-white flex items-center justify-center text-xs sm:text-base">
+                      <BookmarkSquareIcon
+                        height={20}
+                        width={20}
+                        className="mr-3 shrink-0"
+                      />
+                      {dataSource}
+                    </Subtitle>
+                  </Card>
+                )
+              )}
+            </div>
+          )}
+          <div className="flex absolute bottom-4 right-4 space-x-4">
+            {(chartData == undefined || chartData?.length > 0) && (
+              <Button
+                variant="light"
+                color="gray"
+                icon={ArrowPathIcon}
+                className="dark:text-zinc-100 dark:hover:text-zinc-300 outline-none"
+                type="submit"
+                form="generate-chart"
+              >
+                Retry
+              </Button>
+            )}
+            {shouldRenderChart && (
+              <Button
+                size="xs"
+                color="gray"
+                icon={ArrowDownTrayIcon}
+                className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
+                onClick={() => handleDownloadClick('#chart-card')}
+              >
+                Download
+              </Button>
             )}
           </div>
-        )}
-        <div className="flex absolute bottom-4 right-4 space-x-4">
-          {(chartData == undefined || chartData?.length > 0) && (
-            <Button
-              variant="light"
-              color="gray"
-              icon={ArrowPathIcon}
-              className="dark:text-zinc-100 dark:hover:text-zinc-300 outline-none"
-              type="submit"
-              form="generate-chart"
-            >
-              Retry
-            </Button>
-          )}
-          {shouldRenderChart && (
-            <Button
-              size="xs"
-              color="gray"
-              icon={ArrowDownTrayIcon}
-              className="dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-900 outline-none"
-              onClick={() => handleDownloadClick('#chart-card')}
-            >
-              Download
-            </Button>
-          )}
         </div>
       </Col>
     </Grid>
