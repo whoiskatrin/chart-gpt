@@ -149,7 +149,7 @@ const NewHome: NextPage = () => {
     if (!element) {
       return;
     }
-    toPng(element).then(function (dataUrl) {
+    toPng(element).then(function(dataUrl) {
       download(dataUrl, 'chart.png');
     });
   };
@@ -159,7 +159,7 @@ const NewHome: NextPage = () => {
       numCols={1}
       numColsSm={2}
       numColsLg={3}
-      className="gap-y-2 lg:gap-x-4 h-full"
+      className="gap-y-4 lg:gap-x-4 h-full"
     >
       <aside className="h-full shrink-0 w-full flex flex-col justify-between lg:col-span-1 col-span-2 order-last lg:order-first">
         <form id="generate-chart" onSubmit={handleSubmit} className="space-y-4">
@@ -181,6 +181,14 @@ const NewHome: NextPage = () => {
               }
             }}
           />
+          <Button
+            type="submit"
+            form="generate-chart"
+            className="w-full cursor-pointer py-2 px-4 mt-4 rounded-full blue-button-w-gradient-border [text-shadow:0_0_1px_rgba(0,0,0,0.25)] shadow-2xl items-center justify-center false"
+            icon={PencilSquareIcon}
+          >
+            Draw
+          </Button>
 
           <div className="py-2">
             <Divider className="h-px dark:bg-black" />
@@ -244,7 +252,7 @@ const NewHome: NextPage = () => {
               setChecked={setShowTitle}
             />
           </div>
-          <div className="flex justify-between w-full">
+          <div className="flex justify-between w-full pb-6">
             <label
               htmlFor="legend"
               className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none"
@@ -260,14 +268,6 @@ const NewHome: NextPage = () => {
             />
           </div>
         </form>
-        <Button
-          type="submit"
-          form="generate-chart"
-          className="w-full cursor-pointer py-2 px-4 mt-4 mb-4 lg:mb-0 rounded-full blue-button-w-gradient-border [text-shadow:0_0_1px_rgba(0,0,0,0.25)] shadow-2xl items-center justify-center false"
-          icon={PencilSquareIcon}
-        >
-          Draw
-        </Button>
       </aside>
 
       <Col numColSpan={1} numColSpanSm={2} numColSpanMd={2} className="h-full">
@@ -275,8 +275,8 @@ const NewHome: NextPage = () => {
           href="https://www.usechannel.com/?utm_source=chart-gpt&utm_medium=website-advert&utm_campaign=july-sponsorshiphttps://www.usechannel.com/?utm_source=chart-gpt&utm_medium=website-advert&utm_campaign=july-sponsorship"
           target="_blank"
         >
-          <div className="w-full flex flex-row sm:flex-col gap-3 items-center sm:justify-center p-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black mb-2 rounded-md">
-            <p className="sm:text-center font-medium text-sm">
+          <div className="w-full flex flex-row md:flex-col gap-3 items-center md:justify-center p-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black mb-2 rounded-md">
+            <p className="md:text-center font-medium text-sm">
               Connect your company&apos;s database and use AI to answer your
               business questions.
             </p>
@@ -289,7 +289,7 @@ const NewHome: NextPage = () => {
             </Button>
           </div>
         </a>
-        <div className="bg-zinc-100 h-full rounded-md py-12 px-4 lg:py-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative">
+        <div className="bg-zinc-100 h-fit md:h-[calc(100%-100px)] rounded-md py-12 lg:py-4 px-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative">
           <div className="flex absolute top-4 left-4">
             <a
               href="https://github.com/whoiskatrin/chart-gpt"
