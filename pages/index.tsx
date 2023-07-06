@@ -2,11 +2,7 @@ import {
   ArrowDownTrayIcon,
   ArrowPathIcon,
   BookmarkSquareIcon,
-  ChartBarIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
   PencilSquareIcon,
-  PresentationChartLineIcon,
   SwatchIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -31,7 +27,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import Chart from '../components/ChartComponent';
 import Github from '../components/GitHub';
 import LoadingDots from '../components/LoadingDots';
-import { SegmentedControl } from '../components/atoms/SegmentedControl';
 import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
