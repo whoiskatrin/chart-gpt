@@ -7,6 +7,18 @@ import {
   decreaseUserCredits,
 } from '../../utils/helper';
 
+import {
+  ContextAPI,
+  ContextAPIOptionalParams,
+  KnownMessageRole,
+  Credential,
+} from '@contextco/context-node';
+
+const options: ContextAPIOptionalParams = {
+  credential: new Credential(process.env.CONTEXT_TOKEN!),
+};
+const c = new ContextAPI(options);
+
 interface Candidate {
   output: string;
   safetyRatings: Array<{ category: string; probability: string }>;
