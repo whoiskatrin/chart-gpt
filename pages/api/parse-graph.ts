@@ -17,7 +17,7 @@ import {
 const options: ContextAPIOptionalParams = {
   credential: new Credential(process.env.CONTEXT_TOKEN!),
 };
-const c = new ContextAPI(options);
+const context = new ContextAPI(options);
 
 interface Candidate {
   output: string;
@@ -38,8 +38,7 @@ export default async function handler(
   }
 
   const { prompt, session } = req.body;
-  let credits = null;
-  let bot = null;
+  let credits = 0;
   let row_id = null;
 
   if (session) {
@@ -128,6 +127,21 @@ export default async function handler(
         );
       }
     }
+    // Log the conversation using the Context API
+    await context.log.conversation({
+      body: {
+        conversation: {
+          messages: [
+            { message: prompt, role: KnownMessageRole.User, rating: 0 },
+            {
+              message: outputData,
+              role: KnownMessageRole.Assistant,
+              rating: 1,
+            },
+          ],
+        },
+      },
+    });
     res.status(200).json(outputData);
   } catch (error) {
     console.error(error);
