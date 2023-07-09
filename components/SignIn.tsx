@@ -59,7 +59,7 @@ const SignIn = ({
               {session.user?.image ? (
                 <Avatar>
                   <AvatarImage
-                    src={session.user.image + '/slkafj'}
+                    src={session.user.image}
                     alt="user profile image"
                   />
                   <AvatarFallback>
