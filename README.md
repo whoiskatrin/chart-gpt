@@ -17,7 +17,7 @@ cd chart-gpt
 Then duplicate the `.env.example` template with `cp .env.example .env` and add your OpenAI API key:
 
 ```
-OPENAI_API_KEY="your-api-key"
+BARD_KEY="your-api-key"
 ```
 
 Then install the dependencies and start the development server:
@@ -31,6 +31,8 @@ yarn dev
 ```
 
 This will start the development server at http://localhost:3000.
+
+To use the full functionality of the credit system as well, you'll need to setup Supabase, Stripe, and NextAuth with Google — and their respective environment variables found in the `.env.example` file.
 
 ## Contributing
 
