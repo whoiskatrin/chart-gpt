@@ -14,7 +14,7 @@ git clone https://github.com/whoiskatrin/chart-gpt.git
 cd chart-gpt
 ```
 
-Then duplicate the `.env.example` template with `cp .env.example .env` and add your OpenAI API key:
+Then duplicate the `.env.example` template with `cp .env.example .env` and add your PaLM API key:
 
 ```
 BARD_KEY="your-api-key"
