@@ -27,6 +27,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import Chart from '../components/ChartComponent';
 import Github from '../components/GitHub';
 import LoadingDots from '../components/LoadingDots';
+import { GreenOrb, OrangeOrb, WhiteOrb } from '../components/atoms/Orbs';
 import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
@@ -64,7 +65,6 @@ const CHART_TYPES = [
 const NewHome: NextPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showAdvanced, setShowAdvanced] = useState(false);
   const [chartType, setChartType] = useState('bar');
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState(false);
@@ -149,7 +149,7 @@ const NewHome: NextPage = () => {
     if (!element) {
       return;
     }
-    toPng(element).then(function(dataUrl) {
+    toPng(element).then(function (dataUrl) {
       download(dataUrl, 'chart.png');
     });
   };
@@ -275,18 +275,21 @@ const NewHome: NextPage = () => {
           href="https://www.usechannel.com/?utm_source=chart-gpt&utm_medium=website-advert&utm_campaign=july-sponsorshiphttps://www.usechannel.com/?utm_source=chart-gpt&utm_medium=website-advert&utm_campaign=july-sponsorship"
           target="_blank"
         >
-          <div className="w-full flex flex-row md:flex-col gap-3 items-center md:justify-center p-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black mb-2 rounded-md">
-            <p className="md:text-center font-medium text-sm">
-              Connect your company&apos;s database and use AI to answer your
-              business questions.
+          <div className="w-full flex flex-col md:flex-row gap-3 items-center md:justify-between justify-center p-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black bg-white mb-2 rounded-md hover:saturate-150 transition-all relative overflow-hidden">
+            <WhiteOrb />
+            <GreenOrb />
+            <OrangeOrb />
+            <p className="md:text-center text-lg">
+              Connect your{' '}
+              <span className="font-bold text-orange-500">database</span> and{' '}
+              <wbr />
+              answer your{' '}
+              <span className="font-bold text-orange-500">
+                business questions
+              </span>
+              .
             </p>
-            <Button
-              className="mx-auto max-h-fit"
-              color="neutral"
-              variant="secondary"
-            >
-              Ask a question
-            </Button>
+            <Button color="orange">Ask a question</Button>
           </div>
         </a>
         <div className="bg-zinc-100 h-fit sm:h-[calc(100%-100px)] rounded-md py-12 lg:py-4 px-4 border border-zinc-200 dark:border-zinc-900 dark:bg-black dot-grid-gradient-light dark:dot-grid-gradient-dark flex justify-center items-center relative">
