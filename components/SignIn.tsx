@@ -5,8 +5,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button } from '@tremor/react';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import Image from 'next/image';
 import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,13 +57,15 @@ const SignIn = ({
               className="border-0 rounded-full flex items-center justify-center text-sm font-medium px-2 py-1 dark:hover:bg-zinc-500/25 dark:text-zinc-100"
             >
               {session.user?.image ? (
-                <Image
-                  src={session.user.image}
-                  alt="user profile image"
-                  height={24}
-                  width={24}
-                  className="h-6 w-6 rounded-full"
-                />
+                <Avatar>
+                  <AvatarImage
+                    src={session.user.image}
+                    alt="user profile image"
+                  />
+                  <AvatarFallback>
+                    {session.user.name?.slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
               ) : (
                 (session.user?.name || session.user?.email || 'User').charAt(0)
               )}
