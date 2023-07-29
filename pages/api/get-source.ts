@@ -1,6 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const OPENAI_API_URL = 'https://api.openai.withlogging.com/v1/chat/completions';
+interface Candidate {
+  output: string;
+  safetyRatings: Array<{ category: string; probability: string }>;
+}
+
+interface ResponseData {
+  candidates: Candidate[];
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,31 +15,26 @@ export default async function handler(
 ): Promise<void> {
   try {
     const { inputData } = req.body;
-    const prompt = `Given the following text "${inputData}", identify and extract the data source. Follow the format "Data source: {data source}". Please provide the full source name and do not add any additional words.`;
+    const prompt = `Given the following text "${inputData}", identify and extract the data source. Follow the format "Data source: {data source}". Please provide the source name and do not add any additional words, keep it short.`;
 
-    const response = await fetch(OPENAI_API_URL, {
+    const API_KEY = process.env.BARD_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=${API_KEY}`;
+    const source = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        'X-Api-Key': `Bearer ${process.env.REPORT_KEY}`,
       },
-      body: JSON.stringify({
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.5,
-        max_tokens: 100,
-        n: 1,
-        model: 'gpt-3.5-turbo',
-        frequency_penalty: 0.5,
-        presence_penalty: 0.5,
-      }),
-    });
-
-    const data = await response.json();
-
-    const source = data.choices[0].message.content.trim();
-
-    console.log('SOURCE:' + source);
+      body: JSON.stringify({ prompt: { text: prompt } }),
+    })
+      .then(response => response.json())
+      .then((data: any) => {
+        console.log(data); // <-- This will print the API response
+        if ('candidates' in data) {
+          return (data as { candidates: Candidate[] }).candidates[0].output;
+        } else {
+          throw new Error('Invalid response data');
+        }
+      });
 
     res.status(200).send(source);
   } catch (error) {
