@@ -1,6 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const OPENAI_API_URL = 'https://api.openai.withlogging.com/v1/chat/completions';
+interface Candidate {
+  output: string;
+  safetyRatings: Array<{ category: string; probability: string }>;
+}
+
+interface ResponseData {
+  candidates: Candidate[];
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,27 +18,35 @@ export default async function handler(
     const prompt = `The following are the possible chart types supported by the code provided: area, bar, line, composed, scatter, pie, radar, radialBar, treemap, and funnel. Given the user input: ${inputData}, identify the chart type the user wants to display. Return just one word
 `;
 
-    const response = await fetch(OPENAI_API_URL, {
+    // Initialize the Bard
+    const API_KEY = process.env.BARD_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=${API_KEY}`;
+    const chartType = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        'X-Api-Key': `Bearer ${process.env.REPORT_KEY}`,
       },
-      body: JSON.stringify({
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.5,
-        max_tokens: 10,
-        n: 1,
-        model: 'gpt-3.5-turbo',
-        frequency_penalty: 0.5,
-        presence_penalty: 0.5,
-      }),
-    });
+      body: JSON.stringify({ prompt: { text: prompt } }),
+    })
+      .then(response => response.json())
+      .then((data: any) => {
+        console.log(data); // <-- This will print the API response
+        if ('candidates' in data) {
+          return (data as { candidates: Candidate[] }).candidates[0].output;
+        } else {
+          throw new Error('Invalid response data');
+        }
+      });
 
-    const result = await response.json();
-    console.log(result);
-    const chartType = result.choices[0].message.content.trim();
+    if (
+      !chartType ||
+      chartType.includes('AI-model') ||
+      chartType.includes('programmed') ||
+      chartType.includes('model') ||
+      chartType.includes('AI')
+    ) {
+      throw new Error('Failed to generate output data');
+    }
 
     res.status(200).json(chartType);
   } catch (error) {
