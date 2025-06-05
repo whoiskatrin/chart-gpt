@@ -116,6 +116,9 @@ export const DefaultLayout: FC<PropsWithChildren> = ({ children }) => {
               />
             </Link>
           )}
+          <Link href="/features" className="px-2 text-sm">
+            Features
+          </Link>
           <ThemeButton />
           <SignIn />
         </div>

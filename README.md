@@ -7,6 +7,8 @@
 
 ## Getting Started
 
+This fork replaces Supabase and NextAuth with [Clerk](https://clerk.com/) for authentication and uses a Cloudflare Worker to store user credits.
+
 To get started, first clone this repository:
 
 ```
@@ -14,10 +16,12 @@ git clone https://github.com/whoiskatrin/chart-gpt.git
 cd chart-gpt
 ```
 
-Then duplicate the `.env.example` template with `cp .env.example .env` and add your PaLM API key:
+Then duplicate the `.env.example` template with `cp .env.example .env` and add your API keys for the language models you'd like to use:
 
 ```
-BARD_KEY="your-api-key"
+BARD_KEY="your-bard-key"
+OPENAI_API_KEY="your-openai-key"
+ANTHROPIC_API_KEY="your-claude-key"
 ```
 
 Then install the dependencies and start the development server:
@@ -32,7 +36,15 @@ yarn dev
 
 This will start the development server at http://localhost:3000.
 
-To use the full functionality of the credit system as well, you'll need to setup Supabase, Stripe, and NextAuth with Google — and their respective environment variables found in the `.env.example` file.
+To use the full functionality of the credit system as well, you'll need to setup Clerk for authentication, Stripe for payments and a Cloudflare Worker to store user credits. Configure the required environment variables found in the `.env.example` file.
+
+You can choose which model to generate chart data from by selecting "Bard", "OpenAI" or "Claude" in the UI. The backend automatically routes the request to the respective API.
+
+To run the unit tests:
+
+```
+npm test
+```
 
 ## Contributing
 

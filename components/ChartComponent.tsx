@@ -59,6 +59,9 @@ interface ChartProps {
   chartType: string;
   color?: Color;
   showLegend?: boolean;
+  width?: number;
+  height?: number;
+  showGrid?: boolean;
 }
 
 //TODO: dynamic keys instead of default value
@@ -67,6 +70,9 @@ export const Chart: React.FC<ChartProps> = ({
   chartType,
   color,
   showLegend = true,
+  width = 500,
+  height = 300,
+  showGrid = true,
 }) => {
   const value = data.length > 0 ? Object.keys(data[0])[1] : 'value';
 
@@ -80,7 +86,7 @@ export const Chart: React.FC<ChartProps> = ({
       case 'area':
         return (
           <AreaChart
-            className="h-[350px]"
+            className="w-full h-full"
             data={data}
             index="name"
             categories={[value]}
@@ -92,7 +98,7 @@ export const Chart: React.FC<ChartProps> = ({
       case 'bar':
         return (
           <BarChart
-            className="h-[350px]"
+            className="w-full h-full"
             data={data}
             index="name"
             categories={[value]}
@@ -106,7 +112,7 @@ export const Chart: React.FC<ChartProps> = ({
       case 'line':
         return (
           <LineChart
-            className="h-[300px]"
+            className="w-full h-full"
             data={data}
             index="name"
             categories={[value]}
@@ -125,12 +131,14 @@ export const Chart: React.FC<ChartProps> = ({
                 className="mb-5 justify-end"
               />
             )}
-            <ComposedChart width={500} height={260} data={data}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                horizontal
-                vertical={false}
-              />
+            <ComposedChart width={width} height={height} data={data}>
+              {showGrid && (
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  horizontal
+                  vertical={false}
+                />
+              )}
               <XAxis
                 dataKey="name"
                 tickLine={false}
@@ -182,12 +190,14 @@ export const Chart: React.FC<ChartProps> = ({
                 />
               </div>
             )}
-            <ScatterChart width={500} height={260} data={data}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                horizontal
-                vertical={false}
-              />
+            <ScatterChart width={width} height={height} data={data}>
+              {showGrid && (
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  horizontal
+                  vertical={false}
+                />
+              )}
               <XAxis
                 dataKey="name"
                 tickLine={false}
@@ -218,7 +228,7 @@ export const Chart: React.FC<ChartProps> = ({
       case 'pie':
         return (
           <DonutChart
-            className="h-[300px]"
+            className="w-full h-full"
             data={data}
             category={value}
             index="name"
@@ -252,11 +262,11 @@ export const Chart: React.FC<ChartProps> = ({
               cx={300}
               cy={250}
               outerRadius={150}
-              width={600}
-              height={500}
+              width={width}
+              height={height}
               data={data}
             >
-              <PolarGrid />
+              {showGrid && <PolarGrid />}
               <PolarAngleAxis dataKey="name" />
               <PolarRadiusAxis />
               <Tooltip legendColor={getTremorColor(color || 'blue')} />
@@ -282,8 +292,8 @@ export const Chart: React.FC<ChartProps> = ({
               </div>
             )}
             <RadialBarChart
-              width={500}
-              height={300}
+              width={width}
+              height={height}
               cx={150}
               cy={150}
               innerRadius={20}
@@ -316,8 +326,8 @@ export const Chart: React.FC<ChartProps> = ({
               </div>
             )}
             <Treemap
-              width={500}
-              height={260}
+              width={width}
+              height={height}
               data={data}
               dataKey="value"
               stroke="#fff"
@@ -340,7 +350,7 @@ export const Chart: React.FC<ChartProps> = ({
                 />
               </div>
             )}
-            <FunnelChart width={500} height={300} data={data}>
+            <FunnelChart width={width} height={height} data={data}>
               <Tooltip legendColor={getTremorColor(color || 'blue')} />
               <Funnel dataKey="value" color={getTremorColor(color || 'blue')} />
             </FunnelChart>
@@ -352,9 +362,11 @@ export const Chart: React.FC<ChartProps> = ({
   };
 
   return (
-    <ResponsiveContainer width={'100%'} height={'100%'}>
-      {renderChart()}
-    </ResponsiveContainer>
+    <div style={{ width, height }}>
+      <ResponsiveContainer width="100%" height="100%">
+        {renderChart()}
+      </ResponsiveContainer>
+    </div>
   );
 };
 

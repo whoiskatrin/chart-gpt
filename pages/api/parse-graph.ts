@@ -1,11 +1,8 @@
 import fetch from 'node-fetch';
 import { NextApiRequest, NextApiResponse } from 'next';
 import cookie from 'cookie';
-import {
-  getUserIdByEmail,
-  getUserCredits,
-  decreaseUserCredits,
-} from '../../utils/helper';
+import { getUserCredits, decreaseUserCredits } from '../../utils/helper';
+import { generateText, ModelProvider } from '../../lib/llm';
 
 import {
   ContextAPI,
@@ -19,14 +16,6 @@ const options: ContextAPIOptionalParams = {
 };
 const context = new ContextAPI(options);
 
-interface Candidate {
-  output: string;
-  safetyRatings: Array<{ category: string; probability: string }>;
-}
-
-interface ResponseData {
-  candidates: Candidate[];
-}
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,13 +26,15 @@ export default async function handler(
     return;
   }
 
-  const { prompt, session } = req.body;
+  const { prompt, email, provider = 'bard' } = req.body as {
+    prompt: string;
+    email?: string;
+    provider?: ModelProvider;
+  };
   let credits = 0;
-  let row_id = null;
 
-  if (session) {
-    row_id = await getUserIdByEmail(session.user.email);
-    credits = await getUserCredits(row_id);
+  if (email) {
+    credits = await getUserCredits(email);
   }
 
   const cookies = cookie.parse(req.headers.cookie || '');
@@ -65,7 +56,7 @@ export default async function handler(
   console.log('Initial chartGenerations:', chartGenerations); // Added for debugging
 
   if (
-    (chartGenerations <= 0 && !session) ||
+    (chartGenerations <= 0 && !email) ||
     (chartGenerations <= 0 && credits <= 0)
   ) {
     res.status(403).json({
@@ -75,7 +66,7 @@ export default async function handler(
     return;
   }
 
-  if (session && credits <= 0) {
+  if (email && credits <= 0) {
     res.status(403).json({
       error: "You don't have enough credits to generate a chart",
     });
@@ -83,24 +74,7 @@ export default async function handler(
   }
 
   try {
-    // Initialize the Bard
-    const API_KEY = process.env.BARD_KEY;
-    const url = `https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=${API_KEY}`;
-    const outputData = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ prompt: { text: prompt } }),
-    })
-      .then(response => response.json())
-      .then((data: any) => {
-        if ('candidates' in data) {
-          return (data as { candidates: Candidate[] }).candidates[0].output;
-        } else {
-          throw new Error('Invalid response data');
-        }
-      });
+    const outputData = await generateText(provider, prompt);
 
     if (
       !outputData ||
@@ -111,10 +85,10 @@ export default async function handler(
     ) {
       throw new Error('Failed to generate output data');
     }
-    if (session) {
-      await decreaseUserCredits(row_id);
+    if (email) {
+      await decreaseUserCredits(email);
     } else {
-      if (!session && chartGenerations > 0) {
+      if (!email && chartGenerations > 0) {
         chartGenerations -= 1;
         console.log('Decreased chartGenerations:', chartGenerations); // Added for debugging
         res.setHeader(

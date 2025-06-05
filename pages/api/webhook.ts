@@ -1,8 +1,6 @@
 import Stripe from 'stripe';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { addUserCredits, getUserIdByEmail } from '../../utils/helper';
-import { supabase } from '../../lib/supabase';
-import { v4 as uuidv4 } from 'uuid';
+import { addUserCredits } from '../../utils/helper';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2022-11-15',
@@ -82,20 +80,7 @@ const webhookHandler = async (
           break;
       }
 
-      const row_id = await getUserIdByEmail(userEmail);
-      // Update user_credits in users table after purchase
-      await addUserCredits(row_id, credit_amount);
-
-      const createdAt = new Date(charge.created * 1000).toISOString();
-      await supabase.from('purchases').insert([
-        {
-          id: uuidv4(),
-          user_id: row_id,
-          credit_amount: credit_amount,
-          created_at: createdAt,
-          status: charge.status,
-        },
-      ]);
+      await addUserCredits(userEmail!, credit_amount);
     } else {
       console.warn(`🤷‍♀️ Unhandled event type: ${event.type}`);
     }

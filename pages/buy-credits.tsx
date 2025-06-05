@@ -1,7 +1,7 @@
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { Card, Icon, Metric, Subtitle, Title } from '@tremor/react';
 import clsx from 'clsx';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import Head from 'next/head';
 import Script from 'next/script';
 import { useEffect, useState } from 'react';
@@ -34,7 +34,7 @@ const BuyButtons = [
 ];
 
 export default function Pricing() {
-  const { data: session } = useSession();
+  const { user } = useUser();
   const [credits, setCredits] = useState([100]);
   const [button, setButton] = useState<JSX.Element | null>(
     <stripe-buy-button
@@ -127,7 +127,7 @@ export default function Pricing() {
           onValueChange={setCredits}
         />
         {/* TODO: Handle the scenario of logged out, need to prompt to sign in */}
-        {session && (
+        {user && (
           <>
             <div className={clsx({ hidden: !(credits[0] <= 20) })}>
               <stripe-buy-button

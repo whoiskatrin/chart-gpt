@@ -4,13 +4,12 @@ import { AppProps } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 import { DefaultLayout } from '../components/templates/Layout';
 import '../styles/globals.css';
-import { SessionProvider } from 'next-auth/react';
-import { Session } from 'next-auth';
+import { ClerkProvider } from '@clerk/nextjs';
 import Script from 'next/script';
 
-function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider session={pageProps.session}>
+    <ClerkProvider publishableKey={process.env.CLERK_PUBLISHABLE_KEY}>
       <ThemeProvider
         attribute="class"
         enableSystem={true}
@@ -23,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
         <Toaster position="bottom-center" />
       </ThemeProvider>
       <Analytics />
-    </SessionProvider>
+    </ClerkProvider>
   );
 }
 

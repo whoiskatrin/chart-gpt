@@ -21,9 +21,10 @@ import axios from 'axios';
 import download from 'downloadjs';
 import { toPng } from 'html-to-image';
 import { NextPage } from 'next';
-import { getSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import React, { useCallback, useMemo, useState } from 'react';
+import { ModelProvider } from '../lib/llm';
 import Chart from '../components/ChartComponent';
 import Github from '../components/GitHub';
 import LoadingDots from '../components/LoadingDots';
@@ -31,6 +32,7 @@ import { GreenOrb, OrangeOrb, WhiteOrb } from '../components/atoms/Orbs';
 import { IconColor, Select } from '../components/atoms/Select';
 import { TextArea } from '../components/atoms/TextArea';
 import { Toggle } from '../components/atoms/Toggle';
+import { Slider } from '../components/ui/slider';
 
 const SectionHeader = ({
   stepNumber,
@@ -72,8 +74,13 @@ const NewHome: NextPage = () => {
   const [showTitle, setShowTitle] = useState(true);
   const [showLegend, setShowLegend] = useState(true);
   const [chartColor, setChartColor] = useState<Color>('blue');
+  const [chartWidth, setChartWidth] = useState(500);
+  const [chartHeight, setChartHeight] = useState(300);
+  const [showGrid, setShowGrid] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dataSource, setDataSource] = useState('Statista');
+  const [modelProvider, setModelProvider] = useState<ModelProvider>('bard');
+  const { user } = useUser();
 
   const chartComponent = useMemo(() => {
     return (
@@ -82,9 +89,20 @@ const NewHome: NextPage = () => {
         chartType={chartType}
         color={chartColor as Color}
         showLegend={showLegend}
+        width={chartWidth}
+        height={chartHeight}
+        showGrid={showGrid}
       />
     );
-  }, [chartData, chartType, chartColor, showLegend]);
+  }, [
+    chartData,
+    chartType,
+    chartColor,
+    showLegend,
+    chartWidth,
+    chartHeight,
+    showGrid,
+  ]);
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -102,11 +120,12 @@ const NewHome: NextPage = () => {
     try {
       const chartTypeResponse = await axios.post('/api/get-type', {
         inputData: inputValue,
+        provider: modelProvider,
       });
 
       console.log({ res: chartTypeResponse.data });
 
-      const session = await getSession();
+      const email = user?.primaryEmailAddress?.emailAddress;
 
       if (!CHART_TYPES.includes(chartTypeResponse.data.toLowerCase()))
         return setError(true);
@@ -117,18 +136,21 @@ const NewHome: NextPage = () => {
 
       const chartDataResponse = await axios.post('/api/parse-graph', {
         prompt: libraryPrompt,
-        session: session,
+        email,
+        provider: modelProvider,
       });
 
       // Extract JSON from the initial data
       const parsedJSON = await axios.post('/api/get-json', {
         inputData: chartDataResponse.data,
         chart: chartType,
+        provider: modelProvider,
       });
 
       // Extract data source from the text
       const dataSource = await axios.post('/api/get-source', {
         inputData: chartDataResponse.data,
+        provider: modelProvider,
       });
 
       console.log('JSON:' + parsedJSON.data);
@@ -196,6 +218,18 @@ const NewHome: NextPage = () => {
 
           <SectionHeader stepNumber={2} title="Make any tweaks to the chart" />
           <div>
+            <Text className="mb-1 dark:text-zinc-400">AI model</Text>
+            <Select
+              value={modelProvider}
+              onValueChange={value => setModelProvider(value as ModelProvider)}
+              items={[
+                { value: 'bard', textValue: 'Bard' },
+                { value: 'openai', textValue: 'OpenAI' },
+                { value: 'claude', textValue: 'Claude' },
+              ]}
+            />
+          </div>
+          <div>
             <Text className="mb-1 dark:text-zinc-400">Chart type</Text>
             <Select
               name="chart-type"
@@ -236,6 +270,38 @@ const NewHome: NextPage = () => {
               ]}
             />
           </div>
+          <div>
+            <label
+              htmlFor="width"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none mb-3"
+            >
+              Width
+            </label>
+            <Slider
+              id="width"
+              min={300}
+              max={900}
+              step={50}
+              value={[chartWidth]}
+              onValueChange={v => setChartWidth(v[0])}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="height"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none mb-3"
+            >
+              Height
+            </label>
+            <Slider
+              id="height"
+              min={200}
+              max={600}
+              step={50}
+              value={[chartHeight]}
+              onValueChange={v => setChartHeight(v[0])}
+            />
+          </div>
 
           <div className="flex justify-between w-full">
             <label
@@ -265,6 +331,21 @@ const NewHome: NextPage = () => {
               label="Show chart Legend"
               checked={showLegend}
               setChecked={setShowLegend}
+            />
+          </div>
+          <div className="flex justify-between w-full pb-6">
+            <label
+              htmlFor="grid"
+              className="text-zinc-500 dark:text-zinc-400 text-sm font-normal select-none"
+            >
+              Show Grid Lines
+            </label>
+            <Toggle
+              id="grid"
+              size="sm"
+              label="Show Grid Lines"
+              checked={showGrid}
+              setChecked={setShowGrid}
             />
           </div>
         </form>

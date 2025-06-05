@@ -1,5 +1,4 @@
 import { useState, FC } from 'react';
-import { supabase } from '../lib/supabase';
 import { getStripe } from '../lib/stripe';
 import {
   Elements,
