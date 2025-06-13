@@ -6,16 +6,23 @@ import Header from '@/components/Header'
 import LandingPage from '@/components/LandingPage'
 import PricingPage from '@/components/PricingPage'
 import ChartTestSuite from '@/components/ChartTestSuite'
+import EChartsDemo from '@/components/EChartsDemo'
+import ResponsiveTest from '@/components/ResponsiveTest'
 import './styles/globals.css'
 
-type Page = 'landing' | 'pricing' | 'settings' | 'test-charts'
+type Page = 'landing' | 'pricing' | 'settings' | 'test-charts' | 'echarts-demo' | 'responsive-test'
 
 function App() {
   const { user, isLoading } = useAuthStore()
   const [currentPage, setCurrentPage] = useState<Page>('landing')
+  const [landingPageKey, setLandingPageKey] = useState(0)
 
   const handleNavigate = (page: Page) => {
     setCurrentPage(page)
+    // Force re-render of LandingPage to reset its state when navigating to landing
+    if (page === 'landing') {
+      setLandingPageKey(prev => prev + 1)
+    }
   }
 
   const renderPage = () => {
@@ -24,6 +31,10 @@ function App() {
         return <PricingPage />
       case 'test-charts':
         return <ChartTestSuite onNavigate={handleNavigate} />
+      case 'echarts-demo':
+        return <EChartsDemo />
+      case 'responsive-test':
+        return <ResponsiveTest onNavigate={handleNavigate} />
       case 'settings':
         return (
           <div className="min-h-screen bg-[#1a1a1a] py-16">
@@ -36,7 +47,7 @@ function App() {
           </div>
         )
       default:
-        return <LandingPage onNavigate={handleNavigate} />
+        return <LandingPage key={landingPageKey} onNavigate={handleNavigate} />
     }
   }
 

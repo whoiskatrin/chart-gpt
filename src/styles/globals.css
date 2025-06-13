@@ -29,7 +29,17 @@
 
 @layer components {
   .chart-container {
-    @apply relative;
+    @apply relative w-full h-full overflow-hidden;
+    min-height: 350px;
+    background-color: #ffffff;
+    border-radius: 8px;
+  }
+  
+  .chart-container canvas,
+  .chart-container svg {
+    @apply w-full h-full;
+    max-width: 100% !important;
+    max-height: 100% !important;
   }
   
   .chart-controls {
@@ -87,17 +97,49 @@
   }
 }
 
-/* Chart.js responsive overrides */
-.chartjs-render-monitor {
-  animation: chartjs-render-animation 0.8s linear;
+/* ECharts responsive overrides */
+.echarts-for-react {
+  @apply w-full h-full;
+  min-height: 350px !important;
 }
 
-@keyframes chartjs-render-animation {
+.echarts-for-react > div {
+  @apply w-full h-full;
+  min-height: 350px !important;
+}
+
+.echarts-for-react canvas,
+.echarts-for-react svg {
+  @apply w-full h-full;
+  min-height: 350px !important;
+}
+
+/* Responsive chart sizing */
+@media (max-width: 640px) {
+  .chart-container {
+    min-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    min-height: 200px;
+  }
+}
+
+/* Chart animation */
+.chart-container {
+  animation: chartFadeIn 0.8s ease-in-out;
+}
+
+@keyframes chartFadeIn {
   from {
-    opacity: 0.8;
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 

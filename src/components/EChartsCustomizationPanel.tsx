@@ -203,7 +203,7 @@ export const EChartsCustomizationPanel: React.FC<EChartsCustomizationPanelProps>
             <div>
               <label className="block text-sm font-medium text-[#f5f5f5] mb-2">Theme</label>
               <div className="grid grid-cols-2 gap-2">
-                {['light', 'dark', 'business', 'vibrant'].map((theme) => (
+                {['light', 'dark'].map((theme) => (
                   <button
                     key={theme}
                     onClick={() => updateCustomization({ theme })}
@@ -216,6 +216,97 @@ export const EChartsCustomizationPanel: React.FC<EChartsCustomizationPanelProps>
                     {theme.charAt(0).toUpperCase() + theme.slice(1)}
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* Font Family */}
+            <div>
+              <label className="block text-sm font-medium text-[#f5f5f5] mb-2">Font Family</label>
+              <select
+                value={config.customization.typography?.fontFamily || 'Inter, system-ui, sans-serif'}
+                onChange={(e) => updateCustomization({ 
+                  typography: { 
+                    ...config.customization.typography, 
+                    fontFamily: e.target.value 
+                  }
+                })}
+                className="w-full p-2 bg-[#2a2a2a] border border-[#3a3a3a] rounded text-[#f5f5f5] text-sm"
+              >
+                <option value="Inter, system-ui, sans-serif">Inter</option>
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="Times New Roman, serif">Times New Roman</option>
+                <option value="Courier New, monospace">Courier New</option>
+                <option value="Helvetica, sans-serif">Helvetica</option>
+                <option value="Roboto, sans-serif">Roboto</option>
+              </select>
+            </div>
+
+            {/* Font Sizes */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-[#f5f5f5]">Font Sizes</label>
+              
+              <div>
+                <label className="block text-xs text-[#a3a3a3] mb-1">Title Size</label>
+                <input
+                  type="range"
+                  min="14"
+                  max="32"
+                  value={config.customization.typography?.fontSize?.title || 18}
+                  onChange={(e) => updateCustomization({ 
+                    typography: { 
+                      ...config.customization.typography,
+                      fontSize: {
+                        ...config.customization.typography?.fontSize,
+                        title: parseInt(e.target.value)
+                      }
+                    }
+                  })}
+                  className="w-full accent-[#cc785c]"
+                />
+                <span className="text-xs text-[#a3a3a3]">{config.customization.typography?.fontSize?.title || 18}px</span>
+              </div>
+
+              <div>
+                <label className="block text-xs text-[#a3a3a3] mb-1">Label Size</label>
+                <input
+                  type="range"
+                  min="8"
+                  max="18"
+                  value={config.customization.typography?.fontSize?.labels || 12}
+                  onChange={(e) => updateCustomization({ 
+                    typography: { 
+                      ...config.customization.typography,
+                      fontSize: {
+                        ...config.customization.typography?.fontSize,
+                        labels: parseInt(e.target.value)
+                      }
+                    }
+                  })}
+                  className="w-full accent-[#cc785c]"
+                />
+                <span className="text-xs text-[#a3a3a3]">{config.customization.typography?.fontSize?.labels || 12}px</span>
+              </div>
+
+              <div>
+                <label className="block text-xs text-[#a3a3a3] mb-1">Legend Size</label>
+                <input
+                  type="range"
+                  min="10"
+                  max="20"
+                  value={config.customization.typography?.fontSize?.legend || 14}
+                  onChange={(e) => updateCustomization({ 
+                    typography: { 
+                      ...config.customization.typography,
+                      fontSize: {
+                        ...config.customization.typography?.fontSize,
+                        legend: parseInt(e.target.value)
+                      }
+                    }
+                  })}
+                  className="w-full accent-[#cc785c]"
+                />
+                <span className="text-xs text-[#a3a3a3]">{config.customization.typography?.fontSize?.legend || 14}px</span>
               </div>
             </div>
 

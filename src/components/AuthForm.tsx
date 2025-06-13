@@ -3,7 +3,11 @@ import { BarChart3, Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import toast from 'react-hot-toast'
 
-export const AuthForm: React.FC = () => {
+interface AuthFormProps {
+  onNavigate?: (page: 'landing') => void
+}
+
+export const AuthForm: React.FC<AuthFormProps> = ({ onNavigate }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const { signInWithGoogle } = useAuthStore()
@@ -30,10 +34,13 @@ export const AuthForm: React.FC = () => {
         {/* Logo and Header */}
         <div className="text-center">
           <div className="flex justify-center">
-            <div className="flex items-center space-x-2">
+            <button
+              onClick={() => onNavigate && onNavigate('landing')}
+              className="flex items-center space-x-2 hover:opacity-80 transition-opacity cursor-pointer"
+            >
               <BarChart3 className="h-10 w-10 text-orange-500" />
               <span className="text-2xl font-bold text-vercel-black">Chart GPT</span>
-            </div>
+            </button>
           </div>
           <h2 className="mt-6 text-3xl font-bold text-vercel-black">
             Welcome to Chart GPT

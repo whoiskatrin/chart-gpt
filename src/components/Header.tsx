@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/authStore'
 import toast from 'react-hot-toast'
 
 interface HeaderProps {
-  onNavigate?: (page: 'dashboard' | 'pricing' | 'settings') => void
+  onNavigate?: (page: 'landing' | 'pricing' | 'settings' | 'test-charts' | 'echarts-demo' | 'responsive-test') => void
   currentPage?: string
 }
 
@@ -38,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage }) => {
         <div className="flex justify-between items-center h-16">
           {/* Left Side - Logo */}
           <button
-            onClick={() => onNavigate && onNavigate('dashboard')}
+            onClick={() => onNavigate && onNavigate('landing')}
             className="flex items-center space-x-2 text-[#f5f5f5] hover:opacity-80 transition-opacity cursor-pointer"
           >
             <div className="p-2 bg-gradient-to-br from-[#cc785c]/20 to-[#cc785c]/10 rounded-xl">
@@ -171,16 +171,16 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage }) => {
             <div className="space-y-2">
               <button
                 onClick={() => {
-                  onNavigate && onNavigate('dashboard')
+                  onNavigate && onNavigate('landing')
                   setIsMenuOpen(false)
                 }}
                 className={`block w-full text-left px-3 py-2 text-sm font-medium transition-colors rounded-lg ${
-                  currentPage === 'dashboard'
+                  currentPage === 'landing'
                     ? 'text-[#cc785c] bg-[#cc785c]/20'
                     : 'text-[#a3a3a3] hover:text-[#f5f5f5] hover:bg-[#2a2a2a]'
                 }`}
               >
-                Dashboard
+                Home
               </button>
               <button
                 onClick={() => {

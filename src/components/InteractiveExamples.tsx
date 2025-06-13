@@ -21,59 +21,60 @@ interface ExampleData {
 
 const EXAMPLE_DATA: ExampleData[] = [
   {
-    id: 'revenue-growth',
-    title: 'Revenue Growth Analysis',
-    description: 'Track quarterly revenue performance with trend analysis and forecasting',
-    prompt: 'Create a line chart showing quarterly revenue growth from Q1 2022 to Q4 2023: Q1 2022: $1.2M, Q2: $1.5M, Q3: $1.8M, Q4: $2.1M, Q1 2023: $2.4M, Q2: $2.8M, Q3: $3.2M, Q4: $3.6M. Include trend line and growth percentages.',
+    id: 'student-grades',
+    title: 'Student Grade Distribution',
+    description: 'Perfect for students and educators to track academic performance across subjects',
+    prompt: 'Create a bar chart showing my semester grades: Mathematics 85, Physics 78, Chemistry 92, Biology 88, History 76, English 90. Use vibrant colors and show grade values.',
+    category: 'analytics',
+    icon: Target,
+    gradient: 'from-emerald-400/20 via-teal-400/20 to-cyan-400/20',
+    chartType: 'bar',
+    stats: { growth: '85.2', total: 'Avg', change: '+3.2%' },
+    miniChart: [85, 78, 92, 88, 76, 90]
+  },
+  {
+    id: 'research-data',
+    title: 'Research Survey Results',
+    description: 'Ideal for researchers and academics to visualize survey and study data',
+    prompt: 'Show a pie chart of survey responses for "Preferred Learning Method": Visual Learning 35%, Hands-on Practice 28%, Reading 20%, Audio Learning 12%, Group Discussion 5%. Include percentages and clear labels.',
+    category: 'business',
+    icon: Users,
+    gradient: 'from-purple-400/20 via-indigo-400/20 to-blue-500/20',
+    chartType: 'pie',
+    stats: { total: '35%', change: 'Visual', growth: 'Top Choice' },
+    miniChart: [35, 28, 20, 12, 5]
+  },
+  {
+    id: 'business-revenue',
+    title: 'Monthly Business Revenue',
+    description: 'Essential for business owners and entrepreneurs to track financial growth',
+    prompt: 'Create a line chart showing monthly revenue for small business: Jan $4,500, Feb $5,200, Mar $4,800, Apr $6,100, May $7,300, Jun $8,200, Jul $9,100, Aug $8,800. Show growth trend with smooth curves.',
     category: 'business',
     icon: TrendingUp,
-    gradient: 'from-emerald-400/20 via-cyan-400/20 to-blue-500/20',
+    gradient: 'from-green-400/20 via-emerald-400/20 to-teal-400/20',
     chartType: 'line',
-    stats: { growth: '+23.4%', total: '$3.6M', change: '+$2.4M' },
-    miniChart: [1.2, 1.5, 1.8, 2.1, 2.4, 2.8, 3.2, 3.6]
+    stats: { growth: '+96%', total: '$8.8K', change: '+$4.3K' },
+    miniChart: [4.5, 5.2, 4.8, 6.1, 7.3, 8.2, 9.1, 8.8]
   },
   {
-    id: 'market-distribution',
-    title: 'Global Market Share',
-    description: 'Comprehensive breakdown of market presence across major regions worldwide',
-    prompt: 'Show a pie chart of our global market share by region: North America 42%, Europe 28%, Asia Pacific 18%, Latin America 8%, Middle East & Africa 4%. Use professional colors and include percentages.',
-    category: 'business',
-    icon: Globe,
-    gradient: 'from-blue-400/20 via-indigo-400/20 to-purple-500/20',
-    chartType: 'pie',
-    stats: { total: '42%', change: '+3.2%', growth: 'Leading' },
-    miniChart: [42, 28, 18, 8, 4]
-  },
-  {
-    id: 'performance-metrics',
-    title: 'Multi-Channel Performance',
-    description: 'Compare performance across different channels with detailed analytics',
-    prompt: 'Create a bar chart comparing performance metrics across channels: Organic Search 85%, Social Media 72%, Email Marketing 68%, Paid Ads 91%, Direct Traffic 76%, Referrals 59%. Show as percentage values with different colors.',
-    category: 'analytics',
-    icon: BarChart3,
-    gradient: 'from-purple-400/20 via-pink-400/20 to-red-400/20',
-    chartType: 'bar',
-    stats: { growth: '+12.8%', total: '75.2%', change: '+8.4%' },
-    miniChart: [85, 72, 68, 91, 76, 59]
-  },
-  {
-    id: 'user-engagement',
-    title: 'User Engagement Trends',
-    description: 'Daily active users and engagement patterns with seasonal analysis',
-    prompt: 'Show an area chart of daily active users over 30 days: Start at 25,000 users, show natural fluctuations with weekends being lower (18,000-22,000) and weekdays higher (28,000-35,000), ending at 32,000. Include smooth curves and gradient fill.',
-    category: 'analytics',
-    icon: Users,
-    gradient: 'from-cyan-400/20 via-teal-400/20 to-emerald-400/20',
+    id: 'personal-fitness',
+    title: 'Personal Fitness Progress',
+    description: 'Great for personal tracking - fitness goals, budgets, habits, and lifestyle data',
+    prompt: 'Show an area chart of weekly workout minutes over 8 weeks: Week 1: 120 min, Week 2: 150 min, Week 3: 135 min, Week 4: 180 min, Week 5: 200 min, Week 6: 225 min, Week 7: 210 min, Week 8: 240 min. Use gradient fill.',
+    category: 'growth',
+    icon: Activity,
+    gradient: 'from-orange-400/20 via-red-400/20 to-pink-400/20',
     chartType: 'area',
-    stats: { growth: '+28%', total: '32K', change: '+7K' },
-    miniChart: [25, 30, 32, 28, 22, 19, 20, 29, 33, 35, 31, 24, 21, 23, 31, 34, 36, 32, 25, 22, 24, 30, 33, 35, 34, 26, 23, 25, 31, 32]
+    stats: { growth: '+100%', total: '240min', change: '+120min' },
+    miniChart: [120, 150, 135, 180, 200, 225, 210, 240]
   }
 ]
 
 const CATEGORIES = [
   { id: 'all', label: 'All Examples', icon: BarChart3 },
   { id: 'business', label: 'Business', icon: TrendingUp },
-  { id: 'analytics', label: 'Analytics', icon: Activity }
+  { id: 'analytics', label: 'Academic', icon: Target },
+  { id: 'growth', label: 'Personal', icon: Activity }
 ]
 
 interface InteractiveExamplesProps {
@@ -343,9 +344,9 @@ export const InteractiveExamples: React.FC<InteractiveExamplesProps> = ({ onExam
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              Transform{' '}
+              Perfect for{' '}
               <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                Data into Stories
+                Everyone
               </span>
             </motion.h1>
             
@@ -355,8 +356,8 @@ export const InteractiveExamples: React.FC<InteractiveExamplesProps> = ({ onExam
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              Generate beautiful, customizable charts from any data query using AI.{' '}
-              <span className="text-[#f5f5f5] font-medium">Ask about anything</span> and get instant visualizations.
+              From students tracking grades to businesses analyzing revenue.{' '}
+              <span className="text-[#f5f5f5] font-medium">Anyone can create stunning charts</span> in seconds.
             </motion.p>
 
             {/* Feature Pills */}
@@ -367,10 +368,10 @@ export const InteractiveExamples: React.FC<InteractiveExamplesProps> = ({ onExam
               transition={{ delay: 0.6 }}
             >
               {[
-                { icon: '🚀', text: 'Instant Generation' },
-                { icon: '🎨', text: 'Full Customization' },
-                { icon: '🧠', text: 'AI Powered' },
-                { icon: '📊', text: '9+ Chart Types' }
+                { icon: '🎓', text: 'Students & Educators' },
+                { icon: '🔬', text: 'Researchers' },
+                { icon: '💼', text: 'Business Owners' },
+                { icon: '📈', text: 'Personal Tracking' }
               ].map((feature, index) => (
                 <div 
                   key={index}
@@ -452,67 +453,6 @@ export const InteractiveExamples: React.FC<InteractiveExamplesProps> = ({ onExam
         </motion.div>
       </AnimatePresence>
 
-      {/* Bottom Call to Action */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="text-center pt-12"
-      >
-        <div className="relative">
-          {/* Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-400/10 via-pink-400/10 to-red-400/10 rounded-3xl blur-2xl" />
-          
-          {/* Content Card */}
-          <div className="relative bg-[#0f0f0f] border border-[#2a2a2a] rounded-3xl p-8 max-w-2xl mx-auto">
-            <div className="space-y-4">
-              <div className="flex justify-center mb-4">
-                <div className="p-3 bg-gradient-to-br from-[#cc785c]/20 to-[#cc785c]/10 rounded-2xl">
-                  <Sparkles className="w-6 h-6 text-[#cc785c]" />
-                </div>
-              </div>
-              
-              <h3 className="text-2xl font-medium text-[#f5f5f5] mb-3">
-                Ready to Create Your Own?
-              </h3>
-              
-              <p className="text-lg text-[#a3a3a3] leading-relaxed">
-                Describe any data you want to visualize and we'll create the perfect chart for you.{' '}
-                <span className="text-[#f5f5f5] font-medium">No coding required</span> – just tell us what you need.
-              </p>
-
-              {/* Example Queries */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-4">
-                {[
-                  '📊 "Monthly sales by product category"',
-                  '📈 "Stock price trends over 6 months"',
-                  '🏆 "Top 10 performing regions"',
-                  '⏰ "Website traffic by hour of day"'
-                ].map((query, index) => (
-                  <div 
-                    key={index}
-                    className="bg-[#1a1a1a] border border-[#2a2a2a] px-3 py-2 rounded-xl text-sm text-[#a3a3a3] hover:border-[#cc785c]/30 transition-colors duration-300"
-                  >
-                    {query}
-                  </div>
-                ))}
-              </div>
-
-              {/* Scroll Indicator */}
-              <div className="pt-6">
-                <motion.div
-                  animate={{ y: [0, 8, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="inline-flex items-center space-x-2 text-[#cc785c] text-sm font-medium"
-                >
-                  <span>Scroll down to get started</span>
-                  <ChevronDown className="w-4 h-4" />
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
     </div>
   )
 }

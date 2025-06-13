@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { EChartsOption } from 'echarts'
 import { ChartConfig, ChartExportOptions } from '@/types/chart'
@@ -33,7 +33,44 @@ export const EChartsRenderer: React.FC<EChartsRendererProps> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [selectedDataPoint, setSelectedDataPoint] = useState<any>(null)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
   const chartRef = useRef<ReactECharts>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Resize observer to handle container size changes
+  const handleResize = useCallback(() => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect()
+      setContainerSize({ width: rect.width, height: rect.height })
+      
+      // Trigger chart resize
+      const chartInstance = chartRef.current?.getEchartsInstance()
+      if (chartInstance) {
+        setTimeout(() => {
+          chartInstance.resize()
+        }, 100)
+      }
+    }
+  }, [])
+
+  // Set up resize observer
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(handleResize)
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current)
+    }
+
+    // Also listen to window resize for good measure
+    window.addEventListener('resize', handleResize)
+    
+    // Initial size calculation
+    handleResize()
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [handleResize])
 
   useEffect(() => {
     console.log('🎯 EChartsRenderer received config:', config)
@@ -43,11 +80,23 @@ export const EChartsRenderer: React.FC<EChartsRendererProps> = ({
       const transformed = EChartsDataTransformer.transformData(config)
       console.log('✅ ECharts config generated:', transformed)
       
-      // Add event handlers
+      // Add event handlers and responsive settings
       if (transformed.option && interactive) {
         transformed.option.tooltip = {
           ...transformed.option.tooltip,
           trigger: 'item'
+        }
+      }
+
+      // Ensure the chart is responsive with proper spacing
+      if (transformed.option && (config.type === 'bar' || config.type === 'line' || config.type === 'area' || config.type === 'scatter')) {
+        transformed.option.grid = {
+          ...transformed.option.grid,
+          left: '8%',
+          right: '8%',
+          top: '12%',
+          bottom: '12%',
+          containLabel: true
         }
       }
       
@@ -216,125 +265,107 @@ export const EChartsRenderer: React.FC<EChartsRendererProps> = ({
     )
   }
 
-  const chartHeight = isFullscreen ? '90vh' : height
-  const chartWidth = isFullscreen ? '100vw' : width
+  const getResponsiveHeight = () => {
+    if (isFullscreen) return '90vh'
+    if (typeof height === 'number') return `${height}px`
+    return height
+  }
+
+  const getResponsiveWidth = () => {
+    if (isFullscreen) return '100vw'
+    return '100%' // Always use 100% for responsive behavior
+  }
 
   return (
-    <div className={`${className} ${isFullscreen ? 'fixed inset-0 z-50 bg-white dark:bg-gray-900 p-4' : 'relative'}`}>
-      {/* Title and subtitle */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {getTitle()}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {getSubtitle()}
-            </p>
+    <div 
+      ref={containerRef}
+      className={`${className} ${isFullscreen ? 'fixed inset-0 z-50 bg-white dark:bg-gray-900 p-4' : 'relative w-full h-full'}`}
+    >
+      {/* Chart Controls - Compact header */}
+      {showControls && (
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+            {getTitle()}
           </div>
-          
-          {/* Chart Controls */}
-          {showControls && (
-            <div className="flex gap-2">
-              <button
-                onClick={zoomIn}
-                className="p-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                title="Zoom In"
-              >
-                <ZoomIn className="w-4 h-4" />
-              </button>
-              <button
-                onClick={zoomOut}
-                className="p-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                title="Zoom Out"
-              >
-                <ZoomOut className="w-4 h-4" />
-              </button>
-              <button
-                onClick={resetZoom}
-                className="p-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                title="Reset Zoom"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
-              <button
-                onClick={toggleFullscreen}
-                className="p-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                title="Toggle Fullscreen"
-              >
-                <Maximize2 className="w-4 h-4" />
-              </button>
-            </div>
-          )}
+          <div className="flex gap-1 flex-shrink-0">
+            <button
+              onClick={zoomIn}
+              className="p-1.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              title="Zoom In"
+            >
+              <ZoomIn className="w-3 h-3" />
+            </button>
+            <button
+              onClick={zoomOut}
+              className="p-1.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              title="Zoom Out"
+            >
+              <ZoomOut className="w-3 h-3" />
+            </button>
+            <button
+              onClick={resetZoom}
+              className="p-1.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              title="Reset Zoom"
+            >
+              <RotateCcw className="w-3 h-3" />
+            </button>
+            <button
+              onClick={toggleFullscreen}
+              className="p-1.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              title="Toggle Fullscreen"
+            >
+              <Maximize2 className="w-3 h-3" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
       
-      {/* ECharts Component */}
-      <div className="chart-container" style={{ width: chartWidth, height: chartHeight }}>
+      {/* ECharts Component - Takes up most of the space */}
+      <div 
+        className="chart-container w-full flex-1" 
+        style={{ 
+          width: getResponsiveWidth(), 
+          height: showControls ? 'calc(100% - 50px)' : '100%',
+          minHeight: isFullscreen ? '80vh' : '350px'
+        }}
+      >
         <ReactECharts
           ref={chartRef}
           option={echartsConfig.option}
           style={{ width: '100%', height: '100%' }}
-          theme={theme === 'dark' ? 'dark' : undefined}
+          theme={undefined}
           onEvents={interactive ? getChartEvents() : undefined}
           opts={{
             renderer: echartsConfig.renderer || 'canvas',
             devicePixelRatio: window.devicePixelRatio || 1
           }}
+          notMerge={true}
+          lazyUpdate={true}
         />
       </div>
-      
-      {/* Data Summary */}
-      {config.data.datasets.length > 0 && (
-        <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <div className="text-xs text-gray-600 dark:text-gray-400 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
-              <span className="font-medium">Type:</span>
-              <span className="ml-1 capitalize">{config.type}</span>
-            </div>
-            <div>
-              <span className="font-medium">Data Points:</span>
-              <span className="ml-1">{config.data.datasets[0].data.length}</span>
-            </div>
-            <div>
-              <span className="font-medium">Series:</span>
-              <span className="ml-1">{config.data.datasets.length}</span>
-            </div>
-            <div>
-              <span className="font-medium">Interactive:</span>
-              <span className="ml-1">{interactive ? 'Yes' : 'No'}</span>
-            </div>
-          </div>
-          {selectedDataPoint && (
-            <div className="text-xs text-blue-600 dark:text-blue-400 mt-2">
-              💡 Click on chart elements to explore data interactively
-            </div>
-          )}
-        </div>
-      )}
-      
-      {/* Export Controls */}
+
+      {/* Export Controls - Compact footer */}
       {showControls && (
-        <div className="chart-controls mt-4 flex gap-2 justify-center">
+        <div className="flex gap-1 justify-center mt-2">
           <button
             onClick={() => exportChart('png')}
-            className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm flex items-center gap-2"
+            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs flex items-center gap-1"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-3 h-3" />
             PNG
           </button>
           <button
             onClick={() => exportChart('jpg')}
-            className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm flex items-center gap-2"
+            className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs flex items-center gap-1"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-3 h-3" />
             JPG
           </button>
           <button
             onClick={() => exportChart('svg')}
-            className="px-3 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 text-sm flex items-center gap-2"
+            className="px-2 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 text-xs flex items-center gap-1"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-3 h-3" />
             SVG
           </button>
         </div>

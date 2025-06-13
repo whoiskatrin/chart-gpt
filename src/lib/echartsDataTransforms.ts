@@ -107,12 +107,16 @@ export class EChartsDataTransformer {
       type: 'bar' as const,
       data: dataset.data,
       itemStyle: {
-        color: this.getSeriesColor(dataset, index, customization)
+        color: this.getSeriesColor(dataset, index, customization),
+        borderRadius: [(customization as any).borderRadius || 0, (customization as any).borderRadius || 0, 0, 0]
       },
       label: {
-        show: customization.dataLabels?.enabled || false,
-        position: 'top'
+        show: (customization as any).dataLabels?.enabled || false,
+        position: 'top',
+        fontSize: customization.typography?.fontSize?.labels || 12,
+        fontFamily: customization.typography?.fontFamily || 'Inter'
       },
+      stack: (customization as any).stacked ? 'total' : undefined,
       emphasis: {
         focus: 'series'
       }
@@ -135,13 +139,16 @@ export class EChartsDataTransformer {
       },
       legend: {
         show: options?.plugins?.legend?.display !== false,
-        top: 30,
-        data: data.datasets.map(d => d.label)
+        top: '8%',
+        left: 'center',
+        data: data.datasets.map(d => d.label),
+        orient: 'horizontal'
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+        left: '8%',
+        right: '8%',
+        top: options?.plugins?.legend?.display !== false ? '25%' : '15%',
+        bottom: '15%',
         containLabel: true
       },
       xAxis: {
@@ -169,19 +176,20 @@ export class EChartsDataTransformer {
       name: dataset.label || `Series ${index + 1}`,
       type: 'line' as const,
       data: dataset.data,
-      smooth: customization.curves?.enabled || false,
+      smooth: (customization as any).curves?.enabled || (customization as any).smooth || false,
       lineStyle: {
         color: this.getSeriesColor(dataset, index, customization),
-        width: customization.line?.width || 2
+        width: (customization as any).line?.width || 2
       },
       itemStyle: {
-        color: this.getSeriesColor(dataset, index, customization)
+        color: this.getSeriesColor(dataset, index, customization),
+        borderRadius: (customization as any).borderRadius || 0
       },
       areaStyle: dataset.fill ? {
         color: this.getSeriesColor(dataset, index, customization, 0.3)
       } : undefined,
       symbol: 'circle',
-      symbolSize: 6,
+      symbolSize: (customization as any).symbolSize || 6,
       emphasis: {
         focus: 'series'
       }
@@ -201,13 +209,16 @@ export class EChartsDataTransformer {
       },
       legend: {
         show: options?.plugins?.legend?.display !== false,
-        top: 30,
-        data: data.datasets.map(d => d.label)
+        top: '8%',
+        left: 'center',
+        data: data.datasets.map(d => d.label),
+        orient: 'horizontal'
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+        left: '8%',
+        right: '8%',
+        top: options?.plugins?.legend?.display !== false ? '25%' : '15%',
+        bottom: '15%',
         containLabel: true
       },
       xAxis: {
@@ -232,18 +243,19 @@ export class EChartsDataTransformer {
       name: dataset.label || `Series ${index + 1}`,
       type: 'line' as const,
       data: dataset.data,
-      smooth: true,
+      smooth: (customization as any).smooth || true,
       areaStyle: {
         color: this.getSeriesColor(dataset, index, customization, 0.6)
       },
       lineStyle: {
         color: this.getSeriesColor(dataset, index, customization),
-        width: 2
+        width: (customization as any).line?.width || 2
       },
       itemStyle: {
         color: this.getSeriesColor(dataset, index, customization)
       },
-      stack: customization.stacked ? 'area' : undefined,
+      symbolSize: (customization as any).symbolSize || 6,
+      stack: (customization as any).stacked ? 'area' : undefined,
       emphasis: {
         focus: 'series'
       }
@@ -262,13 +274,16 @@ export class EChartsDataTransformer {
       },
       legend: {
         show: options?.plugins?.legend?.display !== false,
-        top: 30,
-        data: data.datasets.map(d => d.label)
+        top: '8%',
+        left: 'center',
+        data: data.datasets.map(d => d.label),
+        orient: 'horizontal'
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+        left: '8%',
+        right: '8%',
+        top: options?.plugins?.legend?.display !== false ? '25%' : '15%',
+        bottom: '15%',
         containLabel: true
       },
       xAxis: {
@@ -304,15 +319,17 @@ export class EChartsDataTransformer {
       },
       legend: {
         show: options?.plugins?.legend?.display !== false,
-        orient: 'vertical',
-        left: 'left',
-        data: data.labels
+        orient: 'horizontal',
+        bottom: '8%',
+        left: 'center',
+        data: data.labels,
+        itemGap: 15
       },
       series: [{
         name: dataset.label || 'Data',
         type: 'pie' as const,
-        radius: isDoughnut ? ['40%', '70%'] : '70%',
-        center: ['50%', '60%'],
+        radius: isDoughnut ? ['30%', '60%'] : '60%',
+        center: ['50%', '45%'],
         data: pieData,
         itemStyle: {
           borderRadius: customization.borderRadius || 0,
@@ -414,12 +431,15 @@ export class EChartsDataTransformer {
       },
       legend: {
         show: options?.plugins?.legend?.display !== false,
-        top: 30,
-        data: data.datasets.map(d => d.label)
+        top: '8%',
+        left: 'center',
+        data: data.datasets.map(d => d.label),
+        orient: 'horizontal'
       },
       radar: {
         indicator,
-        radius: '60%'
+        radius: '55%',
+        center: ['50%', '55%']
       },
       series
     }
@@ -663,14 +683,93 @@ export class EChartsDataTransformer {
   private static applyGlobalStyling(option: EChartsOption, customization: ChartCustomization): EChartsOption {
     const styled = { ...option }
 
+    // Apply theme-based background color
+    const theme = (customization as any).theme || 'light'
+    styled.backgroundColor = theme === 'light' ? '#ffffff' : 'transparent'
+    
     // Apply color palette
     if (customization.colorPalette) {
       styled.color = ECHARTS_COLOR_PALETTES[customization.colorPalette] || ECHARTS_COLOR_PALETTES.default
     }
 
-    // Apply background color
-    if (customization.colors?.background) {
-      styled.backgroundColor = customization.colors.background
+    // Apply theme-based text styles
+    const textColor = theme === 'light' ? '#333333' : '#f5f5f5'
+    const axisColor = theme === 'light' ? '#cccccc' : '#4a4a4a'
+    const gridColor = theme === 'light' ? '#f0f0f0' : '#3a3a3a'
+    
+    if (styled.title) {
+      styled.title = {
+        ...styled.title,
+        textStyle: {
+          ...styled.title.textStyle,
+          color: textColor,
+          fontFamily: customization.typography?.fontFamily || 'Inter, system-ui, sans-serif',
+          fontSize: customization.typography?.fontSize?.title || 18
+        }
+      }
+    }
+
+    // Apply theme-based legend styles
+    if (styled.legend) {
+      styled.legend = {
+        ...styled.legend,
+        textStyle: {
+          color: textColor,
+          fontFamily: customization.typography?.fontFamily || 'Inter, system-ui, sans-serif',
+          fontSize: customization.typography?.fontSize?.legend || 14
+        },
+        itemGap: 20,
+        itemWidth: 14,
+        itemHeight: 14
+      }
+    }
+
+    // Apply theme-based axis styles
+    if (styled.xAxis) {
+      const xAxisConfig = Array.isArray(styled.xAxis) ? styled.xAxis[0] : styled.xAxis
+      styled.xAxis = {
+        ...xAxisConfig,
+        axisLine: {
+          lineStyle: { color: axisColor }
+        },
+        axisTick: {
+          lineStyle: { color: axisColor }
+        },
+        axisLabel: {
+          color: theme === 'light' ? '#666666' : '#a3a3a3',
+          fontFamily: customization.typography?.fontFamily || 'Inter, system-ui, sans-serif',
+          fontSize: customization.typography?.fontSize?.labels || 12
+        },
+        splitLine: {
+          lineStyle: { color: gridColor, type: 'dashed' }
+        }
+      }
+    }
+
+    if (styled.yAxis) {
+      const yAxisConfig = Array.isArray(styled.yAxis) ? styled.yAxis[0] : styled.yAxis
+      styled.yAxis = {
+        ...yAxisConfig,
+        axisLine: {
+          lineStyle: { color: axisColor }
+        },
+        axisTick: {
+          lineStyle: { color: axisColor }
+        },
+        axisLabel: {
+          color: theme === 'light' ? '#666666' : '#a3a3a3',
+          fontFamily: customization.typography?.fontFamily || 'Inter, system-ui, sans-serif',
+          fontSize: customization.typography?.fontSize?.labels || 12
+        },
+        splitLine: {
+          lineStyle: { color: gridColor, type: 'dashed' }
+        }
+      }
+    }
+
+    // Disable tooltips to prevent empty white blocks
+    styled.tooltip = {
+      show: false
     }
 
     // Apply animations
@@ -819,7 +918,8 @@ export class EChartsDataTransformer {
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
     }
   }

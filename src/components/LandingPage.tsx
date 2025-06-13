@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Sparkles, Loader2, ArrowRight, Play, ChevronDown } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { Sparkles, Loader2, ArrowRight, Play, ChevronDown, BarChart3 } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { AIProviderService, AVAILABLE_MODELS } from '@/lib/aiProviders'
 import { ChartConfig } from '@/types/chart'
@@ -8,10 +8,30 @@ import ChartRenderer from './ChartRenderer'
 import ModelSelector from './ModelSelector'
 import EChartsCustomizationPanel from './EChartsCustomizationPanel'
 import InteractiveExamples from './InteractiveExamples'
-import TremorDebugChart from './TremorDebugChart'
-import TremorTestComponent from './TremorTestComponent'
+// Removed Tremor components - now using ECharts
 import ChartTestSuite from './ChartTestSuite'
 import toast from 'react-hot-toast'
+
+const DEFAULT_CUSTOMIZATION = {
+  colors: {
+    primary: '#5470c6',
+    secondary: '#91cc75',
+    accent: '#fac858',
+    background: '#ffffff',
+    text: '#333333'
+  },
+  typography: {
+    fontFamily: 'Inter, system-ui, sans-serif',
+    fontSize: { title: 18, labels: 12, legend: 14 }
+  },
+  layout: {
+    padding: { top: 20, right: 20, bottom: 20, left: 20 }
+  },
+  animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
+  responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
+  colorPalette: 'default',
+  theme: 'light'
+}
 
 const EXAMPLE_CHARTS = [
   {
@@ -51,7 +71,8 @@ const EXAMPLE_CHARTS = [
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
     }
   },
@@ -92,7 +113,8 @@ const EXAMPLE_CHARTS = [
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
     }
   },
@@ -136,14 +158,15 @@ const EXAMPLE_CHARTS = [
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
     }
   }
 ]
 
 interface LandingPageProps {
-  onNavigate?: (page: 'landing' | 'pricing' | 'settings' | 'test-charts') => void
+  onNavigate?: (page: 'landing' | 'pricing' | 'settings' | 'test-charts' | 'echarts-demo' | 'responsive-test') => void
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
@@ -160,6 +183,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
     anthropic: '',
     google: ''
   })
+
 
   const generateChart = async (customPrompt?: string) => {
     const currentPrompt = customPrompt || prompt
@@ -231,7 +255,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
           }
         } catch (parseError) {
@@ -340,7 +365,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
       }
     } 
@@ -388,7 +414,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
       }
     }
@@ -447,7 +474,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
       }
     }
@@ -500,7 +528,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
       }
     }
@@ -551,7 +580,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         },
         animations: { enabled: true, duration: 1000, easing: 'cubicOut' },
         responsive: { enabled: true, breakpoints: { mobile: 480, tablet: 768, desktop: 1024 } },
-        colorPalette: 'default'
+        colorPalette: 'default',
+        theme: 'light'
       }
       }
     }
@@ -573,46 +603,125 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   }
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a]">
-
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {!currentChart ? (
-          // Show Interactive Examples when no chart is generated
-          <div className="mb-8">
-            <InteractiveExamples onExampleSelect={handleExampleSelect} />
-            {/* Chart Test Suite */}
-            <div className="mt-8">
-              <div className="bg-[#2a2a2a] rounded-2xl border border-[#3a3a3a] p-6">
-                <h2 className="text-2xl font-bold text-white mb-4">Test All Chart Types</h2>
-                <p className="text-[#a3a3a3] mb-4">Click below to test all chart types with colors and customization</p>
-                <button
-                  onClick={() => onNavigate?.('test-charts')}
-                  className="bg-[#cc785c] text-white px-6 py-3 rounded-lg hover:bg-[#b8694f] transition-colors"
-                >
-                  Open Chart Test Suite
-                </button>
-              </div>
-              
-              {/* Basic Tremor Test */}
-              <div className="mt-8">
-                <h2 className="text-2xl font-bold text-white mb-4">Basic Tremor Test</h2>
-                <TremorTestComponent />
+    <div className="min-h-screen bg-[#0a0a0a]">
+      {!currentChart ? (
+        // Landing Page Design
+        <>
+          {/* Hero Section */}
+          <section className="relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#cc785c]/5 via-transparent to-[#2563eb]/5" />
+            <div className="relative max-w-7xl mx-auto px-6 py-20 lg:py-32">
+              <div className="text-center">
+                {/* Hero Badge */}
+                <div className="inline-flex items-center gap-2 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full px-4 py-2 mb-8">
+                  <Sparkles className="w-4 h-4 text-[#cc785c]" />
+                  <span className="text-sm text-[#a3a3a3]">AI-Powered Chart Generation</span>
+                </div>
+                
+                {/* Hero Title */}
+                <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
+                  Turn Your
+                  <span className="block bg-gradient-to-r from-[#cc785c] to-[#2563eb] bg-clip-text text-transparent">
+                    Data Into Charts
+                  </span>
+                </h1>
+                
+                {/* Hero Subtitle */}
+                <p className="text-xl lg:text-2xl text-[#a3a3a3] mb-12 max-w-3xl mx-auto leading-relaxed">
+                  Simply describe your data in plain English and watch as we instantly create beautiful, 
+                  interactive charts. No coding, no spreadsheets, just results.
+                </p>
+                
+                {/* CTA Section */}
+                <div className="max-w-2xl mx-auto">
+                  <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-6 mb-8">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#cc785c] to-[#b8694f] rounded-xl flex items-center justify-center">
+                        <BarChart3 className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <div className="text-white font-medium">Try it now</div>
+                        <div className="text-sm text-[#a3a3a3]">Describe your data below</div>
+                      </div>
+                    </div>
+                    
+                    <div className="relative">
+                      <textarea
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        placeholder="e.g., 'Create a bar chart showing quarterly sales: Q1: $120k, Q2: $150k, Q3: $180k, Q4: $200k'"
+                        className="w-full h-24 bg-[#0a0a0a] border border-[#3a3a3a] rounded-xl px-4 py-3 text-white placeholder-[#666] resize-none focus:outline-none focus:border-[#cc785c] transition-colors"
+                        disabled={isGenerating}
+                      />
+                      
+                      <button
+                        onClick={() => generateChart(prompt)}
+                        disabled={isGenerating || !prompt.trim()}
+                        className="absolute bottom-3 right-3 bg-[#cc785c] hover:bg-[#b8694f] disabled:bg-[#666] disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                      >
+                        {isGenerating ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Creating...
+                          </>
+                        ) : (
+                          <>
+                            Generate Chart
+                            <ArrowRight className="w-4 h-4" />
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Model Selector */}
+                  {user && (
+                    <ModelSelector
+                      selectedModel={selectedModel}
+                      onModelSelect={setSelectedModel}
+                      availableModels={AVAILABLE_MODELS}
+                    />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          // Show generated chart and customization when chart exists
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          </section>
+
+          {/* Examples Section */}
+          <section className="py-20">
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+                  See It In Action
+                </h2>
+                <p className="text-lg text-[#a3a3a3] max-w-2xl mx-auto">
+                  Click any example below to see how easy it is to create stunning charts
+                </p>
+              </div>
+              
+              <InteractiveExamples onExampleSelect={handleExampleSelect} />
+            </div>
+          </section>
+        </>
+      ) : (
+        // Show generated chart and customization when chart exists
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 lg:gap-12">
             {/* Left: Generated Chart Display */}
-            <div className="space-y-6">
-              <div className="bg-[#2a2a2a] rounded-2xl border border-[#3a3a3a] p-8">
-                <h3 className="text-2xl font-normal text-[#f5f5f5] mb-6 tracking-tight">Your Chart</h3>
-                <ChartRenderer
-                  config={currentChart.config}
-                  className="w-full"
-                />
-                <div className="mt-6 p-4 bg-[#1a1a1a] rounded-xl border border-[#3a3a3a]">
-                  <p className="text-sm text-[#a3a3a3]">
+            <div className="space-y-6 min-w-0">
+              <div className="bg-[#2a2a2a] rounded-2xl border border-[#3a3a3a] p-4 md:p-8">
+                <h3 className="text-xl md:text-2xl font-normal text-[#f5f5f5] mb-4 md:mb-6 tracking-tight">Your Chart</h3>
+                <div className="w-full h-[450px] md:h-[500px]">
+                  <ChartRenderer
+                    config={currentChart.config}
+                    className="w-full h-full"
+                    width="100%"
+                    height="100%"
+                    showControls={true}
+                  />
+                </div>
+                <div className="mt-4 md:mt-6 p-3 md:p-4 bg-[#1a1a1a] rounded-xl border border-[#3a3a3a]">
+                  <p className="text-sm text-[#a3a3a3] break-words">
                     <strong className="text-[#cc785c]">Query:</strong> {currentChart.prompt}
                   </p>
                   <p className="text-xs text-[#737373] mt-2">
@@ -650,80 +759,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
               </button>
             </div>
           </div>
-        )}
-
-        {/* Always show the input section at bottom when no chart or simplified when chart exists */}
-        <div className="max-w-2xl mx-auto">
-          <div className={`${currentChart ? 'mt-16' : ''}`}>
-            <h2 className="text-3xl font-normal text-[#f5f5f5] mb-8 tracking-tight text-center">
-              {currentChart ? 'Create Another Chart' : 'Visualize Your Data'}
-            </h2>
-            
-            <div className="bg-[#2a2a2a] rounded-2xl border border-[#3a3a3a] p-8">
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-xl font-normal text-[#f5f5f5] mb-4 tracking-tight">
-                    What data do you want to visualize?
-                  </label>
-                  <textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Examples:\n• Monthly sales figures for 2023\n• Weather patterns in London\n• Population demographics by age\n• Stock prices over time\n• Survey results breakdown"
-                    rows={user ? 4 : 5}
-                    className="w-full px-4 py-4 bg-[#1a1a1a] border border-[#3a3a3a] text-[#f5f5f5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#cc785c] focus:border-transparent resize-none placeholder-[#737373] text-base leading-relaxed transition-all duration-300"
-                  />
-                </div>
-
-                {/* AI Model Selection - Available for all users */}
-                <div>
-                  <label className="block text-xl font-normal text-[#f5f5f5] mb-4 tracking-tight">Choose AI Model</label>
-                  <ModelSelector
-                    selectedModel={selectedModel}
-                    onModelChange={setSelectedModel}
-                    userCredits={user ? (userProfile?.credits || 0) : 999} // Trial users get access to all models
-                  />
-                  <p className="text-sm text-[#a3a3a3] mt-4 flex items-center">
-                    <span className="text-[#cc785c] mr-2">✨</span>
-                    We provide all API access - no keys needed!
-                    {!user && (
-                      <span className="ml-2 text-[#cc785c]">(Trial mode)</span>
-                    )}
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => generateChart()}
-                  disabled={isGenerating || !prompt.trim()}
-                  className="w-full bg-[#cc785c] text-white py-5 px-8 rounded-full font-medium hover:bg-[#b8694f] focus:outline-none focus:ring-2 focus:ring-[#cc785c] focus:ring-offset-2 focus:ring-offset-[#2a2a2a] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 transition-all duration-300 text-lg shadow-lg"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Generating your visualization...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5" />
-                      <span>Create Visualization</span>
-                    </>
-                  )}
-                </button>
-
-                {!user && (
-                  <div className="text-center p-5 bg-[#1a1a1a] border border-[#3a3a3a] rounded-xl">
-                    <p className="text-sm text-[#cc785c] mb-2">
-                      🎆 <strong>{3 - trialChartsUsed} free charts remaining</strong>
-                    </p>
-                    <p className="text-xs text-[#a3a3a3]">
-                      Sign in with Google for unlimited charts and credit tracking
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
