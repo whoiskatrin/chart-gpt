@@ -1,0 +1,15 @@
+name = "chart-gpt"
+main = "src/worker.ts"
+compatibility_date = "2023-10-30"
+
+[env.production]
+name = "chart-gpt-prod"
+
+[env.staging]
+name = "chart-gpt-staging"
+
+[[env.production.vars]]
+HUGGINGFACE_API_KEY = ""
+
+[[env.staging.vars]]
+HUGGINGFACE_API_KEY = ""
