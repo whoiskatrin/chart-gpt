@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Sparkles, Loader2, ArrowRight, Play, ChevronDown, BarChart3 } from 'lucide-react'
+import { Sparkles, Loader2, ArrowRight, Play, ChevronDown, BarChart3, FileText, Type } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { AIProviderService, AVAILABLE_MODELS } from '@/lib/aiProviders'
 import { ChartConfig } from '@/types/chart'
@@ -8,6 +8,8 @@ import ChartRenderer from './ChartRenderer'
 import ModelSelector from './ModelSelector'
 import EChartsCustomizationPanel from './EChartsCustomizationPanel'
 import InteractiveExamples from './InteractiveExamples'
+import { FileUpload } from './FileUpload'
+import { ParsedData, FileParser } from '@/lib/fileParser'
 // Removed Tremor components - now using ECharts
 import ChartTestSuite from './ChartTestSuite'
 import toast from 'react-hot-toast'
@@ -183,12 +185,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
     anthropic: '',
     google: ''
   })
+  const [inputMode, setInputMode] = useState<'text' | 'file'>('text')
+  const [uploadedData, setUploadedData] = useState<ParsedData | null>(null)
 
 
   const generateChart = async (customPrompt?: string) => {
     const currentPrompt = customPrompt || prompt
-    if (!currentPrompt.trim()) {
+    
+    // Check if we have data to work with
+    if (inputMode === 'text' && !currentPrompt.trim()) {
       toast.error('Please describe what data you want to visualize')
+      return
+    }
+    
+    if (inputMode === 'file' && !uploadedData) {
+      toast.error('Please upload a data file first')
       return
     }
 
@@ -230,7 +241,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           googleApiKey: process.env.VITE_GOOGLE_API_KEY || 'our-google-key'
         })
 
-        const chartResponse = await aiService.generateChart(currentPrompt, selectedModel, dataRequest)
+        let enhancedPrompt = currentPrompt
+        if (inputMode === 'file' && uploadedData) {
+          // Create an enhanced prompt that includes file data context
+          const dataSummary = FileParser.generateDataSummary(uploadedData)
+          enhancedPrompt = `${currentPrompt ? currentPrompt + '\n\n' : ''}Based on this uploaded data:\n${dataSummary}\n\nPlease create an appropriate chart that best visualizes this data.`
+        }
+
+        const chartResponse = await aiService.generateChart(enhancedPrompt, selectedModel, inputMode === 'file' ? JSON.stringify(uploadedData?.data.slice(0, 10)) : dataRequest)
         
         try {
           const parsedConfig = JSON.parse(chartResponse)
@@ -268,7 +286,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       } else {
         // Generate realistic sample data for trial users using selected model
         const selectedModelData = AVAILABLE_MODELS.find(m => m.id === selectedModel)
-        chartConfig = generateTrialChart(currentPrompt, dataRequest)
+        if (inputMode === 'file' && uploadedData) {
+          chartConfig = generateChartFromFileData(uploadedData, currentPrompt)
+        } else {
+          chartConfig = generateTrialChart(currentPrompt, dataRequest)
+        }
         setTrialChartsUsed(prev => prev + 1)
         toast.success(`Chart generated with ${selectedModelData?.name || 'AI'}! ${3 - trialChartsUsed - 1} trial charts remaining.`)
       }
@@ -311,6 +333,156 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
     options: createFallbackOptions('Chart from: ' + prompt.slice(0, 50) + '...'),
     customization: DEFAULT_CUSTOMIZATION
   })
+
+  const generateChartFromFileData = (parsedData: ParsedData, userPrompt?: string): ChartConfig => {
+    const { data, columns } = parsedData
+    
+    if (data.length === 0 || columns.length === 0) {
+      return createFallbackChart(userPrompt || 'Uploaded data')
+    }
+
+    // Try to determine the best chart type based on data structure
+    const numericColumns = columns.filter(col => 
+      data.some(row => typeof row[col] === 'number' && !isNaN(row[col]))
+    )
+    const categoryColumns = columns.filter(col => 
+      data.some(row => typeof row[col] === 'string' || col.toLowerCase().includes('name') || col.toLowerCase().includes('category'))
+    )
+
+    let chartType: ChartConfig['type'] = 'bar'
+    let chartData: any = {}
+    let chartOptions: any = {
+      responsive: true,
+      plugins: {
+        title: { display: true, text: parsedData.fileName },
+        legend: { position: 'top' as const }
+      }
+    }
+
+    if (numericColumns.length >= 2) {
+      // Scatter plot for two numeric columns
+      chartType = 'scatter'
+      const xCol = numericColumns[0]
+      const yCol = numericColumns[1]
+      
+      chartData = {
+        datasets: [{
+          label: `${yCol} vs ${xCol}`,
+          data: data.map(row => ({ x: row[xCol], y: row[yCol] })).filter(point => 
+            typeof point.x === 'number' && typeof point.y === 'number'
+          ),
+          backgroundColor: '#3b82f6',
+          borderColor: '#2563eb'
+        }]
+      }
+      
+      chartOptions.scales = {
+        x: { title: { display: true, text: xCol } },
+        y: { title: { display: true, text: yCol } }
+      }
+    } else if (numericColumns.length === 1 && categoryColumns.length >= 1) {
+      // Bar chart with categories and one numeric value
+      const categoryCol = categoryColumns[0]
+      const valueCol = numericColumns[0]
+      
+      const aggregatedData = data.reduce((acc: Record<string, number>, row) => {
+        const category = String(row[categoryCol])
+        const value = typeof row[valueCol] === 'number' ? row[valueCol] : 0
+        acc[category] = (acc[category] || 0) + value
+        return acc
+      }, {})
+      
+      chartData = {
+        labels: Object.keys(aggregatedData),
+        datasets: [{
+          label: valueCol,
+          data: Object.values(aggregatedData),
+          backgroundColor: [
+            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+            '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6366f1'
+          ].slice(0, Object.keys(aggregatedData).length)
+        }]
+      }
+      
+      chartOptions.scales = {
+        y: { 
+          beginAtZero: true,
+          title: { display: true, text: valueCol }
+        },
+        x: {
+          title: { display: true, text: categoryCol }
+        }
+      }
+    } else if (data.length <= 20 && categoryColumns.length >= 1) {
+      // Pie chart for small datasets with categories
+      chartType = 'pie'
+      const categoryCol = categoryColumns[0]
+      const valueCol = numericColumns[0] || columns.find(col => col !== categoryCol) || columns[0]
+      
+      const pieData = data.slice(0, 10).reduce((acc: Record<string, number>, row) => {
+        const category = String(row[categoryCol])
+        const value = typeof row[valueCol] === 'number' ? row[valueCol] : 1
+        acc[category] = (acc[category] || 0) + value
+        return acc
+      }, {})
+      
+      chartData = {
+        labels: Object.keys(pieData),
+        datasets: [{
+          label: valueCol,
+          data: Object.values(pieData),
+          backgroundColor: [
+            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+            '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6366f1'
+          ]
+        }]
+      }
+    } else {
+      // Default to line chart for time series or sequential data
+      chartType = 'line'
+      const xCol = columns[0]
+      const yCol = numericColumns[0] || columns[1] || columns[0]
+      
+      chartData = {
+        labels: data.slice(0, 50).map((row, index) => row[xCol] || `Point ${index + 1}`),
+        datasets: [{
+          label: yCol,
+          data: data.slice(0, 50).map(row => typeof row[yCol] === 'number' ? row[yCol] : index),
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      }
+      
+      chartOptions.scales = {
+        y: { 
+          beginAtZero: true,
+          title: { display: true, text: yCol }
+        },
+        x: {
+          title: { display: true, text: xCol }
+        }
+      }
+    }
+
+    return {
+      type: chartType,
+      data: chartData,
+      options: chartOptions,
+      customization: DEFAULT_CUSTOMIZATION
+    }
+  }
+
+  const handleFileProcessed = (data: ParsedData) => {
+    setUploadedData(data)
+    toast.success(`File processed! Found ${data.data.length} rows and ${data.columns.length} columns.`)
+  }
+
+  const handleFileError = (error: string) => {
+    toast.error(error)
+    setUploadedData(null)
+  }
 
   const generateTrialChart = (prompt: string, dataRequest?: string): ChartConfig => {
     // Generate realistic data based on the prompt keywords
@@ -641,37 +813,103 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                       </div>
                       <div className="text-left">
                         <div className="text-white font-medium">Try it now</div>
-                        <div className="text-sm text-[#a3a3a3]">Describe your data below</div>
+                        <div className="text-sm text-[#a3a3a3]">Choose your input method</div>
                       </div>
                     </div>
-                    
-                    <div className="relative">
-                      <textarea
-                        value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
-                        placeholder="e.g., 'Create a bar chart showing quarterly sales: Q1: $120k, Q2: $150k, Q3: $180k, Q4: $200k'"
-                        className="w-full h-24 bg-[#0a0a0a] border border-[#3a3a3a] rounded-xl px-4 py-3 text-white placeholder-[#666] resize-none focus:outline-none focus:border-[#cc785c] transition-colors"
-                        disabled={isGenerating}
-                      />
-                      
+
+                    {/* Input Mode Selector */}
+                    <div className="flex gap-2 p-1 bg-[#0a0a0a] rounded-lg mb-4">
                       <button
-                        onClick={() => generateChart(prompt)}
-                        disabled={isGenerating || !prompt.trim()}
-                        className="absolute bottom-3 right-3 bg-[#cc785c] hover:bg-[#b8694f] disabled:bg-[#666] disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                        onClick={() => setInputMode('text')}
+                        className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md font-medium transition-colors ${
+                          inputMode === 'text'
+                            ? 'bg-[#cc785c] text-white'
+                            : 'text-[#a3a3a3] hover:text-white hover:bg-[#2a2a2a]'
+                        }`}
                       >
-                        {isGenerating ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Creating...
-                          </>
-                        ) : (
-                          <>
-                            Generate Chart
-                            <ArrowRight className="w-4 h-4" />
-                          </>
-                        )}
+                        <Type className="w-4 h-4" />
+                        Text Prompt
+                      </button>
+                      <button
+                        onClick={() => setInputMode('file')}
+                        className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md font-medium transition-colors ${
+                          inputMode === 'file'
+                            ? 'bg-[#cc785c] text-white'
+                            : 'text-[#a3a3a3] hover:text-white hover:bg-[#2a2a2a]'
+                        }`}
+                      >
+                        <FileText className="w-4 h-4" />
+                        Upload File
                       </button>
                     </div>
+                    
+                    {inputMode === 'text' ? (
+                      <div className="relative">
+                        <textarea
+                          value={prompt}
+                          onChange={(e) => setPrompt(e.target.value)}
+                          placeholder="e.g., 'Create a bar chart showing quarterly sales: Q1: $120k, Q2: $150k, Q3: $180k, Q4: $200k'"
+                          className="w-full h-24 bg-[#0a0a0a] border border-[#3a3a3a] rounded-xl px-4 py-3 text-white placeholder-[#666] resize-none focus:outline-none focus:border-[#cc785c] transition-colors"
+                          disabled={isGenerating}
+                        />
+                        
+                        <button
+                          onClick={() => generateChart(prompt)}
+                          disabled={isGenerating || !prompt.trim()}
+                          className="absolute bottom-3 right-3 bg-[#cc785c] hover:bg-[#b8694f] disabled:bg-[#666] disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                        >
+                          {isGenerating ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Creating...
+                            </>
+                          ) : (
+                            <>
+                              Generate Chart
+                              <ArrowRight className="w-4 h-4" />
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <FileUpload
+                          onFileProcessed={handleFileProcessed}
+                          onError={handleFileError}
+                          className="bg-[#0a0a0a] border border-[#3a3a3a] rounded-xl"
+                        />
+                        
+                        {uploadedData && (
+                          <div className="space-y-3">
+                            <textarea
+                              value={prompt}
+                              onChange={(e) => setPrompt(e.target.value)}
+                              placeholder="Optional: Describe what type of chart you'd like (e.g., 'Show this as a line chart' or 'Focus on the trends over time')"
+                              className="w-full h-20 bg-[#0a0a0a] border border-[#3a3a3a] rounded-xl px-4 py-3 text-white placeholder-[#666] resize-none focus:outline-none focus:border-[#cc785c] transition-colors"
+                              disabled={isGenerating}
+                            />
+                            
+                            <button
+                              onClick={() => generateChart()}
+                              disabled={isGenerating}
+                              className="w-full bg-[#cc785c] hover:bg-[#b8694f] disabled:bg-[#666] disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+                            >
+                              {isGenerating ? (
+                                <>
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  Creating Chart...
+                                </>
+                              ) : (
+                                <>
+                                  Generate Chart from Data
+                                  <ArrowRight className="w-4 h-4" />
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   
                   {/* Model Selector */}
@@ -752,6 +990,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                   setCurrentChart(null)
                   setPrompt('')
                   setDataRequest('')
+                  setUploadedData(null)
+                  setInputMode('text')
                 }}
                 className="w-full bg-[#3a3a3a] text-[#f5f5f5] py-4 px-6 rounded-full font-medium hover:bg-[#4a4a4a] transition-all duration-300 border border-[#4a4a4a]"
               >
