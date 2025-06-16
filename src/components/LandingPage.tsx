@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { Sparkles, Loader2, ArrowRight, Play, ChevronDown, BarChart3, FileText, Type } from 'lucide-react'
+import React, { useState } from 'react'
+import { Sparkles, Loader2, ArrowRight, BarChart3, FileText, Type } from 'lucide-react'
 import { useAuthStore } from '@/stores/authStore'
 import { AIProviderService, AVAILABLE_MODELS } from '@/lib/aiProviders'
 import { ChartConfig } from '@/types/chart'
-import { EChartsCustomizationService } from '@/lib/echartsCustomization'
 import ChartRenderer from './ChartRenderer'
 import ModelSelector from './ModelSelector'
 import EChartsCustomizationPanel from './EChartsCustomizationPanel'
 import InteractiveExamples from './InteractiveExamples'
 import { FileUpload } from './FileUpload'
 import { ParsedData, FileParser } from '@/lib/fileParser'
-// Removed Tremor components - now using ECharts
-import ChartTestSuite from './ChartTestSuite'
 import toast from 'react-hot-toast'
 
 const DEFAULT_CUSTOMIZATION = {
@@ -53,7 +50,7 @@ const EXAMPLE_CHARTS = [
         responsive: true,
         plugins: {
           title: { display: true, text: 'Monthly Sales Performance' },
-          legend: { position: 'top' as const }
+          legend: { display: true, position: 'top' as const }
         }
       },
       customization: {
@@ -95,7 +92,7 @@ const EXAMPLE_CHARTS = [
         responsive: true,
         plugins: {
           title: { display: true, text: 'User Age Distribution' },
-          legend: { position: 'bottom' as const }
+          legend: { display: true, position: 'bottom' as const }
         }
       },
       customization: {
@@ -140,7 +137,7 @@ const EXAMPLE_CHARTS = [
         responsive: true,
         plugins: {
           title: { display: true, text: 'User Growth Trend' },
-          legend: { position: 'top' as const }
+          legend: { display: true, position: 'top' as const }
         }
       },
       customization: {
@@ -355,7 +352,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       responsive: true,
       plugins: {
         title: { display: true, text: parsedData.fileName },
-        legend: { position: 'top' as const }
+        legend: { display: true, position: 'top' as const }
       }
     }
 
@@ -406,10 +403,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       
       chartOptions.scales = {
         y: { 
+          display: true,
           beginAtZero: true,
           title: { display: true, text: valueCol }
         },
         x: {
+          display: true,
           title: { display: true, text: categoryCol }
         }
       }
@@ -447,7 +446,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         labels: data.slice(0, 50).map((row, index) => row[xCol] || `Point ${index + 1}`),
         datasets: [{
           label: yCol,
-          data: data.slice(0, 50).map(row => typeof row[yCol] === 'number' ? row[yCol] : index),
+          data: data.slice(0, 50).map((row, index) => typeof row[yCol] === 'number' ? row[yCol] : index),
           borderColor: '#3b82f6',
           backgroundColor: 'rgba(59, 130, 246, 0.1)',
           tension: 0.4,
@@ -457,10 +456,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       
       chartOptions.scales = {
         y: { 
+          display: true,
           beginAtZero: true,
           title: { display: true, text: yCol }
         },
         x: {
+          display: true,
           title: { display: true, text: xCol }
         }
       }
@@ -508,7 +509,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           responsive: true,
           plugins: {
             title: { display: true, text: 'Quarterly Revenue Growth Analysis' },
-            legend: { position: 'top' as const }
+            legend: { display: true, position: 'top' as const }
           },
           scales: {
             y: { 
@@ -566,7 +567,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           responsive: true,
           plugins: {
             title: { display: true, text: 'Global Market Share Distribution' },
-            legend: { position: 'bottom' as const }
+            legend: { display: true, position: 'bottom' as const }
           }
         },
         customization: {
@@ -616,15 +617,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           responsive: true,
           plugins: {
             title: { display: true, text: 'Multi-Channel Performance Metrics' },
-            legend: { position: 'top' as const }
+            legend: { display: true, position: 'top' as const }
           },
           scales: {
             y: { 
+              display: true,
               beginAtZero: true,
-              max: 100,
               title: { display: true, text: 'Performance (%)' }
             },
             x: {
+              display: true,
               title: { display: true, text: 'Channel' }
             }
           }
@@ -671,14 +673,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           responsive: true,
           plugins: {
             title: { display: true, text: 'Daily User Engagement Trends' },
-            legend: { position: 'top' as const }
+            legend: { display: true, position: 'top' as const }
           },
           scales: {
             y: { 
+              display: true,
               beginAtZero: true,
               title: { display: true, text: 'Users' }
             },
             x: {
+              display: true,
               title: { display: true, text: 'Days' }
             }
           }
@@ -723,14 +727,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           responsive: true,
           plugins: {
             title: { display: true, text: 'Generated Data Visualization' },
-            legend: { position: 'top' as const }
+            legend: { display: true, position: 'top' as const }
           },
           scales: {
             y: { 
+              display: true,
               beginAtZero: true,
               title: { display: true, text: 'Units Sold' }
             },
             x: {
+              display: true,
               title: { display: true, text: 'Products' }
             }
           }

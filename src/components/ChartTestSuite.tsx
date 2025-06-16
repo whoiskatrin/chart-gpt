@@ -19,7 +19,7 @@ const TEST_CHARTS: ChartConfig[] = [
       responsive: true,
       plugins: {
         title: { display: true, text: 'Bar Chart Test' },
-        legend: { position: 'top' as const }
+        legend: { display: true, position: 'top' as const }
       }
     },
     customization: {
@@ -58,7 +58,7 @@ const TEST_CHARTS: ChartConfig[] = [
       responsive: true,
       plugins: {
         title: { display: true, text: 'Line Chart Test' },
-        legend: { position: 'top' as const }
+        legend: { display: true, position: 'top' as const }
       }
     },
     customization: {
@@ -97,7 +97,7 @@ const TEST_CHARTS: ChartConfig[] = [
       responsive: true,
       plugins: {
         title: { display: true, text: 'Area Chart Test' },
-        legend: { position: 'top' as const }
+        legend: { display: true, position: 'top' as const }
       }
     },
     customization: {
@@ -135,7 +135,7 @@ const TEST_CHARTS: ChartConfig[] = [
       responsive: true,
       plugins: {
         title: { display: true, text: 'Pie Chart Test' },
-        legend: { position: 'bottom' as const }
+        legend: { display: true, position: 'bottom' as const }
       }
     },
     customization: {
@@ -173,7 +173,7 @@ const TEST_CHARTS: ChartConfig[] = [
       responsive: true,
       plugins: {
         title: { display: true, text: 'Donut Chart Test' },
-        legend: { position: 'bottom' as const }
+        legend: { display: true, position: 'bottom' as const }
       }
     },
     customization: {
@@ -217,7 +217,7 @@ const TEST_CHARTS: ChartConfig[] = [
       responsive: true,
       plugins: {
         title: { display: true, text: 'Scatter Chart Test' },
-        legend: { position: 'top' as const }
+        legend: { display: true, position: 'top' as const }
       }
     },
     customization: {
@@ -319,8 +319,8 @@ export const ChartTestSuite: React.FC<ChartTestSuiteProps> = ({ onNavigate }) =>
               <ChartRenderer
                 config={config}
                 className="w-full h-full"
-                width="100%"
-                height="100%"
+                width={800}
+                height={500}
                 showControls={true}
               />
             </div>
