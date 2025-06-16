@@ -1,20 +1,27 @@
-# Chart GPT - AI-Powered Chart Generation with Credits System
+# Chart GPT - AI-Powered Chart Generation
 
 <div align="center">
     <img src="https://raw.githubusercontent.com/whoiskatrin/chart-gpt/main/public/chartgpt-og.png" width="600" />
 </div>
 
-Generate beautiful, customizable charts from natural language using multiple AI providers (OpenAI, Anthropic, Google). Features user authentication, credit-based pricing, and Vercel-inspired design.
+Transform your data into beautiful, interactive charts using natural language or file uploads. Powered by multiple AI providers (OpenAI, Anthropic, Google) with a modern, credit-based system.
 
 ## ✨ Features
 
+### 🔥 **NEW: File Upload Support**
+- 📁 **Multiple File Formats**: Upload CSV, JSON, TXT, and TSV files
+- 🚀 **Drag & Drop Interface**: Intuitive file upload with real-time preview
+- 🧠 **Smart Chart Detection**: AI automatically selects the best chart type for your data
+- 📊 **Data Analysis**: Automatic column detection and data type inference
+
+### 🎯 **Core Features**
 - 🔐 **Google Authentication**: Secure login with Google OAuth via Supabase
 - 💳 **Credit System**: Pay-per-use model with Stripe integration
 - 🤖 **Multiple AI Providers**: OpenAI GPT-4, Anthropic Claude, Google Gemini
-- 📊 **Advanced Chart Types**: Bar, line, pie, scatter, heatmap, treemap, sankey, and more
-- 🎨 **Full Customization**: Colors, typography, layout, animations, and responsive design
-- 📱 **Responsive Design**: Vercel-inspired UI that adapts to all devices
-- 💾 **Export Options**: PNG, JPG, SVG formats with custom dimensions
+- 📈 **Advanced Chart Types**: Bar, line, pie, scatter, area, bubble, radar, heatmap, treemap, sankey, and more
+- 🎨 **ECharts Integration**: Professional-grade charts with full customization
+- 📱 **Responsive Design**: Modern dark theme UI that adapts to all devices
+- 💾 **Export Options**: PNG, JPG, SVG, PDF formats with custom dimensions
 - ☁️ **Cloudflare Ready**: Optimized for Cloudflare Pages deployment
 - ⚡ **Modern Stack**: Vite, React 18, TypeScript, Tailwind CSS, Zustand
 
@@ -53,6 +60,11 @@ Generate beautiful, customizable charts from natural language using multiple AI 
 
    # Stripe Configuration
    VITE_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+
+   # AI Provider Keys (Server-side - Optional)
+   VITE_OPENAI_API_KEY=your_openai_key
+   VITE_ANTHROPIC_API_KEY=your_anthropic_key
+   VITE_GOOGLE_API_KEY=your_google_key
    ```
 
 4. **Set up Supabase database**
@@ -66,6 +78,44 @@ Generate beautiful, customizable charts from natural language using multiple AI 
 
 6. **Open your browser**
    Navigate to `http://localhost:3000`
+
+## 📁 File Upload Guide
+
+### Supported File Formats
+
+| Format | Extension | Description | Example Use Case |
+|--------|-----------|-------------|------------------|
+| **CSV** | `.csv` | Comma-separated values | Sales data, analytics exports |
+| **JSON** | `.json` | JavaScript Object Notation | API responses, structured data |
+| **TSV** | `.tsv` | Tab-separated values | Database exports |
+| **TXT** | `.txt` | Plain text with delimiters | Log files, simple datasets |
+
+### How to Use File Upload
+
+1. **Choose Input Method**: Switch from "Text Prompt" to "Upload File"
+2. **Upload Your Data**: Drag & drop or click to browse for files
+3. **Review Data Preview**: Automatically generated summary shows columns and sample data
+4. **Add Optional Prompt**: Describe specific chart preferences (e.g., "Show as a line chart")
+5. **Generate Chart**: AI analyzes your data and creates the optimal visualization
+
+### File Format Examples
+
+**CSV Example:**
+```csv
+Month,Sales,Profit
+January,12000,3000
+February,15000,4500
+March,18000,5400
+```
+
+**JSON Example:**
+```json
+[
+  {"month": "January", "sales": 12000, "profit": 3000},
+  {"month": "February", "sales": 15000, "profit": 4500},
+  {"month": "March", "sales": 18000, "profit": 5400}
+]
+```
 
 ## 🏗️ Database Setup
 
@@ -118,30 +168,28 @@ credit_transactions (id, user_id, type, amount, description, stripe_payment_id, 
 
 ## 🎯 Usage
 
-1. **Sign in with Google** - Get 20 free test credits
-2. **Add your AI provider API keys** in the dashboard
-3. **Select an AI model** based on your needs and credit balance
-4. **Describe your chart and data requirements**:
+### Text Prompt Method
+1. **Sign in with Google** - Get 20 free trial credits
+2. **Select an AI model** based on your needs and credit balance
+3. **Describe your chart**:
    - "Create a bar chart showing monthly sales data for Q1-Q4"
    - "Generate a line chart of stock prices over the last year"
    - "Make a pie chart of customer demographics by age group"
-5. **Customize your chart** with the advanced customization panel
-6. **Export in multiple formats** (PNG, JPG, SVG)
-7. **Buy more credits** when needed through integrated Stripe checkout
 
-## 🎨 Design System
+### File Upload Method
+1. **Switch to "Upload File" mode**
+2. **Upload your data file** (CSV, JSON, TXT, TSV)
+3. **Review the data preview** to ensure correct parsing
+4. **Add optional instructions** for chart style or focus
+5. **Generate your chart** with AI-powered optimization
 
-### Vercel-Inspired UI
-- Clean, minimal design with orange accent color (#f97316)
-- Consistent spacing and typography
-- Subtle shadows and borders
-- Responsive layout with mobile-first approach
-
-### Color Palette
-- **Primary Orange**: #f97316 (buttons, accents, highlights)
-- **Vercel Black**: #000000 (headings, primary text)
-- **Vercel Gray**: #666666 (secondary text)
-- **Light Grays**: #fafafa, #eaeaea (backgrounds, borders)
+### Chart Customization
+- **Real-time customization panel** with live preview
+- **10+ color palettes**: Business, vibrant, cool, warm, monochrome, and more
+- **Typography controls**: Font family, sizes, weights
+- **Layout options**: Padding, spacing, responsive breakpoints
+- **Animation settings**: Duration, easing, enable/disable
+- **Export options**: PNG, JPG, SVG, PDF with custom dimensions
 
 ## 🛠️ Development
 
@@ -149,17 +197,19 @@ credit_transactions (id, user_id, type, amount, description, stripe_payment_id, 
 ```
 src/
 ├── components/          # React components
-│   ├── AuthForm.tsx     # Login/signup form
 │   ├── Header.tsx       # Navigation header
-│   ├── Dashboard.tsx    # Main dashboard
+│   ├── LandingPage.tsx  # Main interface with file upload
+│   ├── FileUpload.tsx   # File upload component
 │   ├── PricingPage.tsx  # Credit packages
 │   ├── ModelSelector.tsx # AI model selection
 │   ├── ChartRenderer.tsx # Chart display
-│   └── CustomizationPanel.tsx # Chart customization
+│   ├── EChartsRenderer.tsx # ECharts implementation
+│   └── EChartsCustomizationPanel.tsx # Chart customization
 ├── lib/                # Core services
 │   ├── supabase.ts     # Database client
 │   ├── aiProviders.ts  # AI provider integrations
-│   ├── creditSystem.ts # Credit management
+│   ├── fileParser.ts   # File parsing logic
+│   ├── echartsDataTransforms.ts # Chart data transformation
 │   └── stripe.ts       # Payment processing
 ├── stores/             # State management
 │   └── authStore.ts    # Authentication state
@@ -175,12 +225,38 @@ src/
 - `npm run deploy` - Deploy to Cloudflare Pages
 - `npm run type-check` - TypeScript type checking
 - `npm run lint` - ESLint code linting
+- `npm run test` - Run tests with Vitest
+
+### Key Dependencies
+
+- **React 18** - Modern React with hooks and concurrent features
+- **TypeScript** - Type safety and better developer experience
+- **Vite** - Fast build tool and development server
+- **Tailwind CSS** - Utility-first CSS framework
+- **ECharts** - Professional charting library (primary)
+- **Framer Motion** - Smooth animations and transitions
+- **Zustand** - Lightweight state management
+- **PapaParse** - CSV/TSV file parsing
+- **Lucide React** - Beautiful icons
+
+## 🎨 Design System
+
+### Modern Dark Theme
+- **Primary Color**: Orange (#cc785c) for accents and CTAs
+- **Background**: Deep blacks (#0a0a0a, #1a1a1a, #2a2a2a)
+- **Text**: Light grays (#f5f5f5, #a3a3a3)
+- **Borders**: Subtle grays (#2a2a2a, #3a3a3a)
+
+### Typography
+- **Font Family**: Inter system font stack
+- **Responsive sizing**: Mobile-first with consistent scale
+- **Weight variations**: 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
 
 ## 🔐 Authentication & Security
 
 - **Google OAuth**: Secure authentication via Google with Supabase integration
 - **Row Level Security**: Database-level security policies
-- **API Key Storage**: Users enter their own AI provider keys (not stored on backend)
+- **File Processing**: Client-side file parsing for data privacy
 - **Secure Payments**: Stripe-handled payment processing
 - **Credit Validation**: Server-side credit balance checks
 
@@ -207,18 +283,13 @@ VITE_SUPABASE_ANON_KEY=your_production_supabase_key
 VITE_STRIPE_PUBLISHABLE_KEY=your_production_stripe_key
 ```
 
-## 🧪 Testing
+## 📚 Documentation
 
-### Manual Testing Checklist
-
-- [ ] Google OAuth authentication
-- [ ] User login/logout functionality
-- [ ] Credit balance display and updates
-- [ ] AI model selection based on credit availability
-- [ ] Chart generation with all supported models
-- [ ] Chart customization and export
-- [ ] Credit purchase flow (demo mode)
-- [ ] Responsive design on mobile/tablet/desktop
+- [File Upload Guide](docs/file-upload.md) - Detailed guide for file upload feature
+- [API Reference](docs/api-reference.md) - Complete API documentation
+- [Deployment Guide](docs/deployment.md) - Step-by-step deployment instructions
+- [Development Setup](docs/development.md) - Local development environment setup
+- [Architecture Overview](docs/architecture.md) - System architecture and design decisions
 
 ## 🤝 Contributing
 
@@ -232,9 +303,9 @@ VITE_STRIPE_PUBLISHABLE_KEY=your_production_stripe_key
 
 - Follow the existing code style and conventions
 - Add TypeScript types for all new code
-- Update tests for any new functionality
+- Test file upload functionality with various formats
 - Ensure responsive design for all new components
-- Use the established color palette and design tokens
+- Use the established dark theme design tokens
 
 ## 📝 License
 
@@ -242,25 +313,29 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👏 Acknowledgments
 
-- [Vercel](https://vercel.com/) for design inspiration
+- [ECharts](https://echarts.apache.org/) for professional chart rendering
 - [Supabase](https://supabase.com/) for backend-as-a-service
 - [Stripe](https://stripe.com/) for payment processing
 - [OpenAI](https://openai.com/), [Anthropic](https://anthropic.com/), [Google](https://ai.google.dev/) for AI models
-- [Chart.js](https://www.chartjs.org/) and [Plotly.js](https://plotly.com/javascript/) for chart rendering
+- [PapaParse](https://www.papaparse.com/) for CSV parsing
+- [Tailwind CSS](https://tailwindcss.com/) for styling
 
 ## 📧 Support
 
 For support, please:
 - Open an issue on GitHub for bugs or feature requests
 - Contact [@whoiskatrin](https://twitter.com/whoiskatrin) on Twitter
-- Check our [documentation](https://docs.your-domain.com) for detailed guides
+- Check our documentation for detailed guides
 
 ## 🔮 Roadmap
 
+- [ ] Excel (.xlsx) file support
+- [ ] Real-time collaborative editing
+- [ ] Chart templates library
+- [ ] Advanced data transformation tools
+- [ ] Integration with Google Sheets/Airtable
 - [ ] API access for developers
 - [ ] Bulk chart generation
-- [ ] Chart templates library
-- [ ] Advanced analytics dashboard
-- [ ] Team collaboration features
 - [ ] Custom branding options
-- [ ] Integration with popular data sources
+- [ ] Team workspaces
+- [ ] Advanced analytics dashboard
